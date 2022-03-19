@@ -14,7 +14,7 @@
     <title>WeCare | Log In</title>
 </head>
 <body>
-    <input type="hidden" name="value" id="1">
+    <input type="hidden" name="value" id="">
     <div class="row parentdiv">
         <div class="col-45p lotdiv">
             <img src="../images/wecarebanner white.png" class="img-con" alt="">
