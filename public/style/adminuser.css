@@ -1,0 +1,73 @@
+.table-con{
+    background-color: white;
+}
+
+.table-con .content-tab{
+margin-top: 20px;
+}
+
+th {
+    background-color: #525B80;
+    color: white;
+} 
+
+.btnrow{
+    margin-top: -5px;
+    margin-bottom: -5px;
+}
+
+.btnrow, .colin{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.btn{
+    font-size: 13px !important;
+}
+
+.btnview{
+    background-color: rgb(71, 212, 71) !important;
+    color: white !important;
+}
+
+.btnview:hover{
+    background-color: rgb(59, 172, 59) !important;
+    transition:.5s;
+}
+
+.btndel{
+    background-color: rgb(212, 71, 71) !important;
+    color: white !important;
+}
+
+.btndel:hover{
+    background-color: rgb(172, 59, 59) !important;
+    transition:.5s;
+}
+
+.table{
+    text-align: center;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #ecf0ff;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+   background-color: #f3f3f3;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #ffffff;
+  transition:.8s;
+}
+
+
+.title-area{
+    font-size: 20px;
+    padding-top: 5px;
+    font-weight: 400;
+}
+

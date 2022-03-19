@@ -1,0 +1,111 @@
+.modal-body {
+    height: 410px;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-top: 0px !important;
+}
+
+.modal-body::-webkit-scrollbar {
+      width:.5px; 
+    }
+    .modal::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .modal::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.post_info_pics{
+    width: 300px;
+    height: 200px;
+    margin: auto;
+    border-radius: 10px;
+}
+
+button:focus{
+    outline: none !important;
+}
+ul{
+    background-color: white;
+    margin-top: -30px !important;
+}
+
+.nav-pills{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin-top: -10px !important;
+}
+
+
+.nav .nav-item .nav-link{
+    border: none !important;
+    background-color: #ffffff !important;
+    padding: 10px !important;
+    color: #3c4077 !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    margin-bottom: 10px !important;
+    font-size: 14px !important;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom: 2px solid #5f65bd !important;
+}
+
+.nav .nav-item .active{
+    border: none !important;
+    background-color: #3c4077 !important;
+    padding: 10px !important;
+    color: white !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    margin-bottom: 10px !important;
+    font-size: 14px !important;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom: 2px solid #5f65bd !important;
+}
+
+.col_post_head{
+    font-weight: 500;
+    background-color: #aeb0ca !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+.post_info_row{
+    margin-top: 10px;
+}
+
+.col_post_info{
+    background-color: #aeb0cabe !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+
+.item_bold{
+    font-weight: 500;
+    background-color: #aeb0ca !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+
+.row_total_items{
+    margin-left: 10px;
+    color: white;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.item_info{
+    background-color: #aeb0cabe !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+
+.row_total_info{
+    margin-bottom: 10px;
+}

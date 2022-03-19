@@ -1,0 +1,220 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,700&display=swap");
+body{
+background: rgb(204,240,255);
+background: linear-gradient(70deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 27%, rgb(122, 208, 248) 100%);
+background-attachment:fixed;
+ max-width: 100%;
+    overflow-x: hidden;
+}
+
+.image-con{
+    margin-left: 5% ;
+}
+
+.info-con{
+    font-size: 20px;
+    margin: 3%;
+}
+
+.lottie{
+    margin-top: -15%;
+}
+
+.img-con{
+    width: 50%;
+    margin-top: 3%;
+}
+
+.inner-con{
+    background-color: white;
+    margin: 10%;
+    margin-right: 15%;
+    padding: 20px;
+    border-radius: 10px;
+    width: 65%;
+-webkit-box-shadow: 0px 14px 25px -4px rgba(12,55,77,0.39);
+-moz-box-shadow: 0px 14px 25px -4px rgba(12,55,77,0.39);
+box-shadow: 0px 14px 25px -4px rgba(12,55,77,0.39);
+}
+
+.form-con2{
+    margin: 10%;
+}
+
+.btn{
+    margin-bottom: 2%;
+    background-color: #2a2d5a !important;
+    border: none !important;
+}
+
+.btn:hover{
+    background-color: #181a3a !important;
+}
+
+.btn-con{
+    display: block;
+    margin:auto;
+    text-align: center;
+}
+
+.hidediv{
+    display: none;
+}
+
+.btn-con button{
+    width: 70%;
+}
+
+.welcome{
+  font-family: 'Dancing Script', cursive, Arial, Helvetica, sans-serif;
+  color: #2a2d5a;
+  font-weight: bold;
+  font-size: 35px;
+  text-align: center;
+}
+
+.btn-fb{
+    padding: 7px;
+    border: none;
+    color: rgb(255, 255, 255);
+    background-color: #3b5998;
+    border-radius: 4px;
+    margin-bottom: 5%;
+}
+
+.btn-fb:hover{
+    background-color: #273d6d;
+}
+
+.notreg{
+    font-size: 12px;
+}
+
+@media only screen and (max-width: 1200px) {
+.inner-con{
+    margin: 5%;
+    border-radius: 10px;
+    width: 80%;
+}
+.form-con2{
+    margin: 0%;
+}
+}
+
+@media only screen and (max-width: 1100px) {
+.inner-con{
+    margin: 5%;
+    border-radius: 10px;
+    width: 90%;
+}
+}
+
+@media only screen and (max-width: 950px) {
+.inner-con{
+    
+    border-radius: 10px;
+    width: 80%;
+}
+.image-con{
+    width: 50%;
+    margin-left: 5% ;
+}
+.hidediv{
+    display: inline;
+}
+.row{
+    margin: auto;
+}
+.form-con{
+    margin: auto;
+    margin-top: -10%;
+}
+
+}
+
+@media only screen and (max-width: 750px) {
+.inner-con{
+    margin-top: 10%;
+    border-radius: 10px;
+    width: 94%;
+}
+.image-con{
+    width: 50%;
+}
+.hidediv{
+    display: inline;
+}
+.row{
+    margin: auto;
+}
+.form-con{
+    margin: auto;
+    margin-top: -10%;
+}
+.lottie{
+    display: none;
+}
+
+}
+
+@media only screen and (max-width: 500px) {
+.inner-con{
+    margin-left: 5%;
+    border-radius: 10px;
+    width: 90%;
+}
+.image-con{
+    width: 50%;
+    margin-left: 5% ;
+}
+.hidediv{
+    display: inline;
+}
+.row{
+    margin: auto;
+}
+.form-con{
+    margin: auto;
+    margin-top: -10%;
+}
+
+}
+
+@media only screen and (max-width: 375px) {
+.inner-con{
+    margin: auto;
+    border-radius: 10px;
+    width: 90%;
+}
+.hidediv{
+    display: inline;
+}
+.form-con{
+    margin: auto;
+    margin-top: -10%;
+}
+
+}
+
+@media only screen and (max-width: 320px) {
+.inner-con{
+    margin: auto;
+    border-radius: 10px;
+    width: 90%;
+}
+.hidediv{
+    display: inline;
+}
+.form-con{
+    margin: auto;
+    margin-top: 6%;
+}
+
+}
+
+#button.disabled {
+    opacity: 0.65; 
+    cursor: not-allowed;
+  }

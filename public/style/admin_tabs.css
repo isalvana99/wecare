@@ -1,0 +1,144 @@
+.tab_outer_con{
+    padding-left: 30px !important;
+    padding-right: 40px !important;
+    padding-top: 10px;
+}
+
+.title_con{
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+}
+
+.tab_head_row{
+    padding-top: 10px;
+    text-align: center;
+    border-bottom:2px solid #ffffff;
+    padding-bottom: -1px !important;
+}
+
+.selected_tab{
+    color: white !important;
+    background-color: #2a2d5a;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border:2px solid #ffffff;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.selected_tab a{
+    color: white !important;
+    
+}
+
+a:hover{
+    text-decoration: none !important; 
+}
+
+.normal_tab{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border:2px solid #ffffff00;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.normal_tab:hover{
+    border:2px solid #ffffff00;
+    background-color: #ffffff59;
+}
+
+.normal_tab a{
+    color: white !important;
+}
+
+.tab_body_row{
+    height: 440px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.tab_body_row::-webkit-scrollbar {
+      width:1px; 
+    }
+    .tab_body_row::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .tab_body_row::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.tab_body_con{
+    font-size: 14px;
+}
+
+.center{
+    text-align: center;
+    width: 170px !important;
+}
+
+.btn_view{
+    background-color: rgb(8, 192, 8);
+    color: white;
+    border:1px solid rgba(255, 255, 255, 0.521);
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.btn_delete{
+    background-color: rgb(192, 8, 8);
+    color: white;
+    border:1px solid rgba(255, 255, 255, 0.521);
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.btn_delete:hover{
+    background-color: rgb(158, 6, 6);
+}
+
+ .btn_view:hover{
+    background-color: rgb(6, 158, 26);
+ }
+
+.btn_delete:focus, .btn_view:focus{
+    outline: none;
+}
+
+th {
+    background-color: #2a2d5a;
+    color: white;
+} 
+
+table{
+    color: white !important;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #5b609e;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+   background-color: #8c90cc;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  color: white !important;
+}
+
+.primary_btn{
+    background-color: #2a2d5a !important;
+    border: none !important;
+}
+
+.second_btn{
+    background-color: #797b99 !important;
+    border: none !important;
+}
+
+

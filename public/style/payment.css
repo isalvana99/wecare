@@ -1,0 +1,187 @@
+body{
+    background-color: #0057e4 !important;
+    background-attachment: fixed;
+    overflow-y: hidden;
+}
+
+html{
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.container1{
+    display: block;
+    left: 0;
+    right: 0;
+    margin-right: 27%;
+    margin-left: 27%;
+}
+
+.gcashlogo{
+    display: block;
+    margin: auto;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    width: 50%;
+}
+
+.rowgrey{
+    background-color: #f7f7f9;
+    padding: 30px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    font-size: 18px;
+    font-family: Helvetica, sans-serif;
+}
+
+.col1{
+    color: #a3a9b7;
+}
+
+.rowwhite{
+    background-color: white;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    padding: 30px;
+}
+
+.title1{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.title2{
+    font-size: 12px;
+    color: #696b6d;
+    margin-top: 20px;
+}
+
+.whitecon{
+    width:70% !important;
+}
+
+.telinput{
+border: none;
+width: 120px;
+}
+
+.num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: -50px !important;
+}
+
+.num2{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    border-left:1px solid #d6d6d6;
+}
+
+.telinput:focus{
+    outline: none;
+    border: none;
+    margin-left: -10px;
+}
+
+.btnnext{
+    margin: auto;
+    padding-left: 30%;
+    padding-right: 30%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    font-weight: 500;
+    margin-top: 50px;
+    letter-spacing: 2px;
+    background-color: #0057e4 !important;
+    border-radius: 100px;
+    border: none;
+    outline: none;
+}
+
+.btnnext:focus{
+    border: none;
+    outline: none;
+}
+
+
+
+
+@media only screen and (max-width: 820px) {
+    .num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: -10px !important;
+}
+}
+
+@media only screen and (max-width: 768px) {
+
+.container1{
+    width: 100%;
+    display: block;
+    margin-right: 0;
+    margin-left: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: -100px !important;
+}
+
+.whitecon{
+    width:95% !important;
+}
+
+.rowgrey{
+    background-color: #f7f7f9;
+    font-family: Helvetica, sans-serif;
+    margin-left: 35px;
+    margin-right: 35px;
+}
+
+.rowwhite{
+    background-color: white;
+    margin-left: 35px;
+    margin-right: 35px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+    .num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: -70px !important;
+}
+}
+
+@media only screen and (max-width: 540px) {
+    .num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: -50px !important;
+}
+}
+
+@media only screen and (max-width: 500px) {
+    .num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: -10px !important;
+}
+}
+
+@media only screen and (max-width: 280px) {
+    .num1{
+    font-size:17px;
+    border-bottom:1px solid #d6d6d6;
+    margin-right: 0px !important;
+}
+
+.whitecon{
+    width:100% !important;
+}
+}

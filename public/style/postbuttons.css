@@ -1,0 +1,79 @@
+.comment-btn2, .share-btn2{
+    --fa-primary-color: #8697a0;
+    --fa-secondary-color: #c7d1d6;
+    --fa-secondary-opacity: 1.0;
+    
+
+}
+
+.comment-btn3, .share-btn3, .react-btn3{
+    position: absolute;
+    margin-top: 3px;
+    margin-left: 10px;
+    color: #90A4AE;
+}
+
+
+.post-btns{
+    font-weight: normal;
+    margin: auto;
+}
+
+.react-btn2{
+    width: 30px;
+    margin-top: 4px;
+}
+
+.comment-btn1, .share-btn1, .react-btn1{
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+.react-btn1{
+    padding-left: 50px !important;
+    border-radius: 1000px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.comment-btn1{
+    padding-left: 40px !important;
+    border-radius: 1000px;
+    padding-top: 4px;
+}
+
+.share-btn1{
+    padding-left: 70px !important;
+    border-radius: 1000px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.comment-btn1:hover, .share-btn1:hover, .react-btn1:hover{
+background-color: rgba(47, 49, 49, 0.068);
+-webkit-box-shadow: inset 0px 0px 5px 1px rgba(196,196,196,.05) !important;
+-moz-box-shadow: inset 0px 0px 5px 1px rgba(196,196,196,.05) !important;
+box-shadow: inset 0px 0px 5px 1px rgba(196,196,196,.05) !important;
+}
+
+.share-btn2, .comment-btn2{
+margin-top:8px !important;
+}
+
+.share-btn2{
+    margin-top:6px !important;
+}
+
+.react-btn2{
+    margin-top:-1px !important;
+}
+
+.normalbtn{
+background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}

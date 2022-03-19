@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+html, body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.parentdiv{
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+    overflow:hidden;
+}
+
+.titlereg{
+    font-family: 'Dancing Script', cursive, Arial, Helvetica, sans-serif;
+    color: #565cb8;
+    font-weight: bold;
+    font-size: 35px;
+    text-align: center;
+    display: block;
+    margin: auto;
+    padding: 10px;
+}
+
+.img-con{
+    width: 45%;
+    margin-top: 3%;
+    margin-left: 4%;
+}
+
+.slogan{
+    margin-top: 3%;
+    font-size: 103%;
+    margin-left: 6%;
+    color: white;
+}
+
+.lotdiv{
+    padding: auto;
+    width: 45% !important;
+    background: rgb(0,149,232);
+    background: linear-gradient(342deg, rgba(0,149,232,1) 0%, rgba(32,176,255,1) 23%, rgba(134,210,255,1) 100%);
+}
+
+.lottiecon{
+    margin: auto;
+    width: 80%;
+    margin-top: -50px;
+}
+
+.rightdiv{
+    background-color: white !important;
+    width: 55%;
+}
+
+.insidediv{
+    margin-left: 3%;
+    margin-right: 3%;
+    height: 85vh;
+    overflow:hidden;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.insidediv::-webkit-scrollbar {
+      width:1px; 
+    }
+    .insidediv::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .insidediv::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.seperator{
+    display: none;
+}
+
+.reg_as_org a{
+    color: #64c7fe !important;
+    font-size: 12px;
+    float: right;
+}
+
+.reg_as_org a:hover{
+    color: #565bbb !important;
+    text-decoration: none;
+}
+
+.link_row .col-sm-6{
+    margin-top: 10px !important;
+}
+
+.inputs_label{
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 10px !important;
+}
+input, select{
+    margin-top: 5px !important;
+}
+
+input:focus, select:focus{
+    border: 1px solid #2a2d5a !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #7c84fc !important;
+}
+
+.small_grey{
+    color: rgb(109, 109, 109);
+}
+
+.inputs_row{
+    margin-bottom: 20px;
+}
+
+.inputs_label_small{
+    font-size: 13px;
+    color: #8B8989;
+
+}
+
+.form-check-label{
+    font-size: 14px;
+}
+
+.col_mar_bot{
+    margin-bottom: 10px;
+}
+
+.inputs_row_2{
+    margin-top: 80px !important;
+}
+
+.btn_reg_row{
+    margin-top: 20px;
+}
+
+.link_login span{
+    font-size: 12px;
+    margin-top: 30px !important;
+}
+
+.link_login a{
+    color: #64c7fe;
+}
+
+.link_login a:hover{
+    color: #5359b8;
+    text-decoration: none;
+}
+
+.btn_reg_row button{
+    background-color: #2a2d5a;
+    padding: 5px;
+    border-radius:5px;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 2px solid #2a2d5a;
+    margin-bottom: 10px;
+}
+.btn_reg_row button:hover{
+    background-color: #393d81;
+    border: 2px solid #393d81;
+}
+
+.home_icon_col{
+    padding: auto;
+    text-align: center;
+}
+.home_icon_btn{
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    margin: auto !important;
+    text-align: center;
+    margin-top: 25px !important;
+}
+
+.home_icon_btn:focus{
+    outline: none;
+}
+
+.home_word{
+    color: #565cb8;
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+
+.home_icon{
+    color: #565cb8;
+    font-size: 23px;
+    margin: auto;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 850px) {
+    .seperator{
+    display: block;
+}
+.rightdiv{
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.lotdiv{
+    width: 100% !important;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.insidediv{
+    height: 60vh;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.lottiecon{
+    width: 55%;
+    margin: auto;
+}
+
+.parentdiv{
+    top: 0;
+    bottom:0;
+    position:relative;
+}
+
+.slogan{
+    margin-right: 4%;
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+
+}
+
+
+@media only screen and (max-width: 600px) {
+    .insidediv{
+    height: 80vh;
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+.lotdiv{
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.lottiecon{
+    width: 80%;
+    margin: auto;
+}
+.reg_as_org a{
+    color: #64c7fe !important;
+    font-size: 12px;
+    float: left;
+}
+}
+
+@media only screen and (max-width: 450px) {
+    .insidediv{
+    height: 88vh;
+    margin-left: 8%;
+    margin-right: 8%;
+}
+
+.lotdiv{
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.lottiecon{
+    width: 100%;
+    margin: auto;
+}
+}

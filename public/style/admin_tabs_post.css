@@ -1,0 +1,38 @@
+.report_post_pics{
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.row_post_report_type{
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2d5a !important;
+}
+
+.row_post_report_id{
+    font-size: 20px;
+    font-weight: 500;
+    color: #2a2d5ac7 !important;
+}
+
+.col_post_head{
+    font-weight: 500;
+    background-color: #aeb0ca !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+
+.row_report_post{
+    color: rgba(0, 0, 0, 0.801);
+    margin-top: 10px;
+}
+
+.col_report_info{
+    background-color: #aeb0cabe !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+
+}

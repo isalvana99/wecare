@@ -1,0 +1,32 @@
+.row_com_report_type{
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2d5a !important;
+}
+
+.row_com_report_id{
+    font-size: 20px;
+    font-weight: 500;
+    color: #2a2d5ac7 !important;
+}
+
+.col_report_head{
+    font-weight: 500;
+    background-color: #aeb0ca !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+
+.row_reported_comment{
+    margin-bottom: 10px;
+}
+
+.row_report_comment{
+    margin-top: 10px;
+}
+
+.col_report_info{
+    background-color: #aeb0cabe !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}

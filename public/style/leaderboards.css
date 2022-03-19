@@ -1,0 +1,213 @@
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+button{
+    outline: none;
+    border:none;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: #EFF3F6!important;
+}
+
+.lead-con{
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 5%;
+}
+
+.inside-con{
+    padding-bottom: 3%;
+    background: rgb(0,149,232);
+    background: linear-gradient(342deg, rgba(0,149,232,1) 0%, rgba(32,176,255,1) 23%, rgba(134,210,255,1) 100%);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border:2px solid #9bd7ff;
+    border-top: none;
+}
+
+.profile-circle{
+    width: 120px;
+    height: 120px;
+    margin: auto;
+    border-radius: 1000px;
+    padding: auto;
+    border:3px solid white;
+    
+}
+
+.profile-inner{
+    width: 105px;
+    height: 105px;
+    border-radius: 1000px;
+    margin: auto;
+    margin-top: 3.5%;
+    margin-left: 4.1%;
+    overflow: hidden;
+}
+
+.img-con-2{
+    width: 110px;
+    height: 110px;
+    display: flex;
+    object-fit: cover;
+}
+
+.user-place-con{
+    text-align: center;
+    margin: auto;
+}
+
+.user-points-con{
+    text-align: center;
+    margin: auto;
+}
+
+.name-con{
+    text-align: center;
+    margin-top: 1%;
+    color: white;
+    font-size: 28px;
+}
+
+.user-place, .user-points{
+    font-size: 35px;
+    color: white;
+    font-weight: 700;
+}
+
+.naming-con{
+    font-size:18px;
+    text-align:center !important;
+    color: white;
+}
+
+.row-title{
+    text-align: center;
+    font-size: 16px;
+    color: rgb(54, 54, 54);
+    font-weight: 500;
+    margin-top: 2%;
+}
+
+.place-row{
+    margin-left: .3% !important;
+    margin-right: .3% !important;
+    margin-top: 1%;
+    margin-bottom: 1%;   
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background-color: white;
+    border-radius: 10px;
+    border:1px solid #dbdbdb;
+}
+
+
+.place-points-con{
+    padding: auto;
+    text-align: center;
+}
+.place-pos{
+    margin-left:5%;
+}
+
+.badge-con{
+    width: 40px ;
+}
+
+.place-name{
+    margin: auto;
+    text-align: center;
+}
+
+.place-points{
+    margin: auto;
+    text-align: center;
+}
+
+.select-con{
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
+
+.form-select{
+    width: 100%;
+    text-align: center;
+    border-radius: 3px;
+    background-color: white;
+    border: none;
+}
+
+.form-select:focus{
+    outline: none;
+}
+
+.select-btn{
+    background-color: rgba(255, 255, 255, 0.26);
+    color: white;
+    border:1px solid #ffffff59;
+}
+
+.select-btn2{
+    background-color: rgba(255, 255, 255, 0.26);
+    color: white;
+    border:1px solid #ffffff59;
+}
+
+.select-btn2:hover{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 146, 190);
+    border:1px solid #ffffff59;
+}
+
+@media only screen and (max-width: 450px) {
+ 
+.lead-con{
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-top: 17%;
+}
+
+.user-place, .user-points{
+    font-size: 30px;
+    color: white;
+    font-weight: 700;
+}
+
+.naming-con{
+    font-size:14px;
+    text-align:center !important;
+    color: white;
+}
+
+.place-row{
+    margin-left: -4% !important;
+    margin-right: -4% !important;
+    margin-top: 2%;
+    margin-bottom: 1%;   
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.row-title{
+    text-align: center;
+    font-size: 14px;
+    color: rgb(54, 54, 54);
+    font-weight: 500;
+    margin-top: 3%;
+}
+
+.select-col-con{
+    padding-left: .5% !important;
+    padding-right: .5% !important;
+}
+
+}

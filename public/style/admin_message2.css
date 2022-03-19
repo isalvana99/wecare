@@ -1,0 +1,308 @@
+.message_con{
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-right: 20px;
+    height: 510px;
+    margin-top: 20px;
+}
+
+.search_con{
+    height: 60px;
+    background-color: #5b609e;
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    margin-bottom: 5px;
+    padding: auto;
+    z-index: 1;
+}
+
+.search_input{
+    border:1px solid #ffffff !important;
+}
+
+.search_input:focus{
+    box-shadow: none !important;
+    outline: none !important;
+    border:1px solid #2a2d5a !important;
+}
+
+.btn-outline-secondary{
+    background-color: #2a2d5a !important;
+    color: white !important;
+    border:1px solid #ffffff !important;
+}
+
+.btn-outline-secondary:focus{
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: #1b1e47 !important;
+}
+
+.right_msg_con{
+    height: 500px !important;
+    overflow: hidden;
+    overflow-y: scroll; 
+    background-color: #2a2d5a;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border:2px solid #3c4077;
+}
+
+.right_msg_con::-webkit-scrollbar {
+      width:1px; 
+    }
+    .right_msg_con::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .right_msg_con::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.msg_info_con{
+    width: 100%;
+    margin-left: 0px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.199);
+    border:1px solid rgba(255, 255, 255, 0.541);
+    border-radius: 5px;
+}
+
+.msg_info_con:hover{
+    background-color: rgba(255, 255, 255, 0.288);
+}
+
+.msg_active_con{
+    background-color: white !important;
+    width: 100%;
+    margin-left: 0px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.msg_active_con .right_name{
+    color: #2a2d5a;
+    font-weight: 700;
+}
+
+.msg_active_con .right_time{
+    color: #2a2d5a9d;
+     font-weight: 500;
+}
+
+.right_img_user{
+    width: 55px;
+    height: 55px;
+    border-radius: 1000px;
+    margin-left:-10px !important;
+    object-fit: cover;
+}
+
+.right_name{
+    font-size: 14px;
+    color: white;
+    font-weight: 500;
+    margin-top: 7px;
+    margin-bottom: -2px;
+}
+
+.right_time{
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.705);
+    font-weight: 300;
+    
+}
+
+.unread_dot{
+    width: 20px;
+    height: 20px;
+    background-color: #64fe79;
+    border-radius: 1000px;
+    border:1px solid rgba(255, 255, 255, 0.541);
+}
+
+.left_msg_white_con{
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    text-align: left;
+}
+
+.left_msg_white_con:focus{
+    outline: none ;
+}
+
+.convo_area{
+    height: 338px !important;
+    overflow: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse !important;
+}
+
+.convo_area::-webkit-scrollbar {
+      width:1px; 
+    }
+    .convo_area::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .convo_area::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.user_msg_con{
+    margin-top: 10px;
+}
+
+.left_img_user{
+    width: 40px;
+    height: 40px;
+    border-radius: 1000px;
+    margin-top: 20px;
+    border:1px solid white;
+    object-fit: cover;
+}
+
+.user_msg_body{
+    font-size: 14px;
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-left: 10px;
+    border:1.5px solid #c4c4c4;
+}
+
+.user-msg-name{
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+.user-msg-time{
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.603);
+    color: rgba(255, 255, 255, 0.795);
+    font-weight: 200;
+}
+
+.left_msg_con{
+    background-color: #5b609e;
+    border:2px solid #3c4077;
+    border-top-right-radius: 10px;
+}
+
+.left_img_admin{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 1000px;
+    margin-left: -20px;
+    margin-top: 20px;
+    border:1px solid white;
+}
+
+.admin_msg_content{
+    float: right !important;
+}
+
+.admin_msg_info{
+    float: right !important;
+}
+
+.admin_msg_body{
+    font-size: 14px;
+    color: white;
+    background: rgb(35,38,79);
+background: linear-gradient(342deg, rgba(35,38,79,1) 0%, rgba(65,69,142,1) 100%);
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    float: right !important;
+    border:1.5px solid #ffffff46;
+}
+
+.top_info{
+    background-color: #3c4077;
+}
+
+.top_info_name{
+    font-size: 16px;
+    color: white;
+    font-weight: 700;
+    margin-left: 20px;
+    margin-top: 3px;
+}
+
+.type_area{
+    padding: 10px;
+}
+
+.message-input{
+    width: 103%;
+    background-color: rgba(255, 255, 255, 0);
+    resize: none;
+    color: white;
+    border:1px solid rgba(255, 255, 255, 0);
+    font-size: 14px;
+    letter-spacing: .5px;
+    word-spacing: 1px;
+    border-radius: 5px;
+    padding: 5px;
+}
+.message-input:focus{
+    outline: none;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.144);
+    border:1px solid rgba(255, 255, 255, 0.555);
+}
+
+.message-input::-webkit-scrollbar {
+      width:1px; 
+    }
+    .message-input::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .message-input::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.733);  
+}
+
+.btn-msg-submit{
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    color: white;
+    margin-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 3px;
+    border-radius: 3px;
+    border:1px solid #2a2d5a00;
+}
+
+.btn-msg-submit:hover{
+    background-color: #2a2d5a48 !important;
+    border:1px solid #2a2d5a8c;
+}
+
+.btn-msg-submit:focus{
+    outline: none;
+    background-color: #2a2d5a !important;
+    border:1px solid #2a2d5a8c;
+}
+
+.btn_send_con{
+    padding: auto !important;
+    display: block;
+    text-align: center;
+    
+}

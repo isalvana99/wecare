@@ -1,0 +1,198 @@
+body{
+    overflow-x: hidden;
+    width: 100%;
+    height: 100vh; /* 100% of the viewport height */
+    background-color: #8a8cb1 !important;
+}
+
+.parent_con{
+    display: flex;
+}
+
+.banner_header{
+    background-color:#5b609e;
+    padding: 10px;
+}
+
+.small_con{
+    padding-left: 29px !important;
+}
+
+
+.img_banner{
+    width: 60%;
+    margin: auto;
+}
+
+.admin_profile_info{
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.274);
+    margin: auto !important;
+    border-radius: 5px;
+    border:1px solid rgba(255, 255, 255, 0.534);
+}
+
+.profile_img{
+    width: 60px;
+    border-radius: 1000px;
+    object-fit: fill;
+    border:2px solid rgb(255, 255, 255);
+}
+
+.admin_name{
+    margin: auto;
+    font-size: 16px;
+    color: white;
+    font-weight: 500px;
+}
+
+.admin_title{
+    color: rgba(255, 255, 255, 0.678);
+}
+
+.tile_area{
+    background-color: #2a2d5a;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 10px;
+    height: 430px;
+}
+
+
+.tile_area::-webkit-scrollbar {
+      width:1px; 
+    }
+    .tile_area::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .tile_area::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.active_tile{
+    border: none;
+    border-left: 5px solid white;
+    background-color: rgba(255, 255, 255, 0.562);
+    color: white;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 600;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    outline: none !important;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.circle_alert{
+    width: 15px;
+    height: 15px;
+    background-color: #64fe79;
+    float: right;
+    border-radius: 100px;
+    border:1px solid rgb(255, 255, 255);
+}
+
+.normal_tile{
+    border: none;
+    border:1.5px solid rgba(255, 255, 255, 0.384);
+    background-color: rgba(255, 255, 255, 0.24);
+    color: white;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 400;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    outline: none !important;
+    border-radius: 5px;
+}
+
+.normal_tile:hover{
+    background-color: rgba(255, 255, 255, 0.329);
+}
+
+.top_search_area{
+    background-color: #3c4077;
+    padding: 10px;
+}
+
+.profile_img_top{
+    border-radius: 100px;
+    width: 40px;
+    margin-right: 50px;
+    border:2px solid white;
+    margin-top: 2px !important;
+    object-fit: cover;
+}
+
+.input-group-text{
+    background-color: #2a2d5a !important;
+    color: white !important;
+}
+
+.search_input{
+    border:1px solid #ffffff !important;
+}
+
+.search_input:focus{
+    box-shadow: none !important;
+    outline: none !important;
+    border:1px solid #2a2d5a !important;
+}
+
+.btn-outline-secondary{
+    background-color: #2a2d5a !important;
+    color: white !important;
+    border:1px solid #ffffff !important;
+}
+
+.btn-outline-secondary:focus{
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: #1b1e47 !important;
+}
+
+.inner_main_con{
+    height: 535px;
+}
+
+.top_admin_logout{
+    float: right;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    color: white;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border:1px solid #ffffff00 !important;
+}
+
+.top_admin_logout:hover{
+    background-color: rgba(255, 255, 255, 0.158);
+    border: none;
+    color: white;
+    margin: 5px;
+    border:1px solid #ffffff67 !important;
+}
+
+.top_admin_logout i{
+    margin-left: 10px;
+}
+
+.top_datetime{
+    padding-left: 40px !important;
+}
+
+.top_date_row{
+    color: white;
+    font-size: 16px;
+}
+
+.top_time_row{
+    color: rgba(255, 255, 255, 0.719);
+    font-size: 14px;
+}

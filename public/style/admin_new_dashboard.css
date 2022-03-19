@@ -1,0 +1,202 @@
+.innner_dash_con{
+    height: 88vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 10px;
+    padding-right: 20px;
+}
+
+.innner_dash_con::-webkit-scrollbar {
+      width:1px; 
+    }
+    .innner_dash_con::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .innner_dash_con::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.dash_header{
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+}
+
+.dash_square_con{
+    margin: 10px !important;
+    margin-right: 20px !important;
+    background: rgb(60,64,119);
+background: linear-gradient(342deg, rgba(60,64,119,1) 0%, rgba(42,45,90,1) 100%);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.dash_user_box{
+    color: white;
+background-image: linear-gradient(
+  45deg,
+  hsl(199deg 97% 53%) 0%,
+  hsl(200deg 91% 49%) 21%,
+  hsl(201deg 94% 45%) 30%,
+  hsl(203deg 94% 42%) 39%,
+  hsl(204deg 93% 40%) 46%,
+  hsl(206deg 91% 37%) 54%,
+  hsl(209deg 88% 35%) 61%,
+  hsl(211deg 86% 32%) 69%,
+  hsl(214deg 84% 29%) 79%,
+  hsl(218deg 82% 26%) 100%
+);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.dash_org_box{
+    color: white;
+background-image: linear-gradient(
+  45deg,
+  hsl(166deg 93% 44%) 0%,
+  hsl(167deg 98% 40%) 21%,
+  hsl(167deg 100% 37%) 30%,
+  hsl(168deg 100% 34%) 39%,
+  hsl(168deg 100% 32%) 46%,
+  hsl(168deg 100% 29%) 54%,
+  hsl(169deg 100% 26%) 61%,
+  hsl(169deg 100% 24%) 69%,
+  hsl(169deg 96% 21%) 79%,
+  hsl(169deg 92% 19%) 100%
+);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.dash_post_box{
+    color: white;
+    background-image: linear-gradient(
+        45deg,
+        hsl(359deg 40% 69%) 0%,
+        hsl(357deg 44% 67%) 21%,
+        hsl(354deg 48% 66%) 30%,
+        hsl(351deg 50% 63%) 39%,
+        hsl(348deg 53% 61%) 46%,
+        hsl(346deg 55% 59%) 54%,
+        hsl(342deg 56% 56%) 61%,
+        hsl(339deg 57% 54%) 69%,
+        hsl(336deg 59% 50%) 79%,
+        hsl(332deg 69% 46%) 100%
+    );
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.box_title_col{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.box_total_num{
+    margin: 10px;
+    font-size: 25px;
+    letter-spacing: 2px;
+}
+
+.box_today_num{
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    font-weight: 300;
+}
+
+.box_icon_col i{
+    font-size: 40px;
+    position: absolute;
+    float: right;
+}
+
+.dash_line_con{
+    background: rgb(60,64,119);
+    background: linear-gradient(342deg, rgba(60,64,119,1) 0%, rgba(42,45,90,1) 100%);
+    color: white !important;
+    padding: 0px !important;
+    border-radius: 10px;
+}
+
+canvas #lineChart{
+    color: rgb(255, 255, 255) !important;
+    color:#ffffff2d;
+}
+
+.second_area_con{
+    margin-left: 10px !important;
+    margin-right: 20px !important;
+    margin-top: 20px !important;
+}
+
+.dash_recent_activity{
+    padding-left: 10px;
+}
+
+.dash_recent_con{
+    background: rgb(60,64,119);
+background: linear-gradient(342deg, rgba(60,64,119,1) 0%, rgba(42,45,90,1) 100%);
+    height: 57.5vh;
+    border-radius: 10px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.dash_recent_con::-webkit-scrollbar {
+      width:1px; 
+    }
+    .dash_recent_con::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .dash_recent_con::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.dash_recent_header{
+    margin-left: 0px !important;
+    font-size: 14px;
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    background-color: #2a2d5a;
+    z-index: 100;
+}
+
+.dash_recent_content{
+    color: white;
+    margin: 10px;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.dash_recent_pic{
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 100px;
+}
+
+.dash_recent_name{
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.dash_recent_money{
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.781);
+}
+
+.dash_recent_amount{
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.623);
+    font-weight:lighter;
+}
+
+.dash_recent_time{
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.678) !important;
+    margin-top: -10px;
+}

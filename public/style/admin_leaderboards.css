@@ -1,0 +1,81 @@
+.lead_main_con{
+    height: 535px;
+    padding-left: 30px !important;
+    padding-right: 50px !important;
+    padding-top: 10px;
+}
+
+.lead_inner_con{
+    height: 420px !important;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.lead_inner_con::-webkit-scrollbar {
+      width:1px; 
+    }
+    .lead_inner_con::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .lead_inner_con::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.con_title{
+    color: white;
+    font-size: 18px;
+    font-weight: 600px;
+}
+
+.select_area{
+    margin-bottom: 10px;
+}
+
+.select_con{
+    width: 100%;
+    padding: 5px;
+    background-color: #2a2d5a;
+    color: white;
+    border-radius: 5px;
+    border:1px solid white;
+    font-size: 14px;
+}
+
+.row_user_lead{
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+    margin: auto;
+}
+
+.row_user_lead:hover{
+    background-color: #ffffffbb;
+}
+
+.user_place{
+    background-color: #2a2d5a;
+    color: white;
+    padding: 5px;
+    border:1px solid rgba(255, 255, 255, 0.733);
+}
+
+.user_name_lead{
+    color: white;
+    padding: 5px;
+    background-color: #5b609e;
+    border:1px solid rgba(255, 255, 255, 0.733);
+}
+
+.user_donate{
+    background-color: #3c4077;
+    color: white;
+    padding: 5px;
+    border:1px solid rgba(255, 255, 255, 0.733);
+}
+
+.header_con{
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 500px;
+}

@@ -1,0 +1,35 @@
+.report_user_pic{
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+
+.row_report_type{
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2d5a !important;
+}
+.row_report_id{
+    font-size: 20px;
+    font-weight: 500;
+    color: #2a2d5ac7 !important;
+}
+
+.row_report_details{
+    margin-top: 10px;
+}
+
+.col_report_head{
+    font-weight: 500;
+    background-color: #aeb0ca !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}
+
+.col_report_info{
+    background-color: #aeb0cabe !important;
+    color: #2a2d5a !important;
+    padding: 5px;
+}

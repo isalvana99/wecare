@@ -1,0 +1,19 @@
+.input-box { 
+    position: relative; 
+  }
+  
+ #phone { 
+    display: block; 
+    border: 1px solid #d7d6d6; 
+    background: #fff; 
+    padding: 10px 10px 10px 81px; 
+    width: 195px; 
+  }
+  
+  .unit { 
+    position: absolute; 
+    display: block; 
+    left: 45px; 
+    top: 7px; 
+    z-index: 9; 
+  }
