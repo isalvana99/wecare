@@ -1,0 +1,56 @@
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    font-size: 14px !important;
+    background-color: #2a2d5a !important;
+    color: white !important;
+    padding-bottom: 9px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: rgb(250, 0, 0) !important;
+    cursor: inherit;
+    display: block;
+}
+
+#img-upload{
+    margin-top:-100px;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    padding: 0;
+    border: none;
+}
+
+.profilepic2{
+    width:80px;
+    height:80px;
+    border-radius:1000px;
+}
+
+.modal_row_title{
+    font-size: 14px !important;
+    font-weight: 500;
+    color:rgba(0, 0, 0, 0.774) !important;
+}
+
+.btn-violet{
+    background-color: #2a2d5a;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}

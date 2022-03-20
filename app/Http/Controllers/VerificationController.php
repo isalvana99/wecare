@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Models\Notif;
+use DB;
 
 class VerificationController extends Controller
 {
@@ -48,6 +50,26 @@ class VerificationController extends Controller
      */
     public function show(Request $request)
     {
+        $cnt = 0;
+        $notif = DB::select('SELECT * FROM notifs');
+        if(count($notif) > 0){
+            foreach($notif as $n){
+                if($n->notifUserId == auth()->user()->id){
+                    $cnt = 1;
+                }
+            }
+        }
+        
+        
+        if($cnt == 0){
+            $post3 = new Notif;
+            $post3 -> notifUserId = auth()->user()->id;
+            $post3 -> notifToUserId = auth()->user()->id;
+            $post3 -> notifType = "welcome";
+            $post3 -> notifStatus = "UNREAD";
+            $post3->save();
+        }
+
         return $request->user()->hasVerifiedEmail()
                         ? redirect($this->redirectPath())
                         : view('verification.verify', [
@@ -57,6 +79,8 @@ class VerificationController extends Controller
 
     public function rememberMe()
     {   
+        
+
         $acc = DB::select('SELECT * FROM users');
         return view('auth.login', compact('acc'));
     }

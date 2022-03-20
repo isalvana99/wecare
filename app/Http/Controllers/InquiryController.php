@@ -112,7 +112,7 @@ class InquiryController extends Controller
 
     public function show2(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $selected_from_all = "";
@@ -223,8 +223,9 @@ class InquiryController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
         
-        return view('admin.admin_inquiries', compact('vars', 'people', 'selected_tile', 'tiles', 'selected_person', 'selected_person_id', 'selected_from_all', 'count', 'date', 'search', 'unique', 'all','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.admin_inquiries', compact('vars', 'people', 'selected_tile', 'tiles', 'selected_person', 'selected_person_id', 'selected_from_all', 'count', 'date', 'search', 'unique', 'all','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function inquiryAdmin(Request $request){

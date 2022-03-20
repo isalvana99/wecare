@@ -32,13 +32,13 @@
                 </div>
                 <div class="row tab_head_row">
                     <div class="col-2 ">
-                        <form action="{{route('Manage Reports')}}" method="GET"><input type="hidden" name="selected_tile" value="Manage Reports"><button class="normal_tab">User</button></form>
+                        <form action="{{route('Reports')}}" method="GET"><input type="hidden" name="selected_tile" value="Reports"><button class="normal_tab" style="width:100%;">User</button></form>
                     </div>
                     <div class="col-2">
-                        <form action="{{route('Manage Reports 2')}}" method="GET"><input type="hidden" name="selected_tile" value="Manage Reports"><button class="normal_tab">Post</button></form>
+                        <form action="{{route('Manage Reports 2')}}" method="GET"><input type="hidden" name="selected_tile" value="Reports"><button class="normal_tab" style="width:100%;">Post</button></form>
                     </div>
                     <div class="col-2">
-                        <button class="selected_tab" disabled>Comment</button>
+                        <button class="selected_tab" style="width:100%;" disabled>Comment</button>
                     </div>
                 </div>
                 <div class="row tab_body_row" >

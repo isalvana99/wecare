@@ -176,17 +176,21 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/admin/users', [AdminController::class,'adminUsersTable'])->name('People')->middleware('role:ADMIN');
         Route::get('/admin/organization', [AdminController::class,'adminOrgsTable'])->name('Organization')->middleware('role:ADMIN');
         Route::get('/admin/posts', [AdminController::class,'adminPostsTable'])->name('Posts')->middleware('role:ADMIN');
-        Route::get('/admin/settings', [AdminController::class,'adminSettings'])->name('Settings')->middleware('role:ADMIN');
+        Route::get('/admin/settings', [AdminController::class,'adminSettings'])->name('Settings 2')->middleware('role:ADMIN');
+        Route::put('/admin/updateprofile/{admin?}', [AdminController::class,'updateProfile'])->name('updateProfile')->middleware('role:ADMIN');
+        Route::get('/admin/adminlist', [AdminController::class,'adminList'])->name('Settings')->middleware('role:ADMIN');
         Route::get('/verify-account/', [AdminController::class,'adminVerifyUser'])->name('admin_verify_user')->middleware('role:ADMIN');
         Route::get('/verify-post/', [AdminController::class,'adminVerifyPost'])->name('admin_verify_post')->middleware('role:ADMIN');
         Route::get('/ban/', [AdminController::class,'adminBan'])->name('admin_ban')->middleware('role:ADMIN');
         Route::get('/admin/leaderboards', [AdminController::class,'adminLeaderboards'])->name('Users Leaderboards')->middleware('role:ADMIN');
-        Route::get('/admin/reports/users', [AdminController::class,'adminReportsUsers'])->name('Manage Reports')->middleware('role:ADMIN');
+        Route::get('/admin/reports/users', [AdminController::class,'adminReportsUsers'])->name('Reports')->middleware('role:ADMIN');
         Route::get('/admin/reports/posts', [AdminController::class,'adminReportsPosts'])->name('Manage Reports 2')->middleware('role:ADMIN');
         Route::get('/admin/reports/comments', [AdminController::class,'adminReportsComments'])->name('Manage Reports 3')->middleware('role:ADMIN');
         Route::get('/admin/logs', [AdminController::class,'adminLogs'])->name('Logs')->middleware('role:ADMIN');
         Route::get('/admin/comment-review', [AdminController::class,'reviewComment'])->name('comment_review')->middleware('role:ADMIN');
         Route::get('/admin/set-admin', [AdminController::class,'make_admin'])->name('make_admin')->middleware('role:ADMIN');
+        Route::get('/admin/requests-v', [AdminController::class,'adminRequestsVerify'])->name('Requests')->middleware('role:ADMIN');
+        Route::get('/admin/requests-d', [AdminController::class,'adminRequestsDelete'])->name('Requests 2')->middleware('role:ADMIN');
 
         //message inquiry
         Route::get('/admin/inquiry_message/', [InquiryController::class,'show2'])->name('Users Inquiries')->middleware('role:ADMIN');

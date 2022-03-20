@@ -280,7 +280,7 @@ class PostsController extends Controller
       // }
       $post->save();
 
-      return redirect('/home/'.$id)->with('success', 'Post successfully updated.');
+      return redirect()->back()->with('success', 'Post successfully updated.');
  
     }
 

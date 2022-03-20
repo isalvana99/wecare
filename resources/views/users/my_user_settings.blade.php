@@ -326,15 +326,24 @@
                             </div>        
                        </div> <!--/Address inputs-->
 
-                    <!--Phone number input-->
+                    <!-- phone num row -->
                     <div class="col-md-4 mb-4" style="margin-top:15px;">
-                        <label for="phone_number label">Registered GCash Number</label>
-                        <input type="text" name="phone_number" maxlength="14" minlength="9" class="form-control pn" id="" placeholder="Phone number..." value="{{$posts->phoneNumber}}" required>
-                        
+                        <label class="inputs_label">Registered GCash Number</label>
+                        <div class="">
+                            <img src="../../images/phflag.jpg" style="position:absolute; width:35px;margin:9px;" alt="">
+                            <input maxlength="11" minlength="11" type="tel" name="phone_number" class="form-control pn @error('phone_number') is-invalid @enderror" id="phone" placeholder="0912 345 6789" value="{{$posts->phoneNumber}}" style="padding-left:50px;" autocomplete="off" required>
+                        </div>
+
                         <div class="valid-feedback">
                             Looks good!
                         </div>
-                    </div> <!--/Phone number input-->
+                        @error('phone_number')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>wrong</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <!-- phone num row end -->
                     
                     <!-- profile photo -->
                     <div class="col-md-12 mb-2" style="display:flex;">
