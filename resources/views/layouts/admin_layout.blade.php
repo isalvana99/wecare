@@ -192,7 +192,7 @@
                                     @endif
                                     @endif
                                 @endif
-                                @if($tile == 'Manage Reports')
+                                @if($tile == 'Reports')
                                     @if(count($layoutreport) > 0)
                                     @foreach($layoutreport as $var)
                                         @if($var->reportStatus == "PROCESS")
@@ -200,6 +200,20 @@
                                         @endif
                                     @endforeach
                                     @if($num == 5)
+                                        <div class="col-4">
+                                            <div class="circle_alert"></div> <!-- this circle is for the alert -->
+                                        </div>
+                                    @endif
+                                    @endif
+                                @endif
+                                @if($tile == 'Requests')
+                                    @if(count($layoutrequest) > 0)
+                                    @foreach($layoutrequest as $var)
+                                        @if($var->reviewStatus == "PROCESS")
+                                            @php $num = 6; @endphp
+                                        @endif
+                                    @endforeach
+                                    @if($num == 6)
                                         <div class="col-4">
                                             <div class="circle_alert"></div> <!-- this circle is for the alert -->
                                         </div>

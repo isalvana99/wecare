@@ -6,11 +6,11 @@
     <div class="big_main_con">
         
         <!-- topbar here -->
-        <form action="{{ route('Manage Reports') }}" method="GET">
+        <form action="{{ route('Reports') }}" method="GET">
         <div class="row top_search_area" >
             <div class="col-7" style="margin:auto !important; ">
                 <div class="input-group mb-3">
-                    <input type="hidden" name="selected_tile" value="Manage Reports">
+                    <input type="hidden" name="selected_tile" value="Reports">
                     <input class="form-control" type="search" placeholder="Search" name="search" onclick="submit_form()" aria-label="Search" value="{{ $search }}" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit" style="height:39px;margin-top:-1px;">Search</button>
@@ -32,13 +32,13 @@
                 </div>
                 <div class="row tab_head_row">
                     <div class="col-2 ">
-                        <button class="selected_tab" disabled>User</button>
+                        <button class="selected_tab" style="width:100%;" disabled>User</button>
                     </div>
                     <div class="col-2">
-                        <form action="{{route('Manage Reports 2')}}" method="GET"><input type="hidden" name="selected_tile" value="Manage Reports"><button class="normal_tab">Post</button></form>
+                        <form action="{{route('Manage Reports 2')}}" method="GET"><input type="hidden" name="selected_tile" value="Reports"><button class="normal_tab" style="width:100%;">Post</button></form>
                     </div>
                     <div class="col-2">
-                        <form action="{{route('Manage Reports 3')}}" method="GET"><input type="hidden" name="selected_tile" value="Manage Reports"><button class="normal_tab">Comment</button></form>
+                        <form action="{{route('Manage Reports 3')}}" method="GET"><input type="hidden" name="selected_tile" value="Reports"><button class="normal_tab" style="width:100%;">Comment</button></form>
                     </div>
                 </div>
                 <div class="row tab_body_row" >

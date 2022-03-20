@@ -8,12 +8,13 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="../../style/admin_tabs2.css" rel="stylesheet" type="text/css" >
     <link href="../../style/admin_postinfo_modal.css" rel="stylesheet" type="text/css" >
+    <link rel="shortcut icon" href="{{ asset('images/wecarelogo.png') }}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <title>Username here</title>
+    <title>WeCare Admin</title>
 </head>
 <body>
 @php date_default_timezone_set("Asia/Manila"); @endphp
@@ -111,7 +112,7 @@
                                     @endif
                                     @endif
                                 @endif
-                                @if($tile == 'Manage Reports')
+                                @if($tile == 'Reports')
                                     @if(count($layoutreport) > 0)
                                     @foreach($layoutreport as $var)
                                         @if($var->reportStatus == "PROCESS")
@@ -125,7 +126,20 @@
                                     @endif
                                     @endif
                                 @endif
-                                
+                                @if($tile == 'Requests')
+                                    @if(count($layoutrequest) > 0)
+                                    @foreach($layoutrequest as $var)
+                                        @if($var->reviewStatus == "PROCESS")
+                                            @php $num = 6; @endphp
+                                        @endif
+                                    @endforeach
+                                    @if($num == 6)
+                                        <div class="col-4">
+                                            <div class="circle_alert"></div> <!-- this circle is for the alert -->
+                                        </div>
+                                    @endif
+                                    @endif
+                                @endif
                             </div>
                         </button>
                     </div> <!-- end of tile -->
@@ -289,6 +303,7 @@
                                               <button type="submit" class="btn btn-primary" style="background-color:green; color:white;" disabled><i class="fa fa-check" aria-hidden="true"></i> Post Verified</button>
                                             @else
                                             <form action="{{ route('admin_verify_post') }}" method="GET">
+                                                <input type="hidden" name="userid" value="{{$var->id}}">
                                               <input type="hidden" name="postid" value="{{$var->postId}}">
                                               <button type="submit" class="btn btn-primary">Verify this Post</button>
                                             </form>
@@ -545,6 +560,7 @@
                 <button type="submit" class="btn btn-primary" disabled><i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:14px"></i> This Post is Banned</button>
             @else
             <form action="{{ route('admin_verify_post') }}" method="GET">
+                <input type="hidden" name="userid" value="{{$var->id}}">
                 <input type="hidden" name="postid" value="{{$var->postId}}">
                 <button type="submit" class="btn btn-primary">Verify this Post</button>
             </form>

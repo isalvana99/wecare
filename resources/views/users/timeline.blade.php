@@ -3,7 +3,45 @@
 @section('content')
 
 <link href="../../style/timeline.css" rel="stylesheet" type="text/css" >
+<style>
+    table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
 
+  input[type=checkbox] {
+  display: none;
+}
+
+.container2 img {
+  transition: transform 0.25s ease;
+  cursor: zoom-in;
+  width: 100px;
+  height: 70px;
+}
+
+input[type=checkbox]:checked ~ label > img {
+  transform: scale(4);
+  margin-top: -140px;
+  margin-left: 75%;
+  cursor: zoom-out;
+  position: relative;
+  width: 300px;
+  height: 200px;
+  z-index:99999;
+}
+</style>
 <div class="wide-con" style="border:1px solid white;">
         <div class="row inner-row" >
 
@@ -169,8 +207,21 @@
                 </div>
                 
                 <div class="pic-con">
-                    <img src="/storage/profile_images/{{$user->profileImage}}" class="img-con-3" alt="">
+                    <img data-toggle="modal" data-target="#picpostModal2" src="/storage/profile_images/{{$user->profileImage}}" class="img-con-3" alt="">
                 </div>
+                
+
+                        <!-- Modal OF profile pic BUTTON-->
+                        <div class="modal fade" id="picpostModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="" >
+                            <div class="modal-dialog" role="document" style="margin-top:-1px;margin-bottom:-9px;">
+                                <div class="modal-content" >
+                                    <div class="modal-body" style="left:-100px;width:650px;height:620px;overflow: hidden;background-color:white; padding-top:-100px;">
+                                        <img src="/storage/profile_images/{{$user->profileImage}}" class="" alt="" style="width:100%;height:100%;object-fit:cover;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /END Modal OF profile pic BUTTON -->
             </div>
 
             <div class="w-100 seperator"></div>
@@ -887,8 +938,8 @@
                             
                         </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalCenter2-{{$post->postId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter2-{{$post->postId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -897,92 +948,129 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        @if(Auth::user()->id != $post->postUserId)
-                                        <button class="btn" style="width:100%;text-align:left;" type="button" disabled>Report this post:</button>
-                                            <form action="{{route('report')}}" method="GET">
-                                            <input type="hidden" name="userid" value="">
-                                            <input type="hidden" name="postid" value="{{$post->postId}}">
-                                            <input type="hidden" name="commentid" value="">
-                                            <div class="row" id="reportDiv" style="display:block;">
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios1-{{$post->postId}}" value="Inappropriate" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
-                                                        <label class="form-check-label" for="exampleRadios1-{{$post->postId}}">
-                                                        Inappropriate
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios2-{{$post->postId}}" value="Scam" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
-                                                        <label class="form-check-label" for="exampleRadios2-{{$post->postId}}">
-                                                        Scam
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios3-{{$post->postId}}" value="False Information" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
-                                                        <label class="form-check-label" for="exampleRadios3-{{$post->postId}}">
-                                                        False Information
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios4-{{$post->postId}}" value="Vulgar" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
-                                                        <label class="form-check-label" for="exampleRadios4-{{$post->postId}}">
-                                                        Vulgar
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios6-{{$post->postId}}" value="Vulgar" onclick="document.getElementById('custom-{{$post->postId}}').disabled = false">
-                                                        <label class="form-check-label" for="exampleRadios6-{{$post->postId}}" style="width:400px;">
-                                                        Other: <small>(Please tell us, so we can understand.)</small> 
-                                                        </label>
-                                                        <textarea type="text" name="reportDescription" id="custom-{{$post->postId}}" placeholder="" style="width:400px;height:100px;" required disabled></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-check">
-                                                        <button type="submit" class="btn-report-2">Submit</button>
-                                                    </div>
+
+                                        @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED")
+                                        <!-- post report -->
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('reportDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('reportDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('reportDiv{{$post->postId}}').style.display = 'none'">Report Post</button>
+                                        <form action="{{route('report')}}" method="GET">
+                                        <input type="hidden" name="userid" value="">
+                                        <input type="hidden" name="postid" value="{{$post->postId}}">
+                                        <input type="hidden" name="commentid" value="">
+                                        <div class="row" id="reportDiv{{$post->postId}}" style="display:none;">
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios1-{{$post->postId}}" value="Inappropriate" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
+                                                    <label class="form-check-label" for="exampleRadios1-{{$post->postId}}">
+                                                    Inappropriate
+                                                    </label>
                                                 </div>
                                             </div>
-                                            </form>
-
-
-                                           @elseif(Auth::user()->id == $post->postUserId && $post->postStatus == "PROCESS") 
-                                            <button class="btn" style="width:100%;text-align:left;" type="button" disabled>Delete Post</button>
-                                            <div class="row deleteDiv2" id="deleteDiv" style="display:block; ">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        Are you sure you want to delete this? 
-                                                        {{$post->postUserId." ".$post->postId}}
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    {!!Form::open(['action' => ['App\Http\Controllers\PostsController@destroy', $post->postId], 'method' => 'POST', 'class' => 'pull-right'])!!}
-                                                    <div class="col-5">
-                                                        <div class="form-check">
-                                                            <button type="submit" class="btn-delete-yes">Yes</button>
-                                                        </div>
-                                                    </div>  
-                                                    {{Form::hidden('_method', 'DELETE')}}
-                                                    {!!Form::close()!!}
-                                                    <div class="col-5">
-                                                        <div class="form-check">
-                                                            <button class="btn-delete-no">No</button>
-                                                        </div>
-                                                    </div>                                       
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios2-{{$post->postId}}" value="Scam" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
+                                                    <label class="form-check-label" for="exampleRadios2-{{$post->postId}}">
+                                                    Scam
+                                                    </label>
                                                 </div>
                                             </div>
-                                            @elseif($post->postStatus == "BANNED")
-                                            <div>This post is Banned.</div>
-                                            @endif
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios3-{{$post->postId}}" value="False Information" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
+                                                    <label class="form-check-label" for="exampleRadios3-{{$post->postId}}">
+                                                    False Information
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios4-{{$post->postId}}" value="Vulgar" onclick="document.getElementById('custom-{{$post->postId}}').disabled = true">
+                                                    <label class="form-check-label" for="exampleRadios4-{{$post->postId}}">
+                                                    Vulgar
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reportDescription" id="exampleRadios6-{{$post->postId}}" value="Vulgar" onclick="document.getElementById('custom-{{$post->postId}}').disabled = false">
+                                                    <label class="form-check-label" for="exampleRadios6-{{$post->postId}}" style="width:400px;">
+                                                    Other: <small>(Please tell us, so we can understand.)</small> 
+                                                    </label>
+                                                    <textarea type="text" name="reportDescription" id="custom-{{$post->postId}}" placeholder="" style="width:400px;height:100px;" required disabled></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="">
+                                                    <button type="submit" class="btn-delete-yes"  style="position:relative;width:100%;">Send Report</button>
+                                                    <button class="btn-delete-no" type="button" class="close" data-dismiss="modal" aria-label="Close" style="position:absolute;margin-left:110px;width:50%;">Cancel</button>
+                                                </div>
+                                            </div>
+                                                
+                                        </div>
+                                        </form>
+                                        <!-- /post report -->
+                                        @endif
+
+                                        @if(Auth::user()->id == $post->postUserId && $post->postStatus == "PROCESS")
+                                        <!-- post edit -->
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('editDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('editDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('editDiv{{$post->postId}}').style.display = 'none'">Edit Post</button>
+                                        <div class="row deleteDiv2" id="editDiv{{$post->postId}}" style="display:none; ">
+                                            <div class="row">
+                                            {!! Form::open(['action' => ['App\Http\Controllers\PostsController@update', $post->postId], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+
+                                                <div class="form-group" style="margin-top:20px;">
+                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your caption:</label>
+                                                {{Form::textarea('caption', $post->postCaption, ['class' => 'form-control'])}}
+                                                </div>
+                                                <div class="" style="position:absolute;width:50%;margin-left:290px;">
+                                                    <div class="">
+                                                        <button class="btn-delete-no" type="button" class="close" data-dismiss="modal" aria-label="Close">Cancel</button>
+                                                    </div>
+                                                </div>  
+                                            {{Form::hidden('_method', 'PUT')}}
+                                            {{Form::submit('Update Changes', ['class' => 'btn-delete-yes'])}}
+                                            {!! Form::close() !!}
+                                            
+                                            </div>
+                                            
+                                        </div>
+                                        <!--/post edit -->
+
+                                        <!--post delete -->
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('deleteDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('deleteDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('deleteDiv{{$post->postId}}').style.display = 'none'">Delete Post</button>
+                                        <div class="row deleteDiv2" id="deleteDiv{{$post->postId}}" style="display:none; ">
+                                        <br>
+                                            <div class="row" style="margin-top:20px;">
+                                                <div class="col" style="background:#dbdcdd;padding:20px;border-radius:10px;">
+                                                    Are you sure you want to delete this post? Please note that you cannot undo this after.
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="display:flex;">
+                                                {!!Form::open(['action' => ['App\Http\Controllers\PostsController@destroy', $post->postId], 'method' => 'POST', 'class' => 'pull-right'])!!}
+                                                <div class="" style="position:relative;width:50%;margin-left:50px;">
+                                                    <div class="">
+                                                        <button type="submit" class="btn-delete-yes">Yes, delete</button>
+                                                    </div>
+                                                </div>  
+                                                {{Form::hidden('_method', 'DELETE')}}
+                                                {!!Form::close()!!}
+                                                <div class="" style="position:absolute;width:50%;margin-left:250px;">
+                                                    <div class="">
+                                                        <button class="btn-delete-no" type="button" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                                                    </div>
+                                                </div>                                     
+                                            </div>
+                                        </div>
+                                        <!-- /post delete -->
+                                        @endif
+
+                                        @if($post->postStatus == "BANNED")
+                                        <div><i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:14px"></i> This post is banned, no further action is required.</div>
+                                        @endif
+
+                                        @if($post->postStatus == "VERIFIED" && Auth::user()->id == $post->postUserId)
+                                        <div><i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:14px"></i> This post is verified, changes are not allowed.</div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -1015,8 +1103,14 @@
                         </div>
                         @elseif($post->postStatus == "BANNED")
                         <button class="post_donate_button_disabled" style="background-color:#90A4AE;cursor: no-drop;color:white;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Post Banned</button>
-                        @else
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;">Donate</button>
+                        @elseif($post->postReceivedAmount >= $post->postTargetAmount)
+                        <button class="post_donate_button_disabled" style="cursor: no-drop;"> Target Reached</button>
+                        @elseif($post->id == Auth::user()->id && $post->postStatus == "PROCESS")
+                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-hourglass-half" aria-hidden="true"></i> Under Review</button>
+                        @elseif($post->id == Auth::user()->id && $post->postStatus == "VERIFIED")
+                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-check" aria-hidden="true"></i> Verified</button>
+                        @elseif($post->id != Auth::user()->id)
+                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-times-circle" aria-hidden="true"></i>Not Yet Available</button>
                         @endif
                         
                         <!--  <button class="post_donate_button_disabled">Donate</button> THIS IS DISABLED BUTTON -->

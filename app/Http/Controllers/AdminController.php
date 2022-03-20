@@ -9,6 +9,8 @@ use App\Models\Post;
 use App\Models\Report;
 use App\Models\Comment;
 use App\Models\AdminLog;
+use App\Models\Review;
+use App\Models\Notif;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -20,7 +22,7 @@ class AdminController extends Controller
 {
     public function adminhome(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $count = 1;
         date_default_timezone_set("Asia/Manila"); $month = date("Y-m");
@@ -132,13 +134,14 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
         
-        return view('admin.adminhome', compact('people', 'org', 'post', 'count', 'selected_tile', 'tiles', 'data_donated', 'data_received', 'max','total_donated', 'total_received', 'people2', 'transactions', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.adminhome', compact('people', 'org', 'post', 'count', 'selected_tile', 'tiles', 'data_donated', 'data_received', 'max','total_donated', 'total_received', 'people2', 'transactions', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminUsersTable(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $count = 1;
@@ -189,14 +192,15 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.userstable', compact('donated','received','vars', 'count', 'search', 'search1', 'selected_tile', 'tiles', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.userstable', compact('donated','received','vars', 'count', 'search', 'search1', 'selected_tile', 'tiles', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
         //return view('pdf.adminUsersPDF', compact('vars', 'count', 'search'));
     }
 
     public function adminOrgsTable(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $count = 1;
@@ -244,13 +248,14 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.orgstable', compact('donated','received','vars', 'count', 'search', 'selected_tile', 'tiles', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.orgstable', compact('donated','received','vars', 'count', 'search', 'selected_tile', 'tiles', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminPostsTable(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $count = 1;
@@ -293,15 +298,20 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
         
-        return view('admin.poststable', compact('transactions','vars', 'count', 'search', 'comments', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.poststable', compact('transactions','vars', 'count', 'search', 'comments', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminSettings(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input('search');
+
+        $posts = User::query()
+                ->where('id', '=', auth()->user()->id)
+                ->first();
 
         
         $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
@@ -309,8 +319,241 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.settings', compact('selected_tile', 'tiles', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.settings', compact('selected_tile', 'tiles', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest', 'posts'));
+    }
+
+    public function updateProfile(Request $request, $id){
+
+        //$id = auth()->user()->id;
+        $posts = User::find($id);
+        $this -> validate($request,[
+            'firstname' => ['string', 'max:255', 'nullable'],
+            'lastname' => ['string', 'max:255', 'nullable'],
+            'middlename' => ['string', 'max:255', 'nullable'],
+            'day' => ['string', 'max:255', 'nullable'],
+            'month' => ['string', 'max:255', 'nullable'],
+            'year' => ['string', 'max:255', 'nullable'],
+            'age' => ['string', 'max:255', 'nullable'],
+            'sex' => ['string', 'max:255', 'nullable'],
+            'sector' => ['nullable', 'string', 'max:255'],
+            'barangay' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'province' => ['required', 'string', 'max:255'],
+            'region' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'min:8'],
+            'license' => ['nullable', 'string', 'min:8'],
+            'org_name' => ['string', 'max:255', 'nullable'],
+            'license' => ['string', 'max:255', 'nullable'],
+            'profile_image' => 'image|nullable|max:1999',
+          ]);
+    
+          //handles the file upload
+          if($request->hasFile('profile_image')){
+            //get filename with extension
+            $filenameWithExt = $request->file('profile_image')->getClientOriginalName();
+            //get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            //get just ext
+            $extension = $request->file('profile_image')->getClientOriginalExtension();
+            //filename to Store
+            $fileNameToStore = $filename .'_'.time().'.'.$extension;
+            //upload image
+            $path = $request->file('profile_image')->storeAs('public/profile_images', $fileNameToStore );
+          }
+    
+          $post = User::find($id);
+          $post ->  firstName = $request->input('firstname');
+          $post ->  lastName = $request->input('lastname');
+          $post ->  middleName = $request->input('middlename');
+          $post ->  birthday = $request->input('year').$request->input('month').$request->input('day');
+          $post ->  sex = $request->input('sex');
+          $post ->  phoneNumber = $request->input('phone_number');
+          $post ->  province = $request->input('province');
+          $post ->  region = $request->input('region');
+          $post ->  city = $request->input('city');
+          $post ->  barangay = $request->input('barangay');
+          $post ->  sector = $request->input('sector');
+          $post ->  orgName = $request->input('org_name');
+          $post ->  license = $request->input('license');
+          if($request->hasFile('profile_image')){
+            $post->profileImage = $fileNameToStore;
+          }
+          $post->save();
+    
+          return redirect()->back()->with('posts', $posts)->with('success','Wonderful! Changes saved.');
+    }
+
+    public function adminList(Request $request)
+    {
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $selected_tile = $request->input('selected_tile');
+        $search = $request->input('search');
+
+        $vars = User::query()
+                ->where('role', '=', 'ADMIN')
+                ->orderBy('accountCreatedAt', 'DESC')
+                ->get();
+        
+            $donated = DB::table('posts')
+                ->join('transactions', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->join('users', 'users.id', '=', 'posts.postUserId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        
+            $received = DB::table('transactions')
+                ->join('users', 'users.id', '=', 'transactions.transactionUserId')
+                ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        
+        $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
+        $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
+        $layoutpost = DB::select('SELECT * FROM posts');
+        $layoutinquiry = DB::select('SELECT * FROM inquiries');
+        $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
+
+        return view('admin.adminlist', compact('donated', 'received','vars','selected_tile', 'tiles', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
+    }
+
+    public function adminRequestsVerify(Request $request)
+    {
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $selected_tile = $request->input('selected_tile');
+        $search = "";
+        $search = $request->input('search');
+
+        if($search == ""){
+            $vars = Review::query()
+                ->join('users', 'users.id', '=', 'reviews.reviewUserId')
+                ->where('reviewType', '=', 'VERIFICATION')
+                ->where('users.accountVerified', '=', 'NOT VERIFIED')
+                ->orderBy('reviewCreatedAt', 'DESC')
+                ->get();
+
+            $donated = DB::table('posts')
+                ->join('transactions', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->join('users', 'users.id', '=', 'posts.postUserId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        
+            $received = DB::table('transactions')
+                ->join('users', 'users.id', '=', 'transactions.transactionUserId')
+                ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        }else{
+            $vars = Review::query()
+                ->join('users', 'users.id', '=', 'reviews.reviewUserId')
+                ->where('reviewType', '=', 'VERIFICATION')
+                ->where('users.accountVerified', '=', 'NOT VERIFIED')
+                ->orderBy('reviewCreatedAt', 'DESC')
+                ->where(function($query) use ($search){
+                    $query->where('orgName', 'LIKE', "%{$search}%")
+                        ->orWhere('firstName', 'LIKE', "%{$search}%")
+                        ->orWhere('middleName', 'LIKE', "%{$search}%")
+                        ->orWhere('lastName', 'LIKE', "%{$search}%")
+                        ->orWhere('reviewType', 'LIKE', "%{$search}%")
+                        ->orWhere('reviewCreatedAt', 'LIKE', "%{$search}%")
+                        ->orWhereRaw(
+                            "concat(firstName, ' ', 'middleName', ' ', lastName) like '%" . $search . "%' ")
+                        ->orWhereRaw(
+                                "concat(firstName, ' ', lastName) like '%" . $search . "%' ");
+                        })
+                ->get();
+
+            $donated = DB::table('posts')
+                ->join('transactions', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->join('users', 'users.id', '=', 'posts.postUserId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        
+            $received = DB::table('transactions')
+                ->join('users', 'users.id', '=', 'transactions.transactionUserId')
+                ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        }
+
+        
+        $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
+        $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
+        $layoutpost = DB::select('SELECT * FROM posts');
+        $layoutinquiry = DB::select('SELECT * FROM inquiries');
+        $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
+
+        return view('admin.requests_verify', compact('vars', 'selected_tile', 'tiles', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest', 'donated','received'));
+    }
+
+    public function adminRequestsDelete(Request $request)
+    {
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $selected_tile = $request->input('selected_tile');
+        $search = "";
+        $search = $request->input('search');
+
+        if($search == ""){
+            $vars = Review::query()
+                ->join('users', 'users.id', '=', 'reviews.reviewUserId')
+                ->where('reviewType', '=', 'DELETION')
+                ->orderBy('reviewCreatedAt', 'DESC')
+                ->get();
+
+            $donated = DB::table('posts')
+                ->join('transactions', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->join('users', 'users.id', '=', 'posts.postUserId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        
+            $received = DB::table('transactions')
+                ->join('users', 'users.id', '=', 'transactions.transactionUserId')
+                ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        }else{
+            $vars = Review::query()
+                ->join('users', 'users.id', '=', 'reviews.reviewUserId')
+                ->where('reviewType', '=', 'DELETION')
+                ->orderBy('reviewCreatedAt', 'DESC')
+                ->where(function($query) use ($search){
+                    $query->where('orgName', 'LIKE', "%{$search}%")
+                        ->orWhere('firstName', 'LIKE', "%{$search}%")
+                        ->orWhere('middleName', 'LIKE', "%{$search}%")
+                        ->orWhere('lastName', 'LIKE', "%{$search}%")
+                        ->orWhere('reviewType', 'LIKE', "%{$search}%")
+                        ->orWhere('reviewCreatedAt', 'LIKE', "%{$search}%")
+                        ->orWhereRaw(
+                            "concat(firstName, ' ', 'middleName', ' ', lastName) like '%" . $search . "%' ")
+                        ->orWhereRaw(
+                                "concat(firstName, ' ', lastName) like '%" . $search . "%' ");
+                        })
+                ->get();
+
+            $donated = DB::table('posts')
+                ->join('transactions', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->join('users', 'users.id', '=', 'posts.postUserId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        
+            $received = DB::table('transactions')
+                ->join('users', 'users.id', '=', 'transactions.transactionUserId')
+                ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+                ->orderBy('transactionCreatedAt', 'DESC')
+                ->get();
+        }
+
+        
+        $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
+        $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
+        $layoutpost = DB::select('SELECT * FROM posts');
+        $layoutinquiry = DB::select('SELECT * FROM inquiries');
+        $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
+
+        return view('admin.requests_delete', compact('vars', 'selected_tile', 'tiles', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest', 'donated','received'));
     }
 
     public function adminDashboard()
@@ -337,11 +580,21 @@ class AdminController extends Controller
           $post2 -> adminlogCategory = "PEOPLE/ORGANIZATION";
           $post2->save();
 
+        $post3 = new Notif;
+        $post3 -> notifUserId = $id;
+        $post3 -> notifToUserId = $id;
+        $post3 -> notifType = "verify";
+        $post3 -> notifStatus = "UNREAD";
+        $post3->save();
+
+          DB::table('reviews')->where(['reviewUserId'=> $id])->where(['reviewType'=> "VERIFICATION"])->delete();
+
         return redirect()->back();//->with('vars', $vars);
     }
 
     public function adminVerifyPost(Request $request)
     {
+        $userid = $request->input('userid');
         $id = $request->input('postid');
         $post = Post::find($id);
           $post ->  postStatus = "VERIFIED";
@@ -354,12 +607,20 @@ class AdminController extends Controller
           $post2 -> adminlogCategory = "POSTS";
           $post2->save();
 
+        $post3 = new Notif;
+        $post3 -> notifUserId = $userid;
+        $post3 -> notifToUserId = $userid;
+        $post3 -> notifPostId = $id;
+        $post3 -> notifType = "verify";
+        $post3 -> notifStatus = "UNREAD";
+        $post3->save();
+
         return redirect()->back();//->with('vars', $vars);
     }
 
     public function stats(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $data = DB::table('users')
@@ -438,13 +699,14 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.stats', compact('category', 'city', 'barangay1', 'barangay2', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.stats', compact('category', 'city', 'barangay1', 'barangay2', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminReportsUsers(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
         $thisperson = []; $person = []; $varse = [];
@@ -549,8 +811,9 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.adminreports_users', compact('selected_tile', 'tiles', 'search', 'vars', 'varse', 'person', 'thisperson','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.adminreports_users', compact('selected_tile', 'tiles', 'search', 'vars', 'varse', 'person', 'thisperson','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function make_admin(Request $request){
@@ -571,7 +834,7 @@ class AdminController extends Controller
 
     public function adminReportsPosts(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
         $thisperson = []; $person = []; $varse = [];
@@ -679,13 +942,14 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.adminreports_posts', compact('selected_tile', 'tiles', 'search', 'vars', 'varse', 'person', 'thisperson','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.adminreports_posts', compact('selected_tile', 'tiles', 'search', 'vars', 'varse', 'person', 'thisperson','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminReportsComments(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
 
@@ -905,8 +1169,9 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
+        $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.adminreports_comments', compact('selected_tile', 'tiles', 'search', 'post', 'comment', 'person', 'post2', 'comment2', 'person2', 'post3', 'comment3', 'person3', 'c', 'p', 'pe', 'thispost', 'thisperson','all','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.adminreports_comments', compact('selected_tile', 'tiles', 'search', 'post', 'comment', 'person', 'post2', 'comment2', 'person2', 'post3', 'comment3', 'person3', 'c', 'p', 'pe', 'thispost', 'thisperson','all','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminLayout(Request $request)
@@ -916,7 +1181,9 @@ class AdminController extends Controller
         $layoutpost = DB::select('SELECT * FROM posts');
         $layoutinquiry = DB::select('SELECT * FROM inquiries');
         $layoutreport = DB::select('SELECT * FROM reports');
-        return view('layouts.admin_layout', compact('layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        $layoutrequest = DB::select('SELECT * FROM reviews');
+
+        return view('layouts.admin_layout', compact('layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function deleteSelected(Request $request)
@@ -1042,7 +1309,7 @@ class AdminController extends Controller
 
     public function adminLeaderboards(Request $request){
 
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
 
@@ -1151,13 +1418,14 @@ class AdminController extends Controller
             $layoutpost = DB::select('SELECT * FROM posts');
             $layoutinquiry = DB::select('SELECT * FROM inquiries');
             $layoutreport = DB::select('SELECT * FROM reports');
+            $layoutrequest = DB::select('SELECT * FROM reviews');
             
   
-        return view('admin.adminleaderboards', compact('selected_tile', 'tiles', 'vars', 'array', 'b1', 'b2', 'selectbarangay', 'selectcity', 'selectprovince', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+        return view('admin.adminleaderboards', compact('selected_tile', 'tiles', 'vars', 'array', 'b1', 'b2', 'selectbarangay', 'selectcity', 'selectprovince', 'search','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
       }
 
       public function adminLogs(Request $request){
-            $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Manage Reports', 'Logs', 'Settings');
+            $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
             $selected_tile = $request->input('selected_tile');
             $search = $request->input('search');
 
@@ -1192,8 +1460,9 @@ class AdminController extends Controller
             $layoutpost = DB::select('SELECT * FROM posts');
             $layoutinquiry = DB::select('SELECT * FROM inquiries');
             $layoutreport = DB::select('SELECT * FROM reports');
+            $layoutrequest = DB::select('SELECT * FROM reviews');
 
-            return view('admin.logs', compact('selected_tile', 'tiles', 'search', 'vars','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport'));
+            return view('admin.logs', compact('selected_tile', 'tiles', 'search', 'vars','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
       }
 
       public function reviewComment(Request $request)

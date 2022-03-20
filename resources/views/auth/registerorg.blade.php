@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="../style/wecareRegUser.css" rel="stylesheet" type="text/css" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="../build/css/countrycode.css">
-    <link rel="stylesheet" href="../build/css/telInput.css">
+    
     <title>WeCare | Register</title>
 </head>
 <body>
@@ -28,9 +27,11 @@
         <div class="col-55p rightdiv" >
             <div class="row">
                 <div class="col-2 home_icon_col">
-                    <button class="home_icon_btn">
-                        <i class="fas fa-home-alt home_icon"></i><span class="home_word">Home</span>
-                    </button>
+                    <a href="/">
+                        <button class="home_icon_btn">
+                            <i class="fas fa-home-alt home_icon"></i><span class="home_word">Home</span>
+                        </button>
+                    </a>
                 </div>
                 <div class="col-8">
                     <label for="" class="titlereg">Glad to see you !</label>
@@ -44,7 +45,9 @@
                 <form class="needs-validation" novalidate method="POST" action="{{ route('register') }}">@csrf
                     <!-- org name row -->
                     <div class="row inputs_row">
-                    @include('inc.messages')
+                        <div class="col-sm-12">
+                        @include('inc.messages')
+                        </div>
                         <input type="hidden" name="firstname">
                         <input type="hidden" name="lastname">
                         <input type="hidden" name="middlename">
@@ -58,7 +61,7 @@
                         <!-- orgname row -->
                         <div class="col-sm-6">
                             <label class="inputs_label">Organization Name</label>
-                            <input type="text" name="org_name" class="form-control" id="validationCustom01" placeholder="Organization Name" required>
+                            <input type="text" name="org_name" class="form-control" id="validationCustom01" value="{{ old('org_name') }}" placeholder="Organization Name" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div> 
@@ -68,7 +71,7 @@
                         <!-- license row -->
                         <div class="col-sm-6">
                             <label class="inputs_label">Organization License</label>
-                            <input type="text" name="license" class="form-control" id="validationCustom02" placeholder="License" required>
+                            <input type="text" name="license" value="{{ old('license') }}" class="form-control" id="validationCustom02" placeholder="License" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -226,17 +229,21 @@
                     
                     <!-- phone num row -->
                     <div class="row inputs_row">
-                        <div class="col-sm-6">
-                            <label class="inputs_label">Registered GCash Number</label>
-                            <div class="input-box">
-                                <input type="hidden" id="unitspan" name="phone_number">
-                                <input maxlength="14" minlength="9" type="tel" name="phone_number2" class="form-control pn @error('phone_number') is-invalid @enderror" id="phone" placeholder="912 345 6789" value="{{ old('phone_number') }}"  required>
-                                <span class="unit" id="unitspan2" value=""></span>
+                        <div class="col-sm-4">
+                            <label class="inputs_label">Registered GCash Number <small>(09XXXXXXXXX)</small> </label>
+                            <div class="">
+                                <img src="../images/phflag.jpg" style="position:absolute; width:35px;margin:9px;" alt="">
+                                <input maxlength="11" minlength="11" type="tel" name="phone_number" class="form-control pn @error('phone_number') is-invalid @enderror" id="phone" placeholder="0912 345 6789" value="{{ old('phone_number') }}" style="padding-left:50px;" autocomplete="off" required>
                             </div>
 
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
+                            @error('phone_number')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>wrong</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
                     <!-- phone num row end -->
@@ -313,10 +320,10 @@
 
                     <div class="row link_row">                        
                         <div class="col-sm-6 link_login">
-                            <span>Already have an account?  <a href="">Login here.</a></span>
+                            <span>Already have an account?  <a href="/login">Login here.</a></span>
                         </div>
                         <div class="col-sm-6 reg_as_org">
-                            <span><a href="">Register as an Organization</a></span>
+                            <span><a href="/register">Register as Personal Account</a></span>
                         </div>
                     </div>
                 </form>
@@ -482,7 +489,6 @@
         });
     </script>
 
-    <script src="../build/js/intlTelInput3.js"></script>
     <script>
         var input = document.querySelector("#phone");
         window.intlTelInput(input, {

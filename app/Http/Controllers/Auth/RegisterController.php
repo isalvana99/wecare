@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class RegisterController extends Controller
 {
@@ -63,8 +64,7 @@ class RegisterController extends Controller
             'city' => ['required', 'string', 'max:255'],
             'province' => ['required', 'string', 'max:255'],
             'region' => ['required', 'string', 'max:255'],
-            'phone_number' => ['required', 'string', 'max:14'],
-            'phone_number2' => ['required', 'string', 'min:8'],
+            'phone_number' => ['required', 'string', 'min:8', 'unique:users,phoneNumber'],
             'license' => ['nullable', 'string', 'min:8'],
             'org_name' => ['string', 'max:255', 'nullable'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -83,12 +83,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $id = random_int(100000000000, 999999999999);
-        $phcode = $data['phone_number'];
-        if($phcode == "+63")
-        {
-            $phcode = "0";
-        }
+        
         return User::create([
             'id' => random_int(100000000000, 999999999999),
             'firstName' => $data['firstname'],
@@ -102,7 +97,7 @@ class RegisterController extends Controller
             'province' => $data['province'],
             'region' => $data['region'],
             'orgName' => $data['org_name'],
-            'phoneNumber' => $phcode.$data['phone_number2'],
+            'phoneNumber' => $data['phone_number'],
             'license' => $data['license'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
