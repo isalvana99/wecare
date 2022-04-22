@@ -21,7 +21,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/homecss.css') }}" rel="stylesheet">
-    <link href="{{ asset('style/main.css') }}" rel="stylesheet" type="text/css" >
+    <link href="{{ asset('style/main2.css') }}" rel="stylesheet" type="text/css" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style2.css">
     <link href="{{ asset('style/reactionbuttons.css') }}" rel="stylesheet" type="text/css" >
@@ -49,21 +49,15 @@
                     <div class="collapse navbar-collapse" id="main-navigation">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="/about">About</a>
+                                <a class="nav-link about_btn" href="#">About</a>
                             </li>
 
                             @guest
                                 @if (Route::has('login'))
                                 <li class="nav-item" id="con1">
-                                    <a class="nav-link" href="{{ route('login') }}" id="btn-grp1" style="padding-left:20px; padding-right:20px;">Login</a>
+                                    <a class="nav-link" href="{{ route('login') }}" id="btn-grp1" style="padding-left:20px; padding-right:20px; width:150px;">Login</a>
                                 </li>
                                 @endif
-
-                                @if (Route::has('register'))
-                                <li class="nav-item" id="con1">
-                                    <a class="nav-link" href="{{ route('register') }}" id="btn-grp1" style="padding-left:15px; padding-right:15px;">Register</a>
-                                </li>
-                                @endif 
                             @else
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -109,6 +103,12 @@
     <!--/jquery-->
     
     
-
+    <script>
+        $(".about_btn").click(function() {
+    $('html,body').animate({
+        scrollTop: $(".about_view").offset().top},
+        'slow');
+    });
+    </script>
 </body>
 </html>

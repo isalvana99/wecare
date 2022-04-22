@@ -28,10 +28,11 @@
         <!-- end of user profile -->
 
         <!-- amount received container -->
+        @if(Auth::user()->accountType == "RECEPIENT")
         <div class="row amount_con">
             <div class="col">
                 <div class="row left_received">
-                    Amount Received:
+                    Total Amount Received:
                 </div>
                 <div class="row left_amount">
                     <label for="">PHP {{number_format(Auth::user()->amountReceived, 2)}}</label>
@@ -39,12 +40,13 @@
             </div>
         </div>
         <!-- end amount received container -->
-
+        @endif
+        @if(Auth::user()->accountType == "DONOR")
         <!-- amount Donated container -->
         <div class="row amount_con">
             <div class="col">
                 <div class="row left_received">
-                    Amount Donated:
+                   Total Amount Donated:
                 </div>
                 <div class="row left_amount">
                     <label for="">PHP {{number_format(Auth::user()->amountGiven, 2)}}</label>
@@ -52,6 +54,7 @@
             </div>
         </div>
         <!-- end amount donated container -->
+        @endif
 
         <div class="row buttons_area">
 
@@ -68,7 +71,7 @@
             <!-- normal button design -->
             <div class="col left_btn_con1 normal_btn_style">
                 <div class="row">
-                    <a href="/activity/you-donated"><i class="fas fa-file-alt"></i>My Donation Record</a>
+                    <a href="/activity/you-donated"><i class="fas fa-file-alt"></i>My Transaction Record</a>
                 </div>
             </div>
             <!-- end normal design -->
@@ -89,6 +92,20 @@
             <div class="col left_btn_con1 normal_btn_style">
                 <div class="row">
                     <a href="{{ route('filterlocation2') }}"><i class="fas fa-sliders-h-square"></i>Filter Post</a>
+                </div>
+            </div>
+            <!-- end normal design -->
+
+            <div class="w-100"></div> <!-- use this to seperate each button -->
+            
+            <!-- normal button design -->
+            <div class="col left_btn_con1 normal_btn_style">
+                <div class="row">
+                    @if(Auth::user()->accountType == "RECEPIENT")
+                    <a href="/distribution/"><i class="fa fa-plus-circle" aria-hidden="true"></i>Distributions</a>
+                    @else
+                    <a href="/distribution/my"><i class="fa fa-plus-circle" aria-hidden="true"></i>Distributions</a>
+                    @endif
                 </div>
             </div>
             <!-- end normal design -->
@@ -189,8 +206,11 @@
         <!-- /user container -->
         
         <!-- post start here -->
+        @php $idcount = 0; @endphp
         @if(count($posts) > 0)
         @foreach($posts as $post)
+
+        @if($post->postUser2Id == NULL)
         <div class="row center_post_main_con">
             <div class="container">
                 <!-- first row(user profile area) -->
@@ -209,13 +229,13 @@
                             </div>
 
                             <div style="width: auto;">
-                            @php $count = 0 @endphp
+                            @php $count = 0; $id = 0; @endphp
                                 @if(count($follows) > 0)
                                 @foreach($follows as $follow)
                                     @if($follow->followedUserId == $post->id)
                                         @if($follow->followUserId == Auth::user()->id)
 
-                                            @php $count = 1 @endphp
+                                            @php $count = 1; $id = $follow->followId; @endphp
 
                                         @endif
                                         
@@ -223,25 +243,29 @@
                                 @endforeach
                                 @endif
 
-                                @if($post->postUserId != Auth::user()->id)
+                                @if($post->id != Auth::user()->id)
                                 @if($count == 1)
-                                {!!Form::open(['action' => ['App\Http\Controllers\FollowController@destroy', $follow->followId], 'method' => 'POST', 'id' => 'followform'])!!}
-                                    <input type="hidden" name="followpostid" value="{{$post->postId}}">
+                                {!!Form::open(['action' => ['App\Http\Controllers\FollowController@destroy', $id], 'method' => 'POST'])!!}
+                                <input type="hidden" name="followpostid" value="{{$post->id}}">
 
-                                    <button type="submit" class="follow-btn">
+                                <div class="row right_suggest_follow">
+                                    <button type="submit" style="margin-top:20px;margin-left:25px;">
                                         <i class="fal fa-user-check following-icon"> Following</i>
                                     </button>
+                                </div>
                                 {{Form::hidden('_method', 'DELETE')}}
                                 {!!Form::close()!!}
 
                                 @else
-                                {!! Form::open(['action' => 'App\Http\Controllers\FollowController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 
-                                    <input type="hidden" name="followpostid" value="{{$post->postId}}">
-                                    
-                                    <button type="submit" class="follow-btn">
-                                    <i class="fal fa-user-plus follow-icon" > Follow</i>
+                                {!! Form::open(['action' => 'App\Http\Controllers\FollowController@store2', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                                <input type="hidden" name="followpostid" value="{{$post->id}}">
+                                
+                                <div class="row right_suggest_follow">
+                                    <button type="submit" style="margin-top:20px;margin-left:25px;">
+                                        <i class="fal fa-user-plus follow-icon" >Follow</i>
                                     </button>
+                                </div>
                                 {!! Form::close() !!}
                                 @endif
                                 @endif
@@ -258,12 +282,12 @@
                                 {{$post->postSector.", ".$post->postBarangay.", ".$post->postCity.", ".$post->province.", ".$post->postRegion}}
                             </a>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <a href="" class="post_category">
                                 <i class="fal fa-list-ul"></i>
                                 {{$post->postCategory}}
                             </a>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <a href="" class="post_time">
                                 <i class="fal fa-clock"></i>
@@ -316,7 +340,7 @@
                                         - $months*30*60*60*24 - $days*60*60*24
                                                 - $hours*60*60 - $minutes*60));
                                 
-                                    // Print the result
+                                // Print the result
                                 if($days == 0 && $months == 0 && $years == 0){
                                     if($hours == 0){
                                         if($minutes == 0){
@@ -366,7 +390,7 @@
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body" style="height:auto;">
 
                                         @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED")
                                         <!-- post report -->
@@ -429,7 +453,7 @@
                                         <!-- /post report -->
                                         @endif
 
-                                        @if(Auth::user()->id == $post->postUserId && $post->postStatus == "PROCESS")
+                                        @if(Auth::user()->id == $post->postUserId)
                                         <!-- post edit -->
                                         <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('editDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('editDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('editDiv{{$post->postId}}').style.display = 'none'">Edit Post</button>
                                         <div class="row deleteDiv2" id="editDiv{{$post->postId}}" style="display:none; ">
@@ -502,15 +526,16 @@
                 <!-- end of first row -->
                 
                 <!-- second row (post caption) -->
-                <div class="row post_caption_con">
-                {{$post->postCaption}}
+                <div class="row post_caption_con" style="display:flex;">
+                   <h4 style="text-decoration:underline;">{{$post->postCategory}}</h4>
+                   <p style="">{{$post->postCaption}}</p>
                 </div>
                 <!-- second row end -->
 
                 <!-- third row (post image here) -->
                 <div class="row post_image_con">
                     <a href="/home/{{$post->postId}}">
-                        <img style="width:100%" src="/storage/cover_images/{{$post->postCoverImage}}" alt="">
+                        <img style="width:100%" src="/storage/cover_images/{{$post->postImageName}}" alt="">
                     </a>
                 </div>
                 <!-- third row end -->
@@ -518,22 +543,42 @@
                 <!-- fourth row (donation area) -->
                 <div class="row post_donation_con">
                     <div class="col-4">
-                        @if($post->postReceivedAmount < $post->postTargetAmount && Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus == "VERIFIED")
+                    @if(Auth::user()->id == $post->postUserId || Auth::user()->accountType == "DONOR")
+
+                        @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
                         <div data-toggle="modal" data-target="#mpostModal2-{{$post->postId}}">
                             <input type="hidden" name="postid" value="{{$post->postId}}">
                             <button class="post_donate_button">Donate</button>
                         </div>
                         @elseif($post->postStatus == "BANNED")
                         <button class="post_donate_button_disabled" style="background-color:#90A4AE;cursor: no-drop;color:white;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Post Banned</button>
-                        @elseif($post->postReceivedAmount >= $post->postTargetAmount)
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"> Target Reached</button>
-                        @elseif($post->id == Auth::user()->id && $post->postStatus == "PROCESS")
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-hourglass-half" aria-hidden="true"></i> Under Review</button>
-                        @elseif($post->id == Auth::user()->id && $post->postStatus == "VERIFIED")
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-check" aria-hidden="true"></i> Verified</button>
-                        @elseif($post->id != Auth::user()->id)
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-times-circle" aria-hidden="true"></i> Not Yet Available</button>
+                        @elseif(Auth::user()->id == $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
+                        <form action="{{route('stopdonation')}}" method="GET">
+                        <div>
+                            <input type="hidden" name="postid" value="{{$post->postId}}">
+                            <button class="post_donate_button" style="font-size:13px;">Stop Accepting Donation</button>
+                        </div>
+                        </form>
+                        @elseif(Auth::user()->id == $post->postUserId && $post->postStatus == "STOPPED")
+                        <form action="{{route('godonation')}}" method="GET">
+                            <div>
+                                <input type="hidden" name="postid" value="{{$post->postId}}">
+                                <button class="post_donate_button" style="background-color:#565bbb;">Undo Stop</button>
+                            </div>
+                        </form>
+                        @elseif(Auth::user()->id != $post->postUserId && $post->postStatus == "STOPPED")
+                        <div>
+                            <button class="post_donate_button_disabled">Donate Unavailable</button>
+                        </div>
+
                         @endif
+
+                    @elseif(Auth::user()->id != $post->postUserId && Auth::user()->accountType == "RECEPIENT")
+                    <a href="/home/{{$post->postId}}"><div>
+                        <button class="post_donate_button" style="background-color:#00b919;">View Post</button>
+                    </div></a>
+
+                    @endif
                         
                         <!--  <button class="post_donate_button_disabled">Donate</button> THIS IS DISABLED BUTTON -->
 
@@ -637,13 +682,13 @@
 
                     <!-- POST LIKES -->
                     <div class="col-4 button_react_con">
-                        @php $count2 = 0; $likeid=0; @endphp
+                        @php $count2 = 0; $likeid = 0; @endphp
                         @if(count($likes2) > 0)
                         @foreach($likes2 as $like)
                             @if($like->likePostId == $post->postId)
                                 @if($like->likeUserId == Auth::user()->id)
 
-                                    @php $count2 = 1;$likeid= $like->likeId; @endphp
+                                    @php $count2 = 1; $likeid = $like->likeId; @endphp
 
                                 @endif
                                 
@@ -655,6 +700,7 @@
 
                         {!!Form::open(['action' => ['App\Http\Controllers\LikeController@destroy', $likeid], 'method' => 'POST'])!!}
                         <input type="hidden" name="likepostid" value="{{$post->postId}}">
+                        
                         <button class="react_btn_active">
                             <img src="../../images/wecare svg.svg" class="wecarelogo_svg" alt="">
                             <a href="">{{number_format($post->postLikes)}}</a>
@@ -729,6 +775,8 @@
                 <!-- fifth row end -->
             </div>
         </div>
+        @endif
+        
         @endforeach
         @else
         @endif

@@ -155,7 +155,7 @@ input[type=checkbox]:checked ~ label > img {
                                             <div class="row tab_row_header">
                                                 Personal Information
                                             </div>
-
+                                            @if($var->firstName != "" && $var->middleName != "" && $var->LastName != "")
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Firstname:
@@ -182,7 +182,18 @@ input[type=checkbox]:checked ~ label > img {
                                                     {{$var->lastName}}
                                                 </div>
                                             </div>
-
+                                            @endif
+                                            @if($var->orgName != "")
+                                            <div class="row modal_row_info">
+                                                <div class="col-3 modal_info_bold">
+                                                    Name:
+                                                </div>
+                                                <div class="col-9 modal_info_names">
+                                                    {{$var->orgName}}
+                                                </div>
+                                            </div>
+                                            @endif
+                                            @if($var->firstName != "" && $var->middleName != "" && $var->LastName != "")
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Birthday:
@@ -200,7 +211,7 @@ input[type=checkbox]:checked ~ label > img {
                                                 {{$var->sex}}
                                                 </div>
                                             </div>
-
+                                            @endif
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Email:
@@ -255,23 +266,7 @@ input[type=checkbox]:checked ~ label > img {
                                                 </div>
                                             </div>
 
-                                            <div class="row modal_row_info">
-                                                <div class="col-3 modal_info_bold">
-                                                    Total Amount Received:
-                                                </div>
-                                                <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountReceived, 2)}}
-                                                </div>
-                                            </div>
-
-                                            <div class="row modal_row_info">
-                                                <div class="col-3 modal_info_bold">
-                                                    Total Amount Donated:
-                                                </div>
-                                                <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountGiven, 2)}}
-                                                </div>
-                                            </div>
+                                            
 
                                         </div>
                                     </div>

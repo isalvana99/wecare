@@ -52,9 +52,9 @@ class PagesController extends Controller
           $province = "";
           $city = "";
           $barangay = "";
-          $sector = "";
+          $sector = ""; 
 
-          $posts = DB::select('SELECT * FROM posts JOIN users ON users.id = posts.postUserId ORDER BY postUpdatedAt DESC');
+          $posts = DB::select('SELECT * FROM posts JOIN users ON users.id = posts.postUserId JOIN postimages ON posts.postId = postimages.postImagePostId ORDER BY postUpdatedAt DESC');
           $comment = DB::select('SELECT * FROM comments');
           $likes2 = DB::select('SELECT * FROM likes');
           $shares = DB::select('SELECT * FROM shares');
@@ -73,16 +73,19 @@ class PagesController extends Controller
       $region = $request->get('region');
       $province = $request->get('province');
       $city = $request->get('city');
-      $barangay1 = $request->get('barangay1');
-      $barangay2 = $request->get('barangay2');
-      $sector = $request->input('sector');
       $barangay = "";
+      $barangay = $request->input('barangay');
+      //$barangay2 = $request->get('barangay2');
+      $sector = $request->input('sector');
+      
 
-      if($barangay1 == ""){
-        $barangay = $barangay2;
-      }else{
-        $barangay = $barangay1;
-      }
+      // if($barangay1 == ""){
+      //   $barangay = $barangay2;
+      // }else{
+      //   $barangay = $barangay1;
+      // }
+
+      if($city == ""){$barangay = "";}
 
       if($category == "All"){
             
@@ -108,6 +111,7 @@ class PagesController extends Controller
                                 //SECTOR
                                   $posts = Post::query()
                                   ->join('users', 'users.id', '=', 'posts.postUserId')
+                                  ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                   ->orderBy('postUpdatedAt', 'DESC')
                                   ->get();
               
@@ -119,6 +123,7 @@ class PagesController extends Controller
                                 //ELSE SECTOR
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postSector', '=', $sector)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -137,6 +142,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postBarangay', '=', $barangay)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -150,6 +156,7 @@ class PagesController extends Controller
                                 
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postBarangay', '=', $barangay)
                                 ->where('postSector', '=', $sector)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -173,6 +180,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postCity', '=', $city)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -186,6 +194,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postCity', '=', $city)
                                 ->where('postSector', '=', $sector)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -205,6 +214,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -219,6 +229,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
                                 ->where('postSector', '=', $sector)
@@ -247,6 +258,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -260,6 +272,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postSector', '=', $sector)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -279,6 +292,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postBarangay', '=', $barangay)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -293,6 +307,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postBarangay', '=', $barangay)
                                 ->where('postSector', '=', $sector)
@@ -317,6 +332,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postCity', '=', $city)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -331,6 +347,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postCity', '=', $city)
                                 ->where('postSector', '=', $sector)
@@ -351,6 +368,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
@@ -366,6 +384,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postProvince', '=', $province)
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
@@ -399,6 +418,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -412,6 +432,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postSector', '=', $sector)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -431,6 +452,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postBarangay', '=', $barangay)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -445,6 +467,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postBarangay', '=', $barangay)
                                 ->where('postSector', '=', $sector)
@@ -469,6 +492,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -483,6 +507,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->where('postSector', '=', $sector)
@@ -503,6 +528,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
@@ -518,6 +544,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postBarangay', '=', $barangay)
                                 ->where('postCity', '=', $city)
@@ -547,6 +574,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -560,6 +588,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postSector', '=', $sector)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -579,6 +608,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postBarangay', '=', $barangay)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -593,6 +623,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postBarangay', '=', $barangay)
                                 ->where('postSector', '=', $sector)
@@ -617,6 +648,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->orderBy('postUpdatedAt', 'DESC')
@@ -631,6 +663,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->where('postSector', '=', $sector)
@@ -651,6 +684,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
@@ -666,6 +700,7 @@ class PagesController extends Controller
               
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postRegion', '=', $region)
                                 ->where('postCity', '=', $city)
                                 ->where('postBarangay', '=', $barangay)
@@ -701,6 +736,7 @@ class PagesController extends Controller
                               //SECTOR
                                 $posts = Post::query()
                                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                                 ->where('postCategory', '=', $category)
                                 ->orderBy('postUpdatedAt', 'DESC')
                                 ->get();
@@ -713,6 +749,7 @@ class PagesController extends Controller
                               //ELSE SECTOR
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postSector', '=', $sector)
                               ->orderBy('postUpdatedAt', 'DESC')
@@ -732,6 +769,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postBarangay', '=', $barangay)
                               ->orderBy('postUpdatedAt', 'DESC')
@@ -746,6 +784,7 @@ class PagesController extends Controller
                               
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postBarangay', '=', $barangay)
                               ->where('postSector', '=', $sector)
@@ -770,6 +809,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postCity', '=', $city)
                               ->orderBy('postUpdatedAt', 'DESC')
@@ -784,6 +824,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postCity', '=', $city)
                               ->where('postSector', '=', $sector)
@@ -804,6 +845,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postCity', '=', $city)
                               ->where('postBarangay', '=', $barangay)
@@ -819,6 +861,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postCity', '=', $city)
                               ->where('postBarangay', '=', $barangay)
@@ -848,6 +891,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->orderBy('postUpdatedAt', 'DESC')
@@ -862,6 +906,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postSector', '=', $sector)
@@ -882,6 +927,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postBarangay', '=', $barangay)
@@ -897,6 +943,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postBarangay', '=', $barangay)
@@ -922,6 +969,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postCity', '=', $city)
@@ -937,6 +985,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postCity', '=', $city)
@@ -958,6 +1007,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postCity', '=', $city)
@@ -974,6 +1024,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postProvince', '=', $province)
                               ->where('postCity', '=', $city)
@@ -1008,6 +1059,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->orderBy('postUpdatedAt', 'DESC')
@@ -1022,6 +1074,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postSector', '=', $sector)
@@ -1042,6 +1095,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postBarangay', '=', $barangay)
@@ -1057,6 +1111,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postBarangay', '=', $barangay)
@@ -1082,6 +1137,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1097,6 +1153,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1118,6 +1175,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1134,6 +1192,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postBarangay', '=', $barangay)
@@ -1164,6 +1223,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->orderBy('postUpdatedAt', 'DESC')
@@ -1178,6 +1238,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postSector', '=', $sector)
@@ -1198,6 +1259,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postBarangay', '=', $barangay)
@@ -1213,6 +1275,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postBarangay', '=', $barangay)
@@ -1238,6 +1301,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1253,6 +1317,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1274,6 +1339,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1290,6 +1356,7 @@ class PagesController extends Controller
             
                               $posts = Post::query()
                               ->join('users', 'users.id', '=', 'posts.postUserId')
+                              ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                               ->where('postCategory', '=', $category)
                               ->where('postRegion', '=', $region)
                               ->where('postCity', '=', $city)
@@ -1322,8 +1389,8 @@ class PagesController extends Controller
       $search = "";
       $search = $request->input('search');
                 
-      $tran = DB::table('posts')
-                ->join('transactions', 'posts.postId', '=', 'transactions.transactionPostId')
+      $tran = DB::table('transactions')
+                ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
                 ->join('users', 'users.id', '=', 'posts.postUserId')
                 ->where('transactions.transactionUserId', '=', auth()->user()->id)
                 ->orderBy('transactionCreatedAt', 'DESC')
@@ -1331,6 +1398,7 @@ class PagesController extends Controller
 
       $notification = DB::select('SELECT * FROM notifs JOIN users ON users.id = notifs.notifUserId WHERE notifToUserId =' .auth()->user()->id.' ORDER BY notifCreatedAt DESC');
       $user = DB::select('SELECT * FROM users WHERE id = '.auth()->user()->id);
+
       return view('pages.activitiesdonated', compact('tran', 'search', 'user', 'notification'));
 
     }
@@ -1349,6 +1417,7 @@ class PagesController extends Controller
       ->orderBy('transactionCreatedAt', 'DESC')
       ->get();
       $user = DB::select('SELECT * FROM users WHERE id = '.auth()->user()->id);
+
       return view('pages.activitiesreceived', compact('tran', 'search', 'user', 'notification'));
 
     }

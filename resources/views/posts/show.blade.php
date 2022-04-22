@@ -16,6 +16,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <title>View Post</title>
 </head>
+<style>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #64c7fe;
+  color: white;
+}
+</style>
 <body>
 
     <div class="sticky-top">
@@ -25,11 +49,254 @@
     <div class="con post_main_view">
         <div class="con1" >
             <div class="row view_post_row1">
-            
+                
                 <div class="col-8w">
+
+                    <!-- collapse view info button -->
+                    <div id="editDiv{{$post->postId}}" style="display:none;">
+
+                    <div class="col-3" style="position:absolute;margin-top:280px;margin-left:-30px;">
+                    <!-- view donation history -->
+                    <div class="col-12" data-toggle="modal" data-target="#donatehistpostModal2">
+                        <button class="post_donate_button" style="margin-bottom:20px;">View Donation History</button>
+                    </div>
+                    <!-- Modal OF view donation history BUTTON-->
+                    <div class="modal fade" id="donatehistpostModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    People who donated:
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body" style="">
+                                    <table id="customers">
+                                        <tr>
+                                            <th>Date | Time</th>
+                                            <th>Name</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                        @if(count($transaction) > 0)
+                                        @foreach($transaction as $t)
+                                        <tr>
+                                            <td>{{date('Y-m-d | h:i A', strtotime($t->transactionCreatedAt))}}</td>
+                                            <td>{{$t->firstName." ".$t->middleName." ".$t->lastName." ".$t->orgName}}</td>
+                                            <td>PHP {{number_format($t->transactionAmount, 2)}}</td>
+                                        </tr>
+                                        @endforeach
+                                        <tr>
+                                            <td colspan="2">Total</td>
+                                            <td>PHP {{number_format($post->postReceivedAmount,2)}}</td>
+                                        </tr>
+                                        @else
+                                        <tr>
+                                            <td colspan="3">Empty</td>
+                                        </tr>
+                                        @endif
+                                    </table>
+                                </div>
+
+                                <div class="modal-footer">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end modal -->
+                    <!-- view doation history -->
+
+                    <!-- view transparency history -->
+                    <div class="col-12" data-toggle="modal" data-target="#transparencypostModal2">
+                        <button class="post_donate_button" style="margin-bottom:20px;">View Distribution</button>
+                    </div>
+
+                    <!-- Modal OF view transparency BUTTON-->
+                    <div class="modal fade" id="transparencypostModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content" style="left: -110px;width:800px;">
+                                <div class="modal-header">
+                                    Location: <div style="text-align:right;font-weight:bold;">&nbsp;City of {{$post->postCity}}</div>
+
+                                    
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body" style="">
+                                    @if($post->postUserId == Auth::user()->id)
+                                    <form action="/show-distribution/my">
+                                    <input type="hidden" name="postid" value="{{$post->postId}}">
+                                    <button class="btn-delete-yes" style="display:none;">Edit</button>
+                                    </form>
+                                    @endif
+
+                                    @php $total1 = 0; $total2 = 0; @endphp
+                                    @if(count($transparency) > 0)
+                                    @foreach($transparency as $i=>$tran)
+                                        @php $total1 += $tran->transparencyAmount; @endphp
+                                        @php $total2 += $tran->transparencyAmount; @endphp
+                                    @endforeach
+                                    @endif
+                                    <div style="text-align:right;font-weight:bold;display:flex;float:right;">
+                                    (Grand Total) Donations: PHP {{number_format($post->postReceivedAmount,2)}} |  Distributions: PHP {{number_format($total1,2)}} | Remaining: PHP @php $remains = $post->postReceivedAmount - $total1; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
+                                    </div><br>
+
+                                    
+
+                                    <!-- update / delete record -->
+                                    <div class="row">
+                                    <div class="col-12">
+                                    <table>
+                                        <tr style="border-top:1px solid black;">
+                                            <th>Barangay</th>
+                                            <th>Date</th>
+                                            <!-- <th>Person-in-Charge</th> -->
+                                            <th>Name/Recepient</th>
+                                            <th>Amount</th>
+                                        </tr>
+
+                                        @if(count($transparency) > 0)
+                                        @foreach($transparency as $i=>$tran)
+                                        <tr>
+                                            
+                                            <input type="hidden" name="menusettings[{{$i}}][transparencyid]" id="" value="{{$tran->transparencyId}}">
+                                            <input type="hidden" name="menusettings[{{$i}}][postid]" id="" value="{{$post->postId}}">
+
+                                            <td style="background:white;">{{$tran->transparencyLocation}}</td>
+                                            <td style="background:white;">{{date('F j, Y',strtotime($tran->transparencyCreatedAt))}}</td>
+                                            <!-- <td>{{$tran->firstName}}</td> -->
+                                            <td style="background:white;">{{$tran->firstName.' '.$tran->middleName.' '.$tran->lastName.' '.$tran->orgName}}</td>
+                                            <td style="background:white;">PHP {{number_format($tran->transparencyAmount,2)}}</td>
+                                            
+                                        </tr>
+                                        @endforeach
+                                        
+                                        <tr style="border-top:1px solid black;">
+                                        
+                                            <td  colspan="3">Total</td>
+                                            <td>PHP {{number_format($total2,2)}}</td>
+                                        </tr>
+                                        @endif
+
+                                    </table>
+                                    </div>
+                                    <!-- update / delete record end -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end modal -->
+                    <!-- view transparency history -->
+
+                    <!-- view add files history -->
+                    <div class="col-12" data-toggle="modal" data-target="#addfilepostModal2">
+                        <button class="post_donate_button" style="margin-bottom:20px;">View Attached Files</button>
+                    </div>
+                    <!-- Modal OF view donation history BUTTON-->
+                    <div class="modal fade" id="addfilepostModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content" style="width:705px;">
+                                <div class="modal-header">
+                                    Files:
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body" style="width:700px;">
+                                    <div class="container">
+                                    @if($post->postUserId == Auth::user()->id)
+                                        <form action="{{route('fileUpload')}}" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="postid" value="{{$post->postId}}">
+                                            @csrf
+                                            @if ($message = Session::get('success'))
+                                            <div class="alert alert-success">
+                                                <strong>{{ $message }}</strong>
+                                            </div>
+                                        @endif
+                                        @if (count($errors) > 0)
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                            <label for="formFileMultiple" class="form-label">Upload File Here</label>
+                                            <input class="form-control" type="file" id="formFileMultiple" name="file"/>
+                                            <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">
+                                                Upload Files
+                                            </button>
+
+                                        </form>
+                                    @endif
+                                </div>
+                                </div>
+
+                                
+                                    <table id="customers" style="width:700px;">
+                                        <tr>
+                                            <th>Date | Time</th>
+                                            <th>Click the file to download</th>
+                                            @if($post->postUserId == Auth::user()->id)
+                                            <th>Remove</th>
+                                            @endif
+                                        </tr>
+                                        @if(count($files) > 0)
+                                        @foreach($files as $file)
+                                        <tr>
+                                            <td style="width:230px;">{{date('F j, Y | h:i A', strtotime($file->fileCreatedAt))}}
+                                            </td>
+                                            <td>
+                                                <form action="{{route('fileDownload')}}" method="GET">
+                                                    <input type="hidden" name="filename" id="" value="{{$file->filePath}}">
+                                                    <button type="submit" style="background:none;border:none;width:300px;">{{$file->fileName}}</button>
+                                                </form>
+                                            </td>
+                                            @if($post->postUserId == Auth::user()->id)
+                                            <td style="color:red !important;">
+                                                <form action="{{route('fileDelete')}}">
+                                                    <input type="hidden" name="fileid" id="" value="{{$file->fileId}}">
+                                                    <button type="submit" style="color:red !important;border:none;background:none;font-size:12px;width:50px;">
+                                                    <i class="fa fa-trash" aria-hidden="true" style=""></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                        <tr>
+                                            <td colspan="3">No File</td>
+                                        </tr>
+                                        @endif
+                                    </table>
+                                
+
+                                <div class="modal-footer">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end modal -->
+                    <!-- view add files history -->
+
+                    </div>
+                    </div>
+                    <!-- collapse view info button end-->
+
                     <div class="row view_post_left_row">
-                        <div style="position:absolute;margin-top:5px;width:930px;opacity: 0.9;">@include('inc.messages')</div>
-                        <img src="/storage/cover_images/{{$post->postCoverImage}}" alt="" class="view_post_img">
+                        <div style="margin-top:5px;width:930px;opacity: 0.9;">@include('inc.messages')
+                        <button onclick="document.getElementById('editDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('editDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('editDiv{{$post->postId}}').style.display = 'none'" style="background:none;border:1px solid #00d9ff;color:#00d9ff;font-size:30px;border-radius:10px;margin:5px;position:absolute;top:520px;"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
+                        </div>
+                        <img src="/storage/cover_images/{{$post->postImageName}}" alt="" class="view_post_img">
                     </div>
                 </div>
                 <div class="w-100 seperator"></div>
@@ -99,8 +366,6 @@
                                     </div>
                                     <div class="row">
                                         <a href="" class="view_post_i">
-                                            <i class="fal fa-list-ul"></i>
-                                            {{$post->postCategory}}
                                         </a>
                                     </div>
                                     <div class="row">
@@ -206,7 +471,7 @@
                                                 </div>
                                                 <div class="modal-body">
 
-                                                    @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED")
+                                                    @if(Auth::user()->id != $post->postUserId)
                                                     <!-- post report -->
                                                     <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="reportFunction()">Report Post</button>
                                                     <form action="{{route('report')}}" method="GET">
@@ -267,7 +532,7 @@
                                                     <!-- /post report -->
                                                     @endif
 
-                                                    @if(Auth::user()->id == $post->postUserId && $post->postStatus == "PROCESS")
+                                                    @if(Auth::user()->id == $post->postUserId)
                                                     <!-- post edit -->
                                                     <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="editFunction()">Edit Post</button>
                                                     <div class="row deleteDiv2" id="editDiv" style="display:none; ">
@@ -338,23 +603,50 @@
                                 <!-- /3 dots -->
                             </div>
                             
-                            <div class="row view_post_caption">
-                            {{$post->postCaption}}
+                            <div class="row post_caption_con">
+                            <h4 style="text-decoration:underline;">{{$post->postCategory}}</h4>
+                            <p style="">{{$post->postCaption}}</p>
                             </div>
 
                             <!-- fourth row (donation area) -->
                             <div class="row post_donation_con">
                                 <div class="col-4">
-                                    @if($post->postReceivedAmount < $post->postTargetAmount && Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus == "VERIFIED")
+                                @if(Auth::user()->id == $post->postUserId || Auth::user()->accountType == "DONOR")
+
+                                    @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
                                     <div data-toggle="modal" data-target="#mpostModal2-{{$post->postId}}">
                                         <input type="hidden" name="postid" value="{{$post->postId}}">
                                         <button class="post_donate_button">Donate</button>
                                     </div>
                                     @elseif($post->postStatus == "BANNED")
-                                    <button class="post_donate_button_disabled" style="background-color:#90A4AE;cursor: no-drop;color:white;font-size:12px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Post Banned</button>
-                                    @else
-                                    <button class="post_donate_button_disabled" style="cursor: no-drop;">Donate</button>
+                                    <button class="post_donate_button_disabled" style="background-color:#90A4AE;cursor: no-drop;color:white;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Post Banned</button>
+                                    @elseif(Auth::user()->id == $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
+                                    <form action="{{route('stopdonation')}}" method="GET">
+                                    <div>
+                                        <input type="hidden" name="postid" value="{{$post->postId}}">
+                                        <button class="post_donate_button" style="font-size:11px;">Stop Accepting Donation</button>
+                                    </div>
+                                    </form>
+                                    @elseif(Auth::user()->id == $post->postUserId && $post->postStatus == "STOPPED")
+                                    <form action="{{route('godonation')}}" method="GET">
+                                        <div>
+                                            <input type="hidden" name="postid" value="{{$post->postId}}">
+                                            <button class="post_donate_button" style="background-color:#565bbb;">Undo Stop</button>
+                                        </div>
+                                    </form>
+                                    @elseif(Auth::user()->id != $post->postUserId && $post->postStatus == "STOPPED")
+                                    <div>
+                                        <button class="post_donate_button_disabled">Donate Unavailable</button>
+                                    </div>
+
                                     @endif
+
+                                @elseif(Auth::user()->id != $post->postUserId && Auth::user()->accountType == "RECEPIENT")
+                                <div>
+                                    <button class="post_donate_button_disabled">View Post</button>
+                                </div>
+
+                                @endif
                                     
                                     <!--  <button class="post_donate_button_disabled">Donate</button> THIS IS DISABLED BUTTON -->
 
@@ -399,52 +691,52 @@
                                     </div>
                                     <div class="row">
                                         
-                                        @if($post->postReceivedAmount > 0)
-                                        @php $val = ($post->postReceivedAmount/$post->postTargetAmount)*100 @endphp
-                                        <div class="progress2 progress-moved">
-                                            @if( $val >= 100)
-                                                <div class="progress-bar2" style="width:100%;" ></div>
-                                            @endif
-                                            @if( $val >= 90 AND $val < 100)
-                                                <div class="progress-bar2" style="width:90%;" ></div>
-                                            @endif
-                                            @if( $val >= 80 AND $val < 90)
-                                                <div class="progress-bar2" style="width:80%;" ></div>
-                                            @endif
-                                            @if( $val >= 70 AND $val < 80)
-                                                <div class="progress-bar2" style="width:70%;" ></div>
-                                            @endif
-                                            @if( $val >= 60 AND $val < 70)
-                                                <div class="progress-bar2" style="width:60%;" ></div>
-                                            @endif
-                                            @if( $val >= 50 AND $val < 60)
-                                                <div class="progress-bar2" style="width:50%;" ></div>
-                                            @endif
-                                            @if( $val >= 40 AND $val < 50)
-                                                <div class="progress-bar2" style="width:40%;" ></div>
-                                            @endif
-                                            @if( $val >= 30 AND $val < 40)
-                                                <div class="progress-bar2" style="width:30%;" ></div>
-                                            @endif
-                                            @if( $val >= 20 AND $val < 30)
-                                                <div class="progress-bar2" style="width:20%;" ></div>
-                                            @endif
-                                            @if( $val >= 10 AND $val < 20)
-                                                <div class="progress-bar2" style="width:10%;" ></div>
-                                            @endif
-                                            @if( $val >= 1 AND $val < 10)
-                                                <div class="progress-bar2" style="width:3%;" ></div>
-                                            @endif
-                                        </div>
-                                        @elseif( $post->postTargetAmount == 0)
-                                        <div class="progress2 progress-moved">
+                                    @if($post->postReceivedAmount > 0)
+                                    @php $val = ($post->postReceivedAmount/$post->postTargetAmount)*100 @endphp
+                                    <div class="progress2 progress-moved">
+                                        @if( $val >= 100)
                                             <div class="progress-bar2" style="width:100%;" ></div>
-                                        </div> 
-                                        @else
-                                        <div class="progress2 progress-moved">
-                                            <div class="progress-bar2" style="width:0%;" ></div>
-                                        </div> 
-                                        @endif            
+                                        @endif
+                                        @if( $val >= 90 AND $val < 100)
+                                            <div class="progress-bar2" style="width:90%;" ></div>
+                                        @endif
+                                        @if( $val >= 80 AND $val < 90)
+                                            <div class="progress-bar2" style="width:80%;" ></div>
+                                        @endif
+                                        @if( $val >= 70 AND $val < 80)
+                                            <div class="progress-bar2" style="width:70%;" ></div>
+                                        @endif
+                                        @if( $val >= 60 AND $val < 70)
+                                            <div class="progress-bar2" style="width:60%;" ></div>
+                                        @endif
+                                        @if( $val >= 50 AND $val < 60)
+                                            <div class="progress-bar2" style="width:50%;" ></div>
+                                        @endif
+                                        @if( $val >= 40 AND $val < 50)
+                                            <div class="progress-bar2" style="width:40%;" ></div>
+                                        @endif
+                                        @if( $val >= 30 AND $val < 40)
+                                            <div class="progress-bar2" style="width:30%;" ></div>
+                                        @endif
+                                        @if( $val >= 20 AND $val < 30)
+                                            <div class="progress-bar2" style="width:20%;" ></div>
+                                        @endif
+                                        @if( $val >= 10 AND $val < 20)
+                                            <div class="progress-bar2" style="width:10%;" ></div>
+                                        @endif
+                                        @if( $val >= 1 AND $val < 10)
+                                            <div class="progress-bar2" style="width:5%;" ></div>
+                                        @endif
+                                    </div>
+                                    @elseif( $post->postTargetAmount == 0)
+                                    <div class="progress2 progress-moved">
+                                        <div class="progress-bar2" style="width:100%;" ></div>
+                                    </div> 
+                                    @else
+                                    <div class="progress2 progress-moved">
+                                        <div class="progress-bar2" style="width:0%;" ></div>
+                                    </div> 
+                                    @endif             
                                         
                                     </div>
                                 </div>
@@ -507,7 +799,7 @@
                                             @php $com++ @endphp
                                         @endif
                                     @endforeach
-                                    <button class="react_btn_active">
+                                    <button class="react_btn_style">
                                         <i class="fas fa-comment-alt"></i>
                                         <a href="">{{$com}}</a>
                                     </button>
@@ -809,6 +1101,8 @@
         </div>
     </div>
 
+    
+
     <!-- add comment Modal -->
     {!! Form::open(['action' => 'App\Http\Controllers\CommentController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
         <input type="hidden" name="post_id_temp" value="{{$post->postId}}">
@@ -896,5 +1190,7 @@ function deleteFunction() {
   }
 }
 </script>
+
+
 </body>
 </html>

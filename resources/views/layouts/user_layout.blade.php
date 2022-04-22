@@ -16,6 +16,7 @@
     <title>WeCare</title>
 </head>
 <body>
+@php date_default_timezone_set("Asia/Manila"); @endphp
     <!-- top nav here -->
     <div class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-fixed-top" id="navbar">
@@ -61,7 +62,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 30px;left: auto;">
                         <a class="dropdown-item" href="/users/profile/{{Auth::user()->id}}">Profile</a>
                         <a class="dropdown-item" href="/activity/you-donated">Transaction History</a>
-                        <a class="dropdown-item" href="/users/{{Auth::user()->id}}/edit">Update Credentials</a>
+                        <a class="dropdown-item" href="/users/{{Auth::user()->id}}/edit">Update My Information</a>
                         <div class="dropdown-item" data-toggle="modal" data-target="#notifModal" style="cursor:pointer;">
                         @if(count($notification) > 0)
                         @foreach($notification as $var)
@@ -105,7 +106,7 @@
                         <label for="" class="lblmenu"><a style="color:white;" href="/activity/you-donated">Transaction History</a></label>
                     </li>
                     <li class="nav-item dropdown" >
-                        <label for="" class="lblmenu"><a style="color:white;" href="/users/{{Auth::user()->id}}/edit">Update Credentials</a></label>
+                        <label for="" class="lblmenu"><a style="color:white;" href="/users/{{Auth::user()->id}}/edit">Update My Information</a></label>
                     </li>
                     <li class="nav-item dropdown">
                         <label for="" class="lblmenu">
@@ -160,329 +161,71 @@
 
     <!-- notif modal -->
     <div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                @if(count($notification) > 0)
-                @foreach($notification as $var)
-                @if($var->notifStatus == "UNREAD")
-                    @if($var->notifUserId != Auth::user()->id)
-                    <form action="{{route('thisnotif')}}" method="GET">
-                        <input type="hidden" name="me" value="{{Auth::user()->id}}">
-                        <button class="notifbtn" type="submit"><i class="fa fa-check" aria-hidden="true" style="position:relative;"></i> Mark All As Read </button>
-                    </form>
-                    @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
-                    <form action="{{route('thisnotif')}}" method="GET">
-                        <input type="hidden" name="me" value="{{Auth::user()->id}}">
-                        <button class="notifbtn" type="submit"><i class="fa fa-check" aria-hidden="true" style="position:relative;"></i> Mark All As Read </button>
-                    </form>
-                    @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify")
-                    <form action="{{route('thisnotif')}}" method="GET">
-                        <input type="hidden" name="me" value="{{Auth::user()->id}}">
-                        <button class="notifbtn" type="submit"><i class="fa fa-check" aria-hidden="true" style="position:relative;"></i> Mark All As Read </button>
-                    </form>
-                    @endif
-                @break
-                @elseif($var->notifStatus == "READ")
-                    @if($var->notifUserId != Auth::user()->id)
-                    <button class="notifbtn2" type="submit"><i class="fa fa-check" aria-hidden="true" style=""></i> Mark All As Read </button>
-                    @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
-                    <button class="notifbtn2" type="submit"><i class="fa fa-check" aria-hidden="true" style=""></i> Mark All As Read </button>
-                    @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify")
-                    <button class="notifbtn2" type="submit"><i class="fa fa-check" aria-hidden="true" style=""></i> Mark All As Read </button>
-                    @endif
-                @break
-                @endif
-                @endforeach
-                @endif
-            </div>
-
-            <div class="modal-body">
-            
-            <table>
-                <tr>
-                    <th>Notifications</th>
-                </tr>
-
-                @if(count($notification) > 0)
-                @foreach($notification as $var)
-                <tr>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @if(count($notification) > 0)
+                    @foreach($notification as $var)
                     @if($var->notifStatus == "UNREAD")
                         @if($var->notifUserId != Auth::user()->id)
-                        <td style="background-color:#dfdfdf !important;font-weight: bold;">
-                            @if($var->notifType != "followed")
-                            <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
-                            
-                            {{$var->notifType}}
-                            
-                            on your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a>
-                            @else
-                            <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
-                            
-                            {{$var->notifType}}
-                            
-                            you
-                            @endif
-                            <small>
-                            (@php
-                            date_default_timezone_set("Asia/Manila");
-                            $today = date("Y-m-d H:i:s");
-                            $date1 = strtotime(date("Y-m-d H:i:s"));
-                            $date2 = strtotime($var->notifCreatedAt);
-                            
-                            $diff = abs($date2 - $date1);
-                            
-                            $years = floor($diff / (365*60*60*24));
-                            
-                            $months = floor(($diff - $years * 365*60*60*24)
-                                                            / (30*60*60*24));
-                            
-                            $days = floor(($diff - $years * 365*60*60*24 -
-                                        $months*30*60*60*24)/ (60*60*24));
-                            
-                            $hours = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24)
-                                                                / (60*60));
-                            
-                            $minutes = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                                        - $hours*60*60)/ 60);
-                            
-                            $seconds = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                            - $hours*60*60 - $minutes*60));
-                            
-                            // Print the result
-                            if($days == 0){
-                                if($hours == 0){
-                                    if($minutes == 0){
-                                        if($seconds == 1){
-                                            echo $seconds." second ago";
-                                        }else{
-                                            echo $seconds." seconds ago";
-                                        }
-                                    }else if($minutes == 1){
-                                        echo $minutes." minute ago";
-                                    }else{
-                                        echo $minutes." minutes ago";
-                                    }
-                                }else if($hours == 1){
-                                    echo $hours." hour ago";
-                                }else{
-                                    echo $hours." hours ago";
-                                }
-                            }else if($days == 1){
-                                echo $days." day ago";
-                            }else if($days < 7 && $days > 0){
-                                echo $days." days ago";
-                            }else{
-                                echo date('F j, Y', strtotime($var->notifCreatedAt));
-                            }
-
-                            @endphp)</small>
-                        </td>
+                        <form action="{{route('thisnotif')}}" method="GET">
+                            <input type="hidden" name="me" value="{{Auth::user()->id}}">
+                            <button class="notifbtn" type="submit"><i class="fa fa-check" aria-hidden="true" style="position:relative;"></i> Mark All As Read </button>
+                        </form>
                         @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
-                        <td style="background-color:#dfdfdf !important;font-weight: bold;">
-                            
-                            Welcome to WeCare, {{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}
-
-                            <small>
-                            (@php
-                            date_default_timezone_set("Asia/Manila");
-                            $today = date("Y-m-d H:i:s");
-                            $date1 = strtotime(date("Y-m-d H:i:s"));
-                            $date2 = strtotime($var->notifCreatedAt);
-                            
-                            $diff = abs($date2 - $date1);
-                            
-                            $years = floor($diff / (365*60*60*24));
-                            
-                            $months = floor(($diff - $years * 365*60*60*24)
-                                                            / (30*60*60*24));
-                            
-                            $days = floor(($diff - $years * 365*60*60*24 -
-                                        $months*30*60*60*24)/ (60*60*24));
-                            
-                            $hours = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24)
-                                                                / (60*60));
-                            
-                            $minutes = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                                        - $hours*60*60)/ 60);
-                            
-                            $seconds = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                            - $hours*60*60 - $minutes*60));
-                            
-                            // Print the result
-                            if($days == 0){
-                                if($hours == 0){
-                                    if($minutes == 0){
-                                        if($seconds == 1){
-                                            echo $seconds." second ago";
-                                        }else{
-                                            echo $seconds." seconds ago";
-                                        }
-                                    }else if($minutes == 1){
-                                        echo $minutes." minute ago";
-                                    }else{
-                                        echo $minutes." minutes ago";
-                                    }
-                                }else if($hours == 1){
-                                    echo $hours." hour ago";
-                                }else{
-                                    echo $hours." hours ago";
-                                }
-                            }else if($days == 1){
-                                echo $days." day ago";
-                            }else if($days < 7 && $days > 0){
-                                echo $days." days ago";
-                            }else{
-                                echo date('F j, Y', strtotime($var->notifCreatedAt));
-                            }
-
-                            @endphp)</small>
-                        </td>
-                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify" && $var->notifPostId == NULL)
-                        <td style="background-color:#dfdfdf !important;font-weight: bold;">
-                            
-                            Your account is now verified!
-
-                            <small>
-                            (@php
-                            date_default_timezone_set("Asia/Manila");
-                            $today = date("Y-m-d H:i:s");
-                            $date1 = strtotime(date("Y-m-d H:i:s"));
-                            $date2 = strtotime($var->notifCreatedAt);
-                            
-                            $diff = abs($date2 - $date1);
-                            
-                            $years = floor($diff / (365*60*60*24));
-                            
-                            $months = floor(($diff - $years * 365*60*60*24)
-                                                            / (30*60*60*24));
-                            
-                            $days = floor(($diff - $years * 365*60*60*24 -
-                                        $months*30*60*60*24)/ (60*60*24));
-                            
-                            $hours = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24)
-                                                                / (60*60));
-                            
-                            $minutes = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                                        - $hours*60*60)/ 60);
-                            
-                            $seconds = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                            - $hours*60*60 - $minutes*60));
-                            
-                            // Print the result
-                            if($days == 0){
-                                if($hours == 0){
-                                    if($minutes == 0){
-                                        if($seconds == 1){
-                                            echo $seconds." second ago";
-                                        }else{
-                                            echo $seconds." seconds ago";
-                                        }
-                                    }else if($minutes == 1){
-                                        echo $minutes." minute ago";
-                                    }else{
-                                        echo $minutes." minutes ago";
-                                    }
-                                }else if($hours == 1){
-                                    echo $hours." hour ago";
-                                }else{
-                                    echo $hours." hours ago";
-                                }
-                            }else if($days == 1){
-                                echo $days." day ago";
-                            }else if($days < 7 && $days > 0){
-                                echo $days." days ago";
-                            }else{
-                                echo date('F j, Y', strtotime($var->notifCreatedAt));
-                            }
-
-                            @endphp)</small>
-                        </td>
-                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify" && $var->notifPostId != NULL)
-                        <td style="background-color:#dfdfdf !important;font-weight: bold;">
-                            
-                            Your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a> has been approved, you can now receive donations.
-
-                            <small>
-                            (@php
-                            date_default_timezone_set("Asia/Manila");
-                            $today = date("Y-m-d H:i:s");
-                            $date1 = strtotime(date("Y-m-d H:i:s"));
-                            $date2 = strtotime($var->notifCreatedAt);
-                            
-                            $diff = abs($date2 - $date1);
-                            
-                            $years = floor($diff / (365*60*60*24));
-                            
-                            $months = floor(($diff - $years * 365*60*60*24)
-                                                            / (30*60*60*24));
-                            
-                            $days = floor(($diff - $years * 365*60*60*24 -
-                                        $months*30*60*60*24)/ (60*60*24));
-                            
-                            $hours = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24)
-                                                                / (60*60));
-                            
-                            $minutes = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                                        - $hours*60*60)/ 60);
-                            
-                            $seconds = floor(($diff - $years * 365*60*60*24
-                                    - $months*30*60*60*24 - $days*60*60*24
-                                            - $hours*60*60 - $minutes*60));
-                            
-                            // Print the result
-                            if($days == 0){
-                                if($hours == 0){
-                                    if($minutes == 0){
-                                        if($seconds == 1){
-                                            echo $seconds." second ago";
-                                        }else{
-                                            echo $seconds." seconds ago";
-                                        }
-                                    }else if($minutes == 1){
-                                        echo $minutes." minute ago";
-                                    }else{
-                                        echo $minutes." minutes ago";
-                                    }
-                                }else if($hours == 1){
-                                    echo $hours." hour ago";
-                                }else{
-                                    echo $hours." hours ago";
-                                }
-                            }else if($days == 1){
-                                echo $days." day ago";
-                            }else if($days < 7 && $days > 0){
-                                echo $days." days ago";
-                            }else{
-                                echo date('F j, Y', strtotime($var->notifCreatedAt));
-                            }
-
-                            @endphp)</small>
-                        </td>
+                        <form action="{{route('thisnotif')}}" method="GET">
+                            <input type="hidden" name="me" value="{{Auth::user()->id}}">
+                            <button class="notifbtn" type="submit"><i class="fa fa-check" aria-hidden="true" style="position:relative;"></i> Mark All As Read </button>
+                        </form>
+                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify")
+                        <form action="{{route('thisnotif')}}" method="GET">
+                            <input type="hidden" name="me" value="{{Auth::user()->id}}">
+                            <button class="notifbtn" type="submit"><i class="fa fa-check" aria-hidden="true" style="position:relative;"></i> Mark All As Read </button>
+                        </form>
                         @endif
-
+                    @break
                     @elseif($var->notifStatus == "READ")
                         @if($var->notifUserId != Auth::user()->id)
-                            <td style="background-color: white;">
-                                @if($var->notifType != "followed")
-                                <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                        <button class="notifbtn2" type="submit"><i class="fa fa-check" aria-hidden="true" style=""></i> Mark All As Read </button>
+                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
+                        <button class="notifbtn2" type="submit"><i class="fa fa-check" aria-hidden="true" style=""></i> Mark All As Read </button>
+                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify")
+                        <button class="notifbtn2" type="submit"><i class="fa fa-check" aria-hidden="true" style=""></i> Mark All As Read </button>
+                        @endif
+                    @break
+                    @endif
+                    @endforeach
+                    @endif
+                </div>
+
+                <div class="modal-body">
+                
+                <table>
+                    <tr>
+                        <th>Notifications</th>
+                    </tr>
+
+                    @if(count($notification) > 0)
+                    @foreach($notification as $var)
+                    <tr>
+                        @if($var->notifStatus == "UNREAD")
+                            @if($var->notifUserId != Auth::user()->id)
+                            <td style="background-color:#dfdfdf !important;font-weight: bold;">
+                                @if($var->notifType != "followed" && $var->notifType != "assigned")
+                                <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
                                 
                                 {{$var->notifType}}
                                 
                                 on your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a>
+                                @elseif($var->notifType != "followed" && $var->notifType == "assigned")
+                                
+                                <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                
+                                {{$var->notifType}}
+                                
+                                you a <a class="notiflinks" href="/distribution/my">task.</a>
                                 @else
-                                <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
                                 
                                 {{$var->notifType}}
                                 
@@ -518,7 +261,7 @@
                                                 - $hours*60*60 - $minutes*60));
                                 
                                 // Print the result
-                                if($days == 0 && $months == 0 && $years == 0){
+                                if($days == 0){
                                     if($hours == 0){
                                         if($minutes == 0){
                                             if($seconds == 1){
@@ -536,9 +279,9 @@
                                     }else{
                                         echo $hours." hours ago";
                                     }
-                                }else if($days == 1 && $months == 0 && $years == 0){
+                                }else if($days == 1){
                                     echo $days." day ago";
-                                }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                }else if($days < 7 && $days > 0){
                                     echo $days." days ago";
                                 }else{
                                     echo date('F j, Y', strtotime($var->notifCreatedAt));
@@ -546,73 +289,73 @@
 
                                 @endphp)</small>
                             </td>
-                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
-                            <td style="background-color: white;">
+                            @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
+                            <td style="background-color:#dfdfdf !important;font-weight: bold;">
                                 
                                 Welcome to WeCare, {{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}
 
                                 <small>
                                 (@php
-                                date_default_timezone_set("Asia/Manila");
-                                $today = date("Y-m-d H:i:s");
-                                $date1 = strtotime(date("Y-m-d H:i:s"));
-                                $date2 = strtotime($var->notifCreatedAt);
-                                
-                                $diff = abs($date2 - $date1);
-                                
-                                $years = floor($diff / (365*60*60*24));
-                                
-                                $months = floor(($diff - $years * 365*60*60*24)
-                                                                / (30*60*60*24));
-                                
-                                $days = floor(($diff - $years * 365*60*60*24 -
-                                            $months*30*60*60*24)/ (60*60*24));
-                                
-                                $hours = floor(($diff - $years * 365*60*60*24
-                                        - $months*30*60*60*24 - $days*60*60*24)
-                                                                    / (60*60));
-                                
-                                $minutes = floor(($diff - $years * 365*60*60*24
-                                        - $months*30*60*60*24 - $days*60*60*24
-                                                            - $hours*60*60)/ 60);
-                                
-                                $seconds = floor(($diff - $years * 365*60*60*24
-                                        - $months*30*60*60*24 - $days*60*60*24
-                                                - $hours*60*60 - $minutes*60));
-                                
-                                // Print the result
-                                if($days == 0 && $months == 0 && $years == 0){
-                                    if($hours == 0){
-                                        if($minutes == 0){
-                                            if($seconds == 1){
-                                                echo $seconds." second ago";
+                                    date_default_timezone_set("Asia/Manila");
+                                    $today = date("Y-m-d H:i:s");
+                                    $date1 = strtotime(date("Y-m-d H:i:s"));
+                                    $date2 = strtotime($var->notifCreatedAt);
+                                    
+                                    $diff = abs($date2 - $date1);
+                                    
+                                    $years = floor($diff / (365*60*60*24));
+                                    
+                                    $months = floor(($diff - $years * 365*60*60*24)
+                                                                    / (30*60*60*24));
+                                    
+                                    $days = floor(($diff - $years * 365*60*60*24 -
+                                                $months*30*60*60*24)/ (60*60*24));
+                                    
+                                    $hours = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24)
+                                                                        / (60*60));
+                                    
+                                    $minutes = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                                - $hours*60*60)/ 60);
+                                    
+                                    $seconds = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                    - $hours*60*60 - $minutes*60));
+                                    
+                                    // Print the result
+                                    if($days == 0 && $months == 0 && $years == 0){
+                                        if($hours == 0){
+                                            if($minutes == 0){
+                                                if($seconds == 1){
+                                                    echo $seconds." second ago";
+                                                }else{
+                                                    echo $seconds." seconds ago";
+                                                }
+                                            }else if($minutes == 1){
+                                                echo $minutes." minute ago";
                                             }else{
-                                                echo $seconds." seconds ago";
+                                                echo $minutes." minutes ago";
                                             }
-                                        }else if($minutes == 1){
-                                            echo $minutes." minute ago";
+                                        }else if($hours == 1){
+                                            echo $hours." hour ago";
                                         }else{
-                                            echo $minutes." minutes ago";
+                                            echo $hours." hours ago";
                                         }
-                                    }else if($hours == 1){
-                                        echo $hours." hour ago";
+                                    }else if($days == 1 && $months == 0 && $years == 0){
+                                        echo $days." day ago";
+                                    }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                        echo $days." days ago";
                                     }else{
-                                        echo $hours." hours ago";
+                                        echo date('F j, Y', strtotime($var->notifCreatedAt));
                                     }
-                                }else if($days == 1 && $months == 0 && $years == 0){
-                                    echo $days." day ago";
-                                }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
-                                    echo $days." days ago";
-                                }else{
-                                    echo date('F j, Y', strtotime($var->notifCreatedAt));
-                                }
 
-                                @endphp)</small>
+                                    @endphp)</small>
                             </td>
-                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify"  && $var->notifPostId == NULL)
-                            <td style="background-color: white;">
+                            @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify" && $var->notifPostId == NULL)
+                            <td style="background-color:#dfdfdf !important;font-weight: bold;">
                                 
-                            Your account is now verified!
+                                Your account is now verified!
 
                                 <small>
                                 (@php
@@ -644,7 +387,7 @@
                                                 - $hours*60*60 - $minutes*60));
                                 
                                 // Print the result
-                                if($days == 0 && $months == 0 && $years == 0){
+                                if($days == 0){
                                     if($hours == 0){
                                         if($minutes == 0){
                                             if($seconds == 1){
@@ -662,9 +405,9 @@
                                     }else{
                                         echo $hours." hours ago";
                                     }
-                                }else if($days == 1 && $months == 0 && $years == 0){
+                                }else if($days == 1){
                                     echo $days." day ago";
-                                }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                }else if($days < 7 && $days > 0){
                                     echo $days." days ago";
                                 }else{
                                     echo date('F j, Y', strtotime($var->notifCreatedAt));
@@ -672,10 +415,10 @@
 
                                 @endphp)</small>
                             </td>
-                        @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify"  && $var->notifPostId != NULL)
-                            <td style="background-color: white;">
+                            @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify" && $var->notifPostId != NULL)
+                            <td style="background-color:#dfdfdf !important;font-weight: bold;">
                                 
-                            Your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a> has been approved, you can now receive donations.
+                                Your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a> has been approved, you can now receive donations.
 
                                 <small>
                                 (@php
@@ -707,7 +450,7 @@
                                                 - $hours*60*60 - $minutes*60));
                                 
                                 // Print the result
-                                if($days == 0 && $months == 0 && $years == 0){
+                                if($days == 0){
                                     if($hours == 0){
                                         if($minutes == 0){
                                             if($seconds == 1){
@@ -725,9 +468,9 @@
                                     }else{
                                         echo $hours." hours ago";
                                     }
-                                }else if($days == 1 && $months == 0 && $years == 0){
+                                }else if($days == 1){
                                     echo $days." day ago";
-                                }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                }else if($days < 7 && $days > 0){
                                     echo $days." days ago";
                                 }else{
                                     echo date('F j, Y', strtotime($var->notifCreatedAt));
@@ -735,20 +478,292 @@
 
                                 @endphp)</small>
                             </td>
+                            @endif
+
+                        @elseif($var->notifStatus == "READ")
+                            @if($var->notifUserId != Auth::user()->id)
+                                <td style="background-color: white;">
+                                    @if($var->notifType != "followed" && $var->notifType != "assigned")
+                                    <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                    
+                                    {{$var->notifType}}
+                                    
+                                    on your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a>
+                                    @elseif($var->notifType != "followed" && $var->notifType == "assigned")
+                                    
+                                    <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                    
+                                    {{$var->notifType}}
+                                    
+                                    you a <a class="notiflinks" href="/distribution/my">task.</a>
+                                    @else
+                                    <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                    
+                                    {{$var->notifType}}
+                                    
+                                    you
+                                    @endif
+                                    <small>
+                                    (@php
+                                    date_default_timezone_set("Asia/Manila");
+                                    $today = date("Y-m-d H:i:s");
+                                    $date1 = strtotime(date("Y-m-d H:i:s"));
+                                    $date2 = strtotime($var->notifCreatedAt);
+                                    
+                                    $diff = abs($date2 - $date1);
+                                    
+                                    $years = floor($diff / (365*60*60*24));
+                                    
+                                    $months = floor(($diff - $years * 365*60*60*24)
+                                                                    / (30*60*60*24));
+                                    
+                                    $days = floor(($diff - $years * 365*60*60*24 -
+                                                $months*30*60*60*24)/ (60*60*24));
+                                    
+                                    $hours = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24)
+                                                                        / (60*60));
+                                    
+                                    $minutes = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                                - $hours*60*60)/ 60);
+                                    
+                                    $seconds = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                    - $hours*60*60 - $minutes*60));
+                                    
+                                    // Print the result
+                                    if($days == 0 && $months == 0 && $years == 0){
+                                        if($hours == 0){
+                                            if($minutes == 0){
+                                                if($seconds == 1){
+                                                    echo $seconds." second ago";
+                                                }else{
+                                                    echo $seconds." seconds ago";
+                                                }
+                                            }else if($minutes == 1){
+                                                echo $minutes." minute ago";
+                                            }else{
+                                                echo $minutes." minutes ago";
+                                            }
+                                        }else if($hours == 1){
+                                            echo $hours." hour ago";
+                                        }else{
+                                            echo $hours." hours ago";
+                                        }
+                                    }else if($days == 1 && $months == 0 && $years == 0){
+                                        echo $days." day ago";
+                                    }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                        echo $days." days ago";
+                                    }else{
+                                        echo date('F j, Y', strtotime($var->notifCreatedAt));
+                                    }
+
+                                    @endphp)</small>
+                                </td>
+                            @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "welcome")
+                                <td style="background-color: white;">
+                                    
+                                    Welcome to WeCare, {{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}
+
+                                    <small>
+                                    (@php
+                                    date_default_timezone_set("Asia/Manila");
+                                    $today = date("Y-m-d H:i:s");
+                                    $date1 = strtotime(date("Y-m-d H:i:s"));
+                                    $date2 = strtotime($var->notifCreatedAt);
+                                    
+                                    $diff = abs($date2 - $date1);
+                                    
+                                    $years = floor($diff / (365*60*60*24));
+                                    
+                                    $months = floor(($diff - $years * 365*60*60*24)
+                                                                    / (30*60*60*24));
+                                    
+                                    $days = floor(($diff - $years * 365*60*60*24 -
+                                                $months*30*60*60*24)/ (60*60*24));
+                                    
+                                    $hours = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24)
+                                                                        / (60*60));
+                                    
+                                    $minutes = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                                - $hours*60*60)/ 60);
+                                    
+                                    $seconds = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                    - $hours*60*60 - $minutes*60));
+                                    
+                                    // Print the result
+                                    if($days == 0 && $months == 0 && $years == 0){
+                                        if($hours == 0){
+                                            if($minutes == 0){
+                                                if($seconds == 1){
+                                                    echo $seconds." second ago";
+                                                }else{
+                                                    echo $seconds." seconds ago";
+                                                }
+                                            }else if($minutes == 1){
+                                                echo $minutes." minute ago";
+                                            }else{
+                                                echo $minutes." minutes ago";
+                                            }
+                                        }else if($hours == 1){
+                                            echo $hours." hour ago";
+                                        }else{
+                                            echo $hours." hours ago";
+                                        }
+                                    }else if($days == 1 && $months == 0 && $years == 0){
+                                        echo $days." day ago";
+                                    }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                        echo $days." days ago";
+                                    }else{
+                                        echo date('F j, Y', strtotime($var->notifCreatedAt));
+                                    }
+
+                                    @endphp)</small>
+                                </td>
+                            @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify"  && $var->notifPostId == NULL)
+                                <td style="background-color: white;">
+                                    
+                                Your account is now verified!
+
+                                    <small>
+                                    (@php
+                                    date_default_timezone_set("Asia/Manila");
+                                    $today = date("Y-m-d H:i:s");
+                                    $date1 = strtotime(date("Y-m-d H:i:s"));
+                                    $date2 = strtotime($var->notifCreatedAt);
+                                    
+                                    $diff = abs($date2 - $date1);
+                                    
+                                    $years = floor($diff / (365*60*60*24));
+                                    
+                                    $months = floor(($diff - $years * 365*60*60*24)
+                                                                    / (30*60*60*24));
+                                    
+                                    $days = floor(($diff - $years * 365*60*60*24 -
+                                                $months*30*60*60*24)/ (60*60*24));
+                                    
+                                    $hours = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24)
+                                                                        / (60*60));
+                                    
+                                    $minutes = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                                - $hours*60*60)/ 60);
+                                    
+                                    $seconds = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                    - $hours*60*60 - $minutes*60));
+                                    
+                                    // Print the result
+                                    if($days == 0 && $months == 0 && $years == 0){
+                                        if($hours == 0){
+                                            if($minutes == 0){
+                                                if($seconds == 1){
+                                                    echo $seconds." second ago";
+                                                }else{
+                                                    echo $seconds." seconds ago";
+                                                }
+                                            }else if($minutes == 1){
+                                                echo $minutes." minute ago";
+                                            }else{
+                                                echo $minutes." minutes ago";
+                                            }
+                                        }else if($hours == 1){
+                                            echo $hours." hour ago";
+                                        }else{
+                                            echo $hours." hours ago";
+                                        }
+                                    }else if($days == 1 && $months == 0 && $years == 0){
+                                        echo $days." day ago";
+                                    }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                        echo $days." days ago";
+                                    }else{
+                                        echo date('F j, Y', strtotime($var->notifCreatedAt));
+                                    }
+
+                                    @endphp)</small>
+                                </td>
+                            @elseif($var->notifUserId == Auth::user()->id && $var->notifType == "verify"  && $var->notifPostId != NULL)
+                                <td style="background-color: white;">
+                                    
+                                Your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a> has been approved, you can now receive donations.
+
+                                    <small>
+                                    (@php
+                                    date_default_timezone_set("Asia/Manila");
+                                    $today = date("Y-m-d H:i:s");
+                                    $date1 = strtotime(date("Y-m-d H:i:s"));
+                                    $date2 = strtotime($var->notifCreatedAt);
+                                    
+                                    $diff = abs($date2 - $date1);
+                                    
+                                    $years = floor($diff / (365*60*60*24));
+                                    
+                                    $months = floor(($diff - $years * 365*60*60*24)
+                                                                    / (30*60*60*24));
+                                    
+                                    $days = floor(($diff - $years * 365*60*60*24 -
+                                                $months*30*60*60*24)/ (60*60*24));
+                                    
+                                    $hours = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24)
+                                                                        / (60*60));
+                                    
+                                    $minutes = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                                - $hours*60*60)/ 60);
+                                    
+                                    $seconds = floor(($diff - $years * 365*60*60*24
+                                            - $months*30*60*60*24 - $days*60*60*24
+                                                    - $hours*60*60 - $minutes*60));
+                                    
+                                    // Print the result
+                                    if($days == 0 && $months == 0 && $years == 0){
+                                        if($hours == 0){
+                                            if($minutes == 0){
+                                                if($seconds == 1){
+                                                    echo $seconds." second ago";
+                                                }else{
+                                                    echo $seconds." seconds ago";
+                                                }
+                                            }else if($minutes == 1){
+                                                echo $minutes." minute ago";
+                                            }else{
+                                                echo $minutes." minutes ago";
+                                            }
+                                        }else if($hours == 1){
+                                            echo $hours." hour ago";
+                                        }else{
+                                            echo $hours." hours ago";
+                                        }
+                                    }else if($days == 1 && $months == 0 && $years == 0){
+                                        echo $days." day ago";
+                                    }else if($days < 7 && $days > 0 && $months == 0 && $years == 0){
+                                        echo $days." days ago";
+                                    }else{
+                                        echo date('F j, Y', strtotime($var->notifCreatedAt));
+                                    }
+
+                                    @endphp)</small>
+                                </td>
+                            @endif
                         @endif
+                    </tr>
+                    @endforeach
+                    @else
+                    <tr>
+                        <td>Empty</td>
+                    </tr>
                     @endif
-                </tr>
-                @endforeach
-                @else
-                <tr>
-                    <td>Empty</td>
-                </tr>
-                @endif
-            </table>
-            
+                </table>
+                
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- /notif modal -->
 

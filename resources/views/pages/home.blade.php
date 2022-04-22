@@ -31,10 +31,11 @@
         <!-- end of user profile -->
 
         <!-- amount received container -->
+        @if(Auth::user()->accountType == "RECEPIENT")
         <div class="row amount_con">
             <div class="col">
                 <div class="row left_received">
-                    Amount Received:
+                    Total Amount Received:
                 </div>
                 <div class="row left_amount">
                     <label for="">PHP {{number_format(Auth::user()->amountReceived, 2)}}</label>
@@ -42,12 +43,13 @@
             </div>
         </div>
         <!-- end amount received container -->
-
+        @endif
+        @if(Auth::user()->accountType == "DONOR")
         <!-- amount Donated container -->
         <div class="row amount_con">
             <div class="col">
                 <div class="row left_received">
-                    Amount Donated:
+                   Total Amount Donated:
                 </div>
                 <div class="row left_amount">
                     <label for="">PHP {{number_format(Auth::user()->amountGiven, 2)}}</label>
@@ -55,9 +57,9 @@
             </div>
         </div>
         <!-- end amount donated container -->
+        @endif
 
         <div class="row buttons_area">
-
             <!-- button selected design -->
             <div class="col left_btn_con1 selected_btn_style">
                 <div class="row">
@@ -71,7 +73,7 @@
             <!-- normal button design -->
             <div class="col left_btn_con1 normal_btn_style">
                 <div class="row">
-                    <a href="/activity/you-donated"><i class="fas fa-file-alt"></i>My Donation Record</a>
+                    <a href="/activity/you-donated"><i class="fas fa-file-alt"></i>My Transaction Record</a>
                 </div>
             </div>
             <!-- end normal design -->
@@ -95,6 +97,20 @@
                 </div>
             </div>
             <!-- end normal design -->
+
+            <div class="w-100"></div> <!-- use this to seperate each button -->
+
+            <!-- normal button design -->
+            <div class="col left_btn_con1 normal_btn_style">
+                <div class="row">
+                    @if(Auth::user()->accountType == "RECEPIENT")
+                    <a href="/distribution/"><i class="fa fa-plus-circle" aria-hidden="true"></i>Distributions</a>
+                    @else
+                    <a href="/distribution/my"><i class="fa fa-plus-circle" aria-hidden="true"></i>Distributions</a>
+                    @endif
+                </div>
+            </div>
+            <!-- end normal design -->
             
         </div>
     </div>
@@ -106,6 +122,7 @@
 <div class="col-6 center_area_con">
     <div class="container center_post_area">
         
+        @if(Auth::user()->accountType == "RECEPIENT")
         <!-- create post container start -->
         <div class="row center_create_con" >
         @include('inc.messages')
@@ -119,73 +136,66 @@
             </div>
         </div>   
         <!-- create post end -->
+        @endif
+
+        @if(Auth::user()->accountType == "DONOR")
+        <!-- create post container start -->
+        <div style="margin-top:8px;">
+        @include('inc.messages')
+        </div>
+        
+        <!-- create post end -->
+        @endif
         
         
         <!-- post start here -->
         @php $idcount = 0; @endphp
         @if(count($posts) > 0)
         @foreach($posts as $post)
+
+        @if($post->postUser2Id == NULL)
         <div class="row center_post_main_con">
             <div class="container">
                 <!-- first row(user profile area) -->
                 <div class="row post_profile_row">
                     <div class="col-2" >
-                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic" alt="">
-                    </div>
-                    <div class="col-9">
-                        <div class="row">
+                    @php $count = 0; $id = 0; @endphp
+                        @if(count($follows) > 0)
+                        @foreach($follows as $follow)
+                            @if($follow->followedUserId == $post->id)
+                                @if($follow->followUserId == Auth::user()->id)
 
-                            <div class="" style="width: auto;">
-                            <a href="/users/profile/{{$post->id}}" class="post_user_name"  style="">{{$post->firstName." ".$post->middleName." ".$post->lastName." ".$post->orgName}}
-                            </a> 
+                                    @php $count = 1; $id = $follow->followId; @endphp
 
-                            
-                            </div>
-
-                            <div style="width: auto;">
-                            @php $count = 0; $id = 0; @endphp
-                                @if(count($follows) > 0)
-                                @foreach($follows as $follow)
-                                    @if($follow->followedUserId == $post->id)
-                                        @if($follow->followUserId == Auth::user()->id)
-
-                                            @php $count = 1; $id = $follow->followId; @endphp
-
-                                        @endif
-                                        
-                                    @endif
-                                @endforeach
                                 @endif
-
-                                @if($post->id != Auth::user()->id)
-                                @if($count == 1)
-                                {!!Form::open(['action' => ['App\Http\Controllers\FollowController@destroy', $id], 'method' => 'POST'])!!}
-                                <input type="hidden" name="followpostid" value="{{$post->id}}">
-
-                                <div class="row right_suggest_follow">
-                                    <button type="submit" style="margin-top:20px;margin-left:25px;">
-                                        <i class="fal fa-user-check following-icon"> Following</i>
-                                    </button>
-                                </div>
-                                {{Form::hidden('_method', 'DELETE')}}
-                                {!!Form::close()!!}
-
-                                @else
-
-                                {!! Form::open(['action' => 'App\Http\Controllers\FollowController@store2', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
-                                <input type="hidden" name="followpostid" value="{{$post->id}}">
                                 
-                                <div class="row right_suggest_follow">
-                                    <button type="submit" style="margin-top:20px;margin-left:25px;">
-                                        <i class="fal fa-user-plus follow-icon" >Follow</i>
-                                    </button>
-                                </div>
-                                {!! Form::close() !!}
-                                @endif
-                                @endif
-                            </div>
+                            @endif
+                        @endforeach
+                        @endif
 
-                            
+                        @if($post->id != Auth::user()->id)
+                        @if($count == 1)
+
+                        <i class="far fa-check check_follow"></i>
+                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic" alt="">
+
+                        @else
+                        
+                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic2" alt="">
+
+                        @endif
+                        @else
+                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic2" alt="">
+                        @endif
+                        
+
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="" style="width: auto;">
+                                <a href="/users/profile/{{$post->id}}" class="post_user_name"  style="">{{$post->firstName." ".$post->middleName." ".$post->lastName." ".$post->orgName}}
+                                </a> 
+                            </div>               
                         </div>
 
 
@@ -196,12 +206,12 @@
                                 {{$post->postSector.", ".$post->postBarangay.", ".$post->postCity.", ".$post->province.", ".$post->postRegion}}
                             </a>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <a href="" class="post_category">
                                 <i class="fal fa-list-ul"></i>
                                 {{$post->postCategory}}
                             </a>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <a href="" class="post_time">
                                 <i class="fal fa-clock"></i>
@@ -287,8 +297,8 @@
                     </div>
 
                     <!-- 3 dots -->
-                    <div class="col-1">
-                    <div class="three-dots-small">
+                    <div class="col-2">
+                    <div class="three-dots-small" style="float:right;">
                     <div class="dropdown dots">
 
                         <button class="btn tdots" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2-{{$post->postId}}">
@@ -304,9 +314,46 @@
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body" style="height:auto;">
+                                    
 
                                         @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED")
+
+                                        <!-- follow/following button -->
+                                        @php $count = 0; $id = 0; @endphp
+                                        @if(count($follows) > 0)
+                                        @foreach($follows as $follow)
+                                            @if($follow->followedUserId == $post->id)
+                                                @if($follow->followUserId == Auth::user()->id)
+
+                                                    @php $count = 1; $id = $follow->followId; @endphp
+
+                                                @endif
+                                                
+                                            @endif
+                                        @endforeach
+                                        @endif
+
+                                        @if($post->id != Auth::user()->id)
+                                        @if($count == 1)
+                                        {!!Form::open(['action' => ['App\Http\Controllers\FollowController@destroy', $id], 'method' => 'POST'])!!}
+                                        <input type="hidden" name="followpostid" value="{{$post->id}}">
+
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="submit">Unfollow this User</button>
+                                        {{Form::hidden('_method', 'DELETE')}}
+                                        {!!Form::close()!!}
+
+                                        @else
+
+                                        {!! Form::open(['action' => 'App\Http\Controllers\FollowController@store2', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                                        <input type="hidden" name="followpostid" value="{{$post->id}}">
+                                        
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="submit">Follow this User</button>
+                                        {!! Form::close() !!}
+                                        @endif
+                                        @endif
+                                        <!-- follow/following button end -->
+
                                         <!-- post report -->
                                         <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('reportDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('reportDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('reportDiv{{$post->postId}}').style.display = 'none'">Report Post</button>
                                         <form action="{{route('report')}}" method="GET">
@@ -367,7 +414,7 @@
                                         <!-- /post report -->
                                         @endif
 
-                                        @if(Auth::user()->id == $post->postUserId && $post->postStatus == "PROCESS")
+                                        @if(Auth::user()->id == $post->postUserId)
                                         <!-- post edit -->
                                         <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('editDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('editDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('editDiv{{$post->postId}}').style.display = 'none'">Edit Post</button>
                                         <div class="row deleteDiv2" id="editDiv{{$post->postId}}" style="display:none; ">
@@ -440,15 +487,16 @@
                 <!-- end of first row -->
                 
                 <!-- second row (post caption) -->
-                <div class="row post_caption_con">
-                {{$post->postCaption}}
+                <div class="row post_caption_con" style="display:flex;">
+                   <h5 style="text-decoration:underline;">{{$post->postCategory}}</h5>
+                   <p style="">{{$post->postCaption}}</p>
                 </div>
                 <!-- second row end -->
 
                 <!-- third row (post image here) -->
                 <div class="row post_image_con">
                     <a href="/home/{{$post->postId}}">
-                        <img style="width:100%" src="/storage/cover_images/{{$post->postCoverImage}}" alt="">
+                        <img style="width:100%" src="/storage/cover_images/{{$post->postImageName}}" alt="">
                     </a>
                 </div>
                 <!-- third row end -->
@@ -456,22 +504,40 @@
                 <!-- fourth row (donation area) -->
                 <div class="row post_donation_con">
                     <div class="col-4">
-                        @if($post->postReceivedAmount < $post->postTargetAmount && Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus == "VERIFIED")
+                    @if(Auth::user()->id == $post->postUserId || Auth::user()->accountType == "DONOR")
+
+                        @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
                         <div data-toggle="modal" data-target="#mpostModal2-{{$post->postId}}">
                             <input type="hidden" name="postid" value="{{$post->postId}}">
                             <button class="post_donate_button">Donate</button>
                         </div>
                         @elseif($post->postStatus == "BANNED")
                         <button class="post_donate_button_disabled" style="background-color:#90A4AE;cursor: no-drop;color:white;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Post Banned</button>
-                        @elseif($post->postReceivedAmount >= $post->postTargetAmount)
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"> Target Reached</button>
-                        @elseif($post->id == Auth::user()->id && $post->postStatus == "PROCESS")
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-hourglass-half" aria-hidden="true"></i> Under Review</button>
-                        @elseif($post->id == Auth::user()->id && $post->postStatus == "VERIFIED")
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-check" aria-hidden="true"></i> Verified</button>
-                        @elseif($post->id != Auth::user()->id)
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-times-circle" aria-hidden="true"></i> Not Yet Available</button>
+                        @elseif(Auth::user()->id == $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
+                        <form action="{{route('stopdonation')}}" method="GET">
+                        <div>
+                            <input type="hidden" name="postid" value="{{$post->postId}}">
+                            <button class="post_donate_button" style="font-size:13px;">Stop Accepting Donation</button>
+                        </div>
+                        </form>
+                        @elseif(Auth::user()->id == $post->postUserId && $post->postStatus == "STOPPED")
+                        <form action="{{route('godonation')}}" method="GET">
+                            <div>
+                                <input type="hidden" name="postid" value="{{$post->postId}}">
+                                <button class="post_donate_button" style="background-color:#565bbb;">Undo Stop</button>
+                            </div>
+                        </form>
+                        @elseif(Auth::user()->id != $post->postUserId && $post->postStatus == "STOPPED")
+                        <div>
+                            <button class="post_donate_button_disabled">Donate Unavailable</button>
+                        </div>
                         @endif
+
+                    @elseif(Auth::user()->id != $post->postUserId && Auth::user()->accountType == "RECEPIENT")
+                    <a href="/home/{{$post->postId}}"><div>
+                        <button class="post_donate_button" style="background-color:#00b919;">View Post</button>
+                    </div></a>
+                    @endif
                         
                         <!--  <button class="post_donate_button_disabled">Donate</button> THIS IS DISABLED BUTTON -->
 
@@ -499,6 +565,7 @@
                                         <input type="hidden" name="recepient" value="{{$post->postUserId}}">
                                         <input type="hidden" name="donor" value="{{Auth::user()->id}}">
                                         <input type="hidden" name="previous_url" value="/home">
+                                        <input type="hidden" name="transaction" id="" value="YES">
                                     </div>
 
                                     <div class="modal-footer">
@@ -627,9 +694,16 @@
                             @endif
                         @endforeach
                         <form action="/home/{{$post->postId}}">
-                        <button class="react_btn_style" style="height:31px;">
-                            <i class="fas fa-comment-alt"></i>
-                            <a href="">{{number_format($com)}}</a>
+                        <button class="react_btn_style_form" >
+                            <div class="row">
+                                <div class="col-w1">
+                                    <i class="fas fa-comment-alt"></i>
+                                </div>
+
+                                <div class="col-w2">
+                                    <a href="">{{number_format($com)}}</a>
+                                </div>
+                            </div>
                         </button>
                         </form>
                         @endif
@@ -668,6 +742,8 @@
                 <!-- fifth row end -->
             </div>
         </div>
+        @endif
+
         @endforeach
         @else
         @endif
@@ -691,6 +767,8 @@
                         <!-- ever row profile start here -->
                         @if(count($user) > 0)
                         @foreach($user as $u)
+
+                        
                         <a href="/users/profile/{{$u->id}}">
                         <div class="row right_profile_suggest">
                             <div class="col-3">
@@ -771,6 +849,8 @@
                         <!-- ever row profile start here -->
                         @if(count($posts2) > 0)
                         @foreach($posts2 as $post)
+
+                        @if($post->postUser2Id == NULL || $post->postStatus == "REPOST")
                         <a href="/home/{{$post->postId}}">
                         <div class="row right_profile_suggest">
                             <div class="col-3">
@@ -867,6 +947,7 @@
                             </div>
                         </div>
                         </a>
+                        @endif
                         @endforeach
                         @else
                         <div class="row right_profile_suggest">
@@ -918,6 +999,7 @@
     </div>
 </div>
 
+@if(Auth::user()->accountVerified == "VERIFIED")
 <!-- create post modal-->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -931,8 +1013,17 @@
 
             {!! Form::open(['action' => 'App\Http\Controllers\PostsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
                 <div class="modal-body">   
+                    <div class="col-sm-12" style="display:flex;">
+                            <div class="row modal_row_title" style="width:200px;position:relative;">Title of your Post: <small style="">(Ex: Fire in Mandaue City)</small></div>
+                            <div class="row modal_input_amount" style="width:100%;margin-left:20px;">
+                                <input type="text" name="category" id="" >
+                            </div>
+                        </div> <br>
                     <div class="row post_textarea_row">
-                        <textarea name="caption" id="" cols="30" rows="7" class="modal_post_textarea"placeholder="Enter post description..."></textarea>
+
+                        
+
+                        <textarea name="caption" id="" cols="30" rows="7" class="modal_post_textarea"placeholder="Write a description..."></textarea>
                     </div>
                     <div class="row">
                         <div class="container">
@@ -950,31 +1041,19 @@
                                     <img id='img-upload'/>
                                 </div>
                             </div>
+                            <!-- target amount -->
+                            <div class="col-sm-6" style="margin-left:20px;">
+                                <div class="row modal_row_title">How much is your target amount for this post?</div>
+                                <div class="row modal_input_amount"><small>PHP</small><input name="amountTarget" type="text" placeholder="PHP"></div>
+                            </div> <br>
+                            <!-- //target amount -->
                             
                         </div>
                     </div>
                     
                     <div class="row post_modal_row3">
-                    <div class="row modal_row_title_dark">Please fill out neccesary information for us to verify your post..</div> <br><br>
-                        <div class="col-sm-6">
-                            <div class="row modal_row_title">How much is your target amount?</div>
-                            <div class="row modal_input_amount"><input name="amountTarget" type="text"></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="row modal_row_title">Select category</div>
-                            <div class="row modal_input_amount">
-                                <select class="form-select" name="category" required>
-                                    <option value="Calamity" selected hidden>Calamity</option>
-                                    <option value="Calamity">Calamity</option>
-                                    <option value="Children">Children</option>
-                                    <option value="Animals">Animals</option>
-                                    <option value="Medical">Medical</option>
-                                    <option value="Youth">Youth</option>
-                                    <option value="Seniors">Seniors</option>
-                                    <option value="Memorial">Memorial</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="row modal_row_title_dark">Please fill out these neccesary information..</div> <br>
+                        
                     </div>
 
                     <div class="row post_modal_row4">
@@ -1099,6 +1178,8 @@
                                         </div>
 
                                     </div> <!--/Address inputs-->
+
+                                    
                         </div>
                     </div>
                 </div>
@@ -1111,6 +1192,28 @@
         </div>
     </div>
 </div>
+<!-- last post modal -->
+@else
+<!-- create post modal-->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+                <div class="modal-body">   
+                   <p>Your account is not yet verified to proceed this action, please submit a verification request to our Admins. Thanks!</p> 
+
+                   <p>To submit, please go to your timeline page and click the three vertical dots at the upper right of the page.</p>
+
+                   <p>If you have already submitted, please wait within 30 days upon submission to verify your account.</p>
+                    
+                   <p>You may also contact Admin Support for follow-ups that can also be found in your timeline page, below the three vertical dots.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary second_btn" data-dismiss="modal">Close</button>
+                </div>
+        </div>
+    </div>
+</div>
+@endif
 <!-- /body container here -->
 
 

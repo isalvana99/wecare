@@ -84,6 +84,7 @@
                       @endphp
                       @if(count($vars) > 0)
                       @foreach($vars as $var)
+                      @if($var->accountType != "RECEPIENT")
                       <div class="row row_user_lead"> <!-- leaderboards row -->
                           <div class="col-2 user_place">
                             @if($a == 1)
@@ -106,6 +107,7 @@
                             Php {{number_format((float)$var->amountGiven, 2, '.', '')}}
                           </div>
                       </div> <!-- leaderboards end -->
+                      @endif
                       @endforeach
                       @else
                       <div class="row row_user_lead"> <!-- leaderboards row -->

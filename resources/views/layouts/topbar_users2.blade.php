@@ -67,7 +67,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0px;left: auto;">
             <a class="dropdown-item" href="/users/profile/{{Auth::user()->id}}">Profile</a>
             <a class="dropdown-item" href="/activity/you-donated">Transaction History</a>
-            <a class="dropdown-item" href="/users/{{Auth::user()->id}}/edit">Update Credentials</a>
+            <a class="dropdown-item" href="/users/{{Auth::user()->id}}/edit">Update My Information</a>
             <div class="dropdown-item" data-toggle="modal" data-target="#notifModal" style="cursor:pointer;">
             @if(count($notification) > 0)
             @foreach($notification as $var)
@@ -110,7 +110,7 @@
             <label for="" class="lblmenu">Transaction History</label>
         </li>
         <li class="nav-item dropdown" >
-            <label for="" class="lblmenu">Update Credentials</label>
+            <label for="" class="lblmenu">Update My Information</label>
         </li>
         <li class="nav-item dropdown">
             <label for="" class="lblmenu">
@@ -203,14 +203,21 @@
                     @if($var->notifStatus == "UNREAD")
                         @if($var->notifUserId != Auth::user()->id)
                         <td style="background-color:#dfdfdf !important;font-weight: bold;">
-                            @if($var->notifType != "followed")
-                            <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                            @if($var->notifType != "followed" && $var->notifType != "assigned")
+                            <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
                             
                             {{$var->notifType}}
                             
                             on your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a>
+                            @elseif($var->notifType != "followed" && $var->notifType == "assigned")
+                            
+                            <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                            
+                            {{$var->notifType}}
+                            
+                            you a <a class="notiflinks" href="/distribution/my">task.</a>
                             @else
-                            <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                            <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
                             
                             {{$var->notifType}}
                             
@@ -468,14 +475,21 @@
                     @elseif($var->notifStatus == "READ")
                         @if($var->notifUserId != Auth::user()->id)
                             <td style="background-color: white;">
-                                @if($var->notifType != "followed")
-                                <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                @if($var->notifType != "followed" && $var->notifType != "assigned")
+                                <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
                                 
                                 {{$var->notifType}}
                                 
                                 on your <a class="notiflinks" href="/home/{{$var->notifPostId}}">post</a>
+                                @elseif($var->notifType != "followed" && $var->notifType == "assigned")
+                                
+                                <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                
+                                {{$var->notifType}}
+                                
+                                you a <a class="notiflinks" href="/distribution/my">task.</a>
                                 @else
-                                <a class="notiflinks" href="/users/profile/{{$var->notifToUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
+                                <a class="notiflinks" href="/users/profile/{{$var->notifUserId}}">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</a>
                                 
                                 {{$var->notifType}}
                                 
