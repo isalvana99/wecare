@@ -11,28 +11,32 @@ use App\Models\Comment;
 use App\Models\AdminLog;
 use App\Models\Review;
 use App\Models\Notif;
+use App\Models\Transparency;
+use App\Models\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use DB;
 use PDF;
 use View;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
     public function adminhome(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $count = 1;
         date_default_timezone_set("Asia/Manila"); $month = date("Y-m");
         $data_donated = [];
         $data_received = [];
+        $year = date('Y');
 
         $people = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
         $people2 = DB::select('SELECT * FROM users WHERE role != "ADMIN" ORDER BY accountUpdatedAt DESC LIMIT 50');
         $org = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
-        $post = DB::select('SELECT * FROM posts JOIN users ON users.id = posts.postUserId');
+        $post = DB::select('SELECT * FROM posts JOIN users ON users.id = posts.postUserId JOIN postimages ON posts.postId = postimages.postImagePostId');
         $transactions = DB::select('SELECT * FROM transactions JOIN users ON users.id = transactions.transactionUserId ORDER BY transactionCreatedAt DESC LIMIT 30');
         
         $jan1=0; $feb1=0; $mar1=0;$apr1=0;$may1=0;$jun1=0;$jul1=0;$aug1=0;$sept1=0;$oct1=0;$nov1=0;$dec1=0;
@@ -40,59 +44,62 @@ class AdminController extends Controller
         $djan=0; $dfeb=0; $dmar=0;$dapr=0;$dmay=0;$djun=0;$djul=0;$daug=0;$dsept=0;$doct=0;$dnov=0;$ddec=0;
         $rjan=0; $rfeb=0; $rmar=0;$rapr=0;$rmay=0;$rjun=0;$rjul=0;$raug=0;$rsept=0;$roct=0;$rnov=0;$rdec=0;
 
-        for($i=0; $i<count($people); $i++){
-            if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-01"){
-                $jan1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-02"){
-                $feb1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-03"){
-                $mar1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-04"){
-                $apr1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-05"){
-                $may1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-06"){
-                $jun1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-07"){
-                $jul1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-08"){
-                $aug1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-09"){
-                $sept1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-10"){
-                $oct1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-11"){
-                $nov1 += $people[$i]->amountGiven;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-12"){
-                $dec1 += $people[$i]->amountGiven;
-            }
-        }
+        if(count($people) > 0) {
 
-        for($i=0; $i<count($people); $i++){
-            if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-01"){
-                $jan2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-02"){
-                $feb2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-03"){
-                $mar2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-04"){
-                $apr2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-05"){
-                $may2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-06"){
-                $jun2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-07"){
-                $jul2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-08"){
-                $aug2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-09"){
-                $sept2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-10"){
-                $oct2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-11"){
-                $nov2 += $people[$i]->amountReceived;
-            }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == "2022-12"){
-                $dec2 += $people[$i]->amountReceived;
+            for($i=0; $i<count($people); $i++){
+                if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) == date('Y')."-01"){
+                    $jan1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-02"){
+                    $feb1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-03"){
+                    $mar1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-04"){
+                    $apr1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-05"){
+                    $may1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-06"){
+                    $jun1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-07"){
+                    $jul1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-08"){
+                    $aug1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-09"){
+                    $sept1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-10"){
+                    $oct1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-11"){
+                    $nov1 += $people[$i]->amountGiven;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-12"){
+                    $dec1 += $people[$i]->amountGiven;
+                }
+            }
+
+            for($i=0; $i<count($people); $i++){
+                if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-01"){
+                    $jan2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-02"){
+                    $feb2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-03"){
+                    $mar2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-04"){
+                    $apr2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-05"){
+                    $may2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-06"){
+                    $jun2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-07"){
+                    $jul2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-08"){
+                    $aug2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-09"){
+                    $sept2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-10"){
+                    $oct2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-11"){
+                    $nov2 += $people[$i]->amountReceived;
+                }else if(date("Y-m", strtotime($people[$i]->accountCreatedAt)) ==  date('Y')."-12"){
+                    $dec2 += $people[$i]->amountReceived;
+                }
             }
         }
 
@@ -105,24 +112,31 @@ class AdminController extends Controller
         //     }
         // }
 
-        foreach ($data_donated1 as $key => $value) {
-            if ($value >= $max) 
-             $max = number_format((float)$value, 2, '.', '');     
+        if(count($data_donated1) > 0) {
+            foreach ($data_donated1 as $key => $value) {
+                if ($value >= $max) 
+                $max = number_format((float)$value, 2, '.', '');     
+            }
+        
+
+            foreach ($data_donated1 as $key => $value) {
+
+                if($max != 0){
+                    $data_donated[$key] = (number_format((float)$value, 2, '.', '') / $max) * 100;     
+                }
+            }
+
+            foreach ($data_donated1 as $key => $value) {
+                
+                $total_donated += number_format((float)$data_donated1[$key], 2, '.', '');     
+            }
         }
 
-        foreach ($data_donated1 as $key => $value) {
-            
-             $data_donated[$key] = (number_format((float)$value, 2, '.', '') / $max) * 100;     
-        }
-
-        foreach ($data_donated1 as $key => $value) {
-            
-            $total_donated += number_format((float)$data_donated1[$key], 2, '.', '');     
-        }
-
-        foreach ($data_received2 as $key => $value) {
-            
-            $total_received += number_format((float)$data_received2[$key], 2, '.', '');    
+        if(count($data_received2) > 0) {
+            foreach ($data_received2 as $key => $value) {
+                
+                $total_received += number_format((float)$data_received2[$key], 2, '.', '');    
+            }
         }
 
         $data_donated = [$jan1, $feb1, $mar1,$apr1,$may1,$jun1,$jul1,$aug1,$sept1,$oct1,$nov1,$dec1];
@@ -136,12 +150,12 @@ class AdminController extends Controller
         $layoutreport = DB::select('SELECT * FROM reports');
         $layoutrequest = DB::select('SELECT * FROM reviews');
         
-        return view('admin.adminhome', compact('people', 'org', 'post', 'count', 'selected_tile', 'tiles', 'data_donated', 'data_received', 'max','total_donated', 'total_received', 'people2', 'transactions', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
+        return view('admin.adminhome', compact('people', 'year', 'org', 'post', 'count', 'selected_tile', 'tiles', 'data_donated', 'data_received', 'max','total_donated', 'total_received', 'people2', 'transactions', 'layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
     }
 
     public function adminUsersTable(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $count = 1;
@@ -200,7 +214,7 @@ class AdminController extends Controller
 
     public function adminOrgsTable(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $count = 1;
@@ -255,7 +269,7 @@ class AdminController extends Controller
 
     public function adminPostsTable(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $count = 1;
@@ -266,14 +280,18 @@ class AdminController extends Controller
         {
             $vars = Post::query()
             ->join('users', 'users.id', '=', 'posts.postUserId')
+            ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
             ->orderBy('postCreatedAt', 'DESC')
+            ->where('postUser2Id', '=', '')
             ->get();
             $transactions = DB::select('SELECT * FROM recactivities JOIN users ON users.id = recactivities.recactivityBy ORDER BY recactivityCreatedAt DESC');
             $comments = DB::select('SELECT * FROM comments JOIN users ON users.id = comments.commentUserId ORDER BY commentCreatedAt DESC');
         }else{
             $vars = Post::query()
                     ->join('users', 'users.id', '=', 'posts.postUserId')
+                    ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                     ->orderBy('postCreatedAt', 'DESC')
+                    ->where('postUser2Id', '=', '')
                     ->where(function($query) use ($search){
                         $query->where('orgName', 'LIKE', "%{$search}%")
                             ->orWhere('postId', 'LIKE', "{$search}")
@@ -293,6 +311,11 @@ class AdminController extends Controller
             $comments = DB::select('SELECT * FROM comments JOIN users ON users.id = comments.commentUserId ORDER BY commentCreatedAt DESC');
         }
 
+        $transparency = Transparency::query()->join('users', 'users.id', '=', 'transparencies.transparencyUserId')->orderBy('transparencyLocation', 'ASC')->get();
+        $transparency2 = Transparency::query()->join('users', 'users.id', '=', 'transparencies.transparencyHouseholdUserId')->orderBy('transparencyLocation', 'ASC')->get();
+
+        $files = File::query()->orderBy('fileCreatedAt', 'DESC')->get();
+
         $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
         $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
         $layoutpost = DB::select('SELECT * FROM posts');
@@ -300,12 +323,20 @@ class AdminController extends Controller
         $layoutreport = DB::select('SELECT * FROM reports');
         $layoutrequest = DB::select('SELECT * FROM reviews');
         
-        return view('admin.poststable', compact('transactions','vars', 'count', 'search', 'comments', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
+        return view('admin.poststable', compact('transactions','vars', 'count', 'search', 'comments', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest', 'transparency','transparency2', 'files'));
+    }
+
+    public function getDownload(Request $request)
+    {
+        $filename = $request->input('filename');
+        $file_path = public_path($filename);
+        return response()->download($file_path);
+        //return Storage::disk('public')->download('/uploads/', $filename);
     }
 
     public function adminSettings(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input('search');
 
@@ -387,7 +418,7 @@ class AdminController extends Controller
 
     public function adminList(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input('search');
 
@@ -420,7 +451,7 @@ class AdminController extends Controller
 
     public function adminRequestsVerify(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = "";
         $search = $request->input('search');
@@ -490,7 +521,7 @@ class AdminController extends Controller
 
     public function adminRequestsDelete(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = "";
         $search = $request->input('search');
@@ -620,79 +651,477 @@ class AdminController extends Controller
 
     public function stats(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        date_default_timezone_set("Asia/Manila");
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
-
-        $data = DB::table('users')
-           ->select(
-            DB::raw('barangay as barangay'),
-            DB::raw('count(*) as number'))
-           ->groupBy('barangay')
-           ->get();
-        $array[] = ['City', 'Number'];
-        foreach($data as $key => $value)
-        {
-          $array[++$key] = [$value->barangay, $value->number];
+        $viewmonitoring = "";
+        $viewmonitoring = $request->input('viewmonitoring');
+        $monthchoices = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        $monthindex = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        $daychoice = $request->input('daychoice');
+        if($daychoice == null || $daychoice == ""){
+            $daychoice = date('Y-m-d');
         }
-
-        //category
-        $data1 = DB::table('posts')
-           ->select(
-            DB::raw('postCategory as val'),
-            DB::raw('count(*) as number'))
-           ->groupBy('postCategory')
-           ->get();
-        $array1[] = ['Category', 'Number'];
-        foreach($data1 as $key => $value)
-        {
-          $array1[++$key] = [$value->val, $value->number];
+        $weekchoice = $request->input('weekchoice');
+        if($weekchoice == null || $weekchoice == ""){
+            $weekchoice = date('Y').'-W'.date('W');
         }
+        $monthchoice = $request->input('monthchoice');
+        if($monthchoice == 0 || $monthchoice == null || $monthchoice == ""){
+            $monthchoice = date('Y-m');
+        }
+        $yearchoice = $request->input('yearchoice');
+        if($yearchoice == null || $yearchoice == ""){
+            $yearchoice = date('Y');
+        }
+        $date00 = date('F j, Y', strtotime($daychoice));
+        $date01 = date('F, Y', strtotime($monthchoice));
+        $date02 = $yearchoice;
+        
+        //mandaue
+        $b1 = array('Alang-alang', 'Bakilid', 'Banilad', 'Basak', 'Cabancalan', 'Cambaro', 'Canduman', 'Casili', 'Casuntingan', 'Centro', 'Cubacub', 'Guizo', 'Ibabao-Estancia', 'Jagobiao', 'Labogon', 'Looc', 'Maguikay', 'Mantuyong', 'Opao', 'Pakna-an', 'Pagsabungan', 'Subangdaku', 'Tabok', 'Tawason', 'Tingub', 'Tipolo', 'Umapad');
+        //lapu-lapu
+        $b2 = array('Agus', 'Babag', 'Bankal', 'Baring', 'Basak', 'Buaya', 'Calawisan', 'Canjulao', 'Caw-oy', 'Cawhagan', 'Caubian', 'Gun-ob', 'Ibo', 'Looc', 'Mactan', 'Maribago', 'Marigondon', 'Opon', 'Pajac', 'Pajo', 'Pangan-an', 'Punta Engaño', 'Pusok', 'Sabang', 'Santa Rosa', 'Subabasbas', 'Talima', 'Tingo', 'Tungasan', 'San Vicente');
 
+        //DAILY/CURRENT
         //city
-        $data2 = DB::table('posts')
+        $currdata1 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
            ->select(
             DB::raw('postCity as val'),
-            DB::raw('count(*) as number'))
+            DB::raw('sum(transactionAmount) as number'))
            ->groupBy('postCity')
+           ->whereDate('transactionCreatedAt', '=', $daychoice)
+           ->orderBy('postCity', 'DESC')
            ->get();
-        $array2[] = ['City', 'Number'];
-        foreach($data2 as $key => $value)
-        {
-          $array2[++$key] = [$value->val, $value->number];
+        $currarray1[] = [];
+        if(count($currdata1) > 0) {
+            foreach($currdata1 as $key => $value)
+            {
+                $currarray1[$key] = $value->number;
+                $key++;
+            }
+        }else{
+            foreach($currdata1 as $key => $value)
+            {
+              $currarray1[$key] = 0;
+              $key++;
+            }
         }
 
         //barangays of city mandaue
-        $data3 = DB::table('posts')
+        $currdata2 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
            ->select(
             DB::raw('postBarangay as val'),
-            DB::raw('count(*) as number'))
+            DB::raw('sum(transactionAmount) as number'))
            ->groupBy('postBarangay')
            ->where('postCity', '=', 'Mandaue')
+           ->whereDate('transactionCreatedAt', '=', $daychoice)
+           ->orderBy('postBarangay', 'ASC')
            ->get();
-        $array3[] = ['Mandaue Barangays', 'Number'];
-        foreach($data3 as $key => $value)
-        {
-          $array3[++$key] = [$value->val, $value->number];
+        $currarray2[] = [];
+        if(count($currdata2) > 0){
+            foreach($b1 as $key => $b){
+                foreach($currdata2 as $value)
+                {
+                    if($value->val == $b){
+                        $currarray2[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $currarray2[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b1 as $key => $b){
+                foreach($currdata2 as $value)
+                {
+                    $currarray2[$key] = 0;
+                }
+            }
         }
 
         //barangays of city lapulapu
-        $data4 = DB::table('posts')
+        $currdata3 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
            ->select(
             DB::raw('postBarangay as val'),
-            DB::raw('count(*) as number'))
+            DB::raw('sum(transactionAmount) as number'))
            ->groupBy('postBarangay')
            ->where('postCity', '=', 'Lapu-Lapu')
+           ->whereDate('transactionCreatedAt', '=', $daychoice)
+           ->orderBy('postBarangay', 'ASC')
            ->get();
-        $array4[] = ['Lapu-Lapu Barangays', 'Number'];
-        foreach($data4 as $key => $value)
-        {
-          $array4[++$key] = [$value->val, $value->number];
+        $currarray3[] = [];
+        if(count($currdata3) > 0){
+            foreach($b2 as $key => $b){
+                foreach($currdata3 as $value)
+                {
+                    if($b == $value->val){
+                        $currarray3[$key] = $value->number;
+                        
+                    }else{
+                        $currarray3[$key] = 0;
+                    }
+                    $key++;
+                }
+            }
+            
+        }else{
+            foreach($b2 as $key => $b){
+                foreach($currdata3 as $value)
+                {
+                    $currarray3[$key] = 0;
+                    $key++;
+                }
+            }
+        }
+        
+
+
+        //WEEKLY
+        //city
+        $firstday = ""; $lastday = ""; $startdate = ""; $enddate = "";
+
+        if($weekchoice == date('Y').'-W'.date('W')) {
+            if(date('l', strtotime('2022-04-16')) == "Sunday"){
+
+                $week = (int)date('W') + 1;
+                $weekchoice = date('Y').'-W'.$week;
+                $startdate = date('Y-m-d', strtotime("-1 days".date('Y-m-d', strtotime($weekchoice))));
+                $enddate = date('Y-m-d', strtotime("+6 days".$startdate));
+          
+            }else{
+          
+                $startdate = date('Y-m-d', strtotime("-1 days".date('Y-m-d', strtotime($weekchoice))));
+                $enddate = date('Y-m-d', strtotime("+6 days".$startdate));
+          
+            }
+        }else{
+
+                $startdate = date('Y-m-d', strtotime("-1 days".date('Y-m-d', strtotime($weekchoice))));
+                $enddate = date('Y-m-d', strtotime("+6 days".$startdate));
         }
 
-        $category = json_encode($array1);
-        $city = json_encode($array2);
-        $barangay1 = json_encode($array3);
-        $barangay2 = json_encode($array4);
+        $sdate = date('F j, Y', strtotime($startdate));
+        $edate = date('F j, Y', strtotime($enddate));
+
+        // $firstday = date('d', strtotime($weekchoice)) - 1;
+        // $startdate = date('Y-m-', strtotime($weekchoice)).$firstday;
+        // $lastday = date('d', strtotime($weekchoice)) + 5;
+        // $enddate = date('Y-m-', strtotime($weekchoice)).$lastday;
+        
+        $wdata1 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postCity as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postCity')
+           ->whereDate('transactionCreatedAt', '>=', $startdate)
+           ->whereDate('transactionCreatedAt', '<=', $enddate)
+           ->get();
+        $warray1[] = [];
+        if(count($wdata1) > 0) {
+            foreach($wdata1 as $key => $value)
+            {
+                $warray1[$key] = $value->number;
+            }
+        }else{
+            foreach($wdata1 as $key => $value)
+            {
+                $warray1[$key] = 0;
+            }
+        }
+
+        //barangays of city mandaue
+        $wdata2 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postBarangay as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postBarangay')
+           ->where('postCity', '=', 'Mandaue')
+           ->whereDate('transactionCreatedAt', '>=', $startdate)
+           ->whereDate('transactionCreatedAt', '<=', $enddate)
+           ->get();
+        $warray2[] = [];
+        if(count($wdata2) > 0){
+            foreach($b1 as $key => $b){
+                foreach($wdata2 as $value)
+                {
+                    if($value->val == $b){
+                        $warray2[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $warray2[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b1 as $key => $b){
+                foreach($wdata2 as $value)
+                {
+                    $warray2[$key] = 0;
+                }
+            }
+        }
+
+        //barangays of city lapulapu
+        $wdata3 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postBarangay as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postBarangay')
+           ->where('postCity', '=', 'Lapu-Lapu')
+           ->whereDate('transactionCreatedAt', '>=', $startdate)
+           ->whereDate('transactionCreatedAt', '<=', $enddate)
+           ->get();
+        $warray3[] = [];
+        if(count($wdata3) > 0){
+            foreach($b2 as $key => $b){
+                foreach($wdata3 as $value)
+                {
+                    if($value->val == $b){
+                        $warray3[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $warray3[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b2 as $key => $b){
+                foreach($wdata3 as $value)
+                {
+                    $warray3[$key] = 0;
+                }
+            }
+        }
+
+
+
+        //MONTHLY
+        //city
+        $mdata1 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postCity as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postCity')
+           ->whereYear('transactionCreatedAt', date('Y', strtotime($monthchoice)))
+           ->whereMonth('transactionCreatedAt', date('m', strtotime($monthchoice)))
+           ->orderBy('postCity', 'DESC')
+           ->get();
+        $marray1[] = [];
+        if(count($mdata1) > 0) {
+            foreach($mdata1 as $key => $value)
+            {
+                $marray1[$key] = $value->number;
+            }
+        }else{
+            foreach($mdata1 as $key => $value)
+            {
+              $marray1[$key] = 0;
+            }
+        }
+        
+
+        //barangays of city mandaue
+        $mdata2 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postBarangay as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postBarangay')
+           ->where('postCity', '=', 'Mandaue')
+           ->whereYear('transactionCreatedAt', date('Y', strtotime($monthchoice)))
+           ->whereMonth('transactionCreatedAt', date('m', strtotime($monthchoice)))
+           ->orderBy('postBarangay', 'ASC')
+           ->get();
+        $marray2[] = [];
+        if(count($mdata2) > 0){
+            foreach($b1 as $key => $b){
+                foreach($mdata2 as $value)
+                {
+                    if($value->val == $b){
+                        $marray2[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $marray2[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b1 as $key => $b){
+                foreach($mdata2 as $value)
+                {
+                    $marray2[$key] = 0;
+                }
+            }
+        }
+
+        //barangays of city lapulapu
+        $mdata3 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postBarangay as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postBarangay')
+           ->where('postCity', '=', 'Lapu-Lapu')
+           ->whereYear('transactionCreatedAt', date('Y', strtotime($monthchoice)))
+           ->whereMonth('transactionCreatedAt', date('m', strtotime($monthchoice)))
+           ->orderBy('postBarangay', 'ASC')
+           ->get();
+        $marray3[] = [];
+        if(count($mdata3) > 0){
+            foreach($b2 as $key => $b){
+                foreach($mdata3 as $value)
+                {
+                    if($value->val == $b){
+                        $marray3[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $marray3[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b2 as $key => $b){
+                foreach($mdata3 as $value)
+                {
+                    $marray3[$key] = 0;
+                }
+            }
+        }
+
+        //YEARLY
+        //city
+        $ydata1 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postCity as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postCity')
+           ->whereYear('transactionCreatedAt', $yearchoice)
+           ->orderBy('postCity', 'DESC')
+           ->get();
+        $yarray1[] = [];
+        if(count($ydata1) > 0) {
+            foreach($ydata1 as $key => $value)
+            {
+                $yarray1[$key] = $value->number;
+            }
+        }else{
+            foreach($ydata1 as $key => $value)
+            {
+              $yarray1[$key] = 0;
+            }
+        }
+        
+
+        //barangays of city mandaue
+        $ydata2 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postBarangay as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postBarangay')
+           ->where('postCity', '=', 'Mandaue')
+           ->whereYear('transactionCreatedAt', $yearchoice)
+           ->orderBy('postBarangay', 'ASC')
+           ->get();
+        $yarray2[] = [];
+        if(count($ydata2) > 0){
+            foreach($b1 as $key => $b){
+                foreach($ydata2 as $value)
+                {
+                    if($value->val == $b){
+                        $yarray2[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $yarray2[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b1 as $key => $b){
+                foreach($ydata2 as $value)
+                {
+                    $yarray2[$key] = 0;
+                }
+            }
+        }
+
+        //barangays of city lapulapu
+        $ydata3 = DB::table('transactions')
+            ->join('posts', 'posts.postId', '=', 'transactions.transactionPostId')
+           ->select(
+            DB::raw('postBarangay as val'),
+            DB::raw('sum(transactionAmount) as number'))
+           ->groupBy('postBarangay')
+           ->where('postCity', '=', 'Lapu-Lapu')
+           ->whereYear('transactionCreatedAt', $yearchoice)
+           ->orderBy('postBarangay', 'ASC')
+           ->get();
+        $yarray3[] = [];
+        if(count($ydata3) > 0){
+            foreach($b2 as $key => $b){
+                foreach($ydata3 as $value)
+                {
+                    if($value->val == $b){
+                        $yarray3[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $yarray3[$key] = 0;
+                    }
+                    
+                }
+                
+            }
+            
+        }else{
+            foreach($b2 as $key => $b){
+                foreach($ydata3 as $value)
+                {
+                    $yarray3[$key] = 0;
+                }
+            }
+        }
+        
+
+        //$category = json_encode($array1);
+        $city = json_encode($currarray1);
+        $barangay1 = json_encode($currarray2);
+        $barangay2 = json_encode($currarray3);
+        $wcity = json_encode($warray1);
+        $wbarangay1 = json_encode($warray2);
+        $wbarangay2 = json_encode($warray3);
+        $mcity = json_encode($marray1);
+        $mbarangay1 = json_encode($marray2);
+        $mbarangay2 = json_encode($marray3);
+        $ycity = json_encode($yarray1);
+        $ybarangay1 = json_encode($yarray2);
+        $ybarangay2 = json_encode($yarray3);
 
         $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
         $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
@@ -701,12 +1130,12 @@ class AdminController extends Controller
         $layoutreport = DB::select('SELECT * FROM reports');
         $layoutrequest = DB::select('SELECT * FROM reviews');
 
-        return view('admin.stats', compact('category', 'city', 'barangay1', 'barangay2', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest'));
+        return view('admin.stats', compact('city', 'barangay1', 'barangay2', 'mcity', 'mbarangay1', 'mbarangay2', 'wcity', 'wbarangay1', 'wbarangay2', 'ycity', 'ybarangay1', 'ybarangay2', 'selected_tile', 'tiles','layoutpeople', 'layoutorg', 'layoutpost', 'layoutinquiry', 'layoutreport', 'layoutrequest', 'monthchoices', 'monthindex', 'weekchoice', 'monthchoice', 'yearchoice', 'daychoice', 'b1', 'b2', 'viewmonitoring', 'date00', 'date01', 'date02', 'sdate', 'edate'));
     }
 
     public function adminReportsUsers(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
         $thisperson = []; $person = []; $varse = [];
@@ -806,6 +1235,8 @@ class AdminController extends Controller
             }
         }
 
+        
+
         $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
         $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');
         $layoutpost = DB::select('SELECT * FROM posts');
@@ -834,7 +1265,7 @@ class AdminController extends Controller
 
     public function adminReportsPosts(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
         $thisperson = []; $person = []; $varse = [];
@@ -850,6 +1281,7 @@ class AdminController extends Controller
 
             $vars = Report::query()
                 ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
+                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                 ->join('users', 'users.id', '=', 'posts.postUserId')
                 ->where('reportPostId', '!=', NULL)
                 ->orderBy('reportUpdatedAt','DESC')
@@ -858,6 +1290,7 @@ class AdminController extends Controller
 
             $varse = Report::query()
                     ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
+                    ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                     ->join('users', 'users.id', '=', 'posts.postUserId')
                     ->where('reportPostId', '!=', NULL)
                     ->orderBy('reportUpdatedAt','DESC')
@@ -868,6 +1301,7 @@ class AdminController extends Controller
 
             $vars = Report::query()
                 ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
+                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                 ->join('users', 'users.id', '=', 'posts.postUserId')
                 ->where('reportPostId', '!=', NULL)
                 ->orderBy('reportUpdatedAt','DESC')
@@ -921,6 +1355,7 @@ class AdminController extends Controller
             if(count($person2) > 0){
                 $varse = Report::query()
                     ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
+                    ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
                     ->join('users', 'users.id', '=', 'posts.postUserId')
                     ->where('reportPostId', '!=', NULL)
                     ->orderBy('reportUpdatedAt','DESC')
@@ -949,7 +1384,7 @@ class AdminController extends Controller
 
     public function adminReportsComments(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
 
@@ -1207,6 +1642,7 @@ class AdminController extends Controller
             DB::table('inquiries')->where(['inquirySentToId'=> $deleteUser])->delete();
             DB::table('likes')->where(['likeUserId'=> $deleteUser])->delete();
             DB::table('posts')->where(['postUserId'=> $deleteUser])->delete();
+            DB::table('postimages')->where(['postImageUserId'=> $deleteUser])->delete();
             DB::table('recactivities')->where(['recactivityBy'=> $deleteUser])->delete();
             DB::table('recactivities')->where(['recactivityUserId'=> $deleteUser])->delete();
             DB::table('reports')->where(['reportedBy'=> $deleteUser])->delete();
@@ -1230,7 +1666,7 @@ class AdminController extends Controller
             DB::table('recactivities')->where(['recactivityPostId'=> $deletePost])->delete();
             DB::table('reports')->where(['reportPostId'=> $deletePost])->delete();
             DB::table('transactions')->where(['transactionPostId'=> $deletePost])->delete();
-
+            DB::table('postimages')->where(['postImagePostId'=> $deletePost])->delete();
 
             $post = new AdminLog;
             $post ->  adminloggedBy = auth()->user()->id;
@@ -1309,7 +1745,7 @@ class AdminController extends Controller
 
     public function adminLeaderboards(Request $request){
 
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
         $search = $request->input("search");
 
@@ -1425,7 +1861,7 @@ class AdminController extends Controller
       }
 
       public function adminLogs(Request $request){
-            $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+            $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
             $selected_tile = $request->input('selected_tile');
             $search = $request->input('search');
 

@@ -1,0 +1,101 @@
+.title_con2{
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+    margin-left: 20px;
+    margin-top:10px;
+}
+
+.tab_title_1{
+    color: white;
+    font-weight: 500;
+}
+
+.daily_monitor{
+    background: rgb(60,64,119);
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.weekly_monitor{
+    background: rgb(60,64,119);
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.monthly_monitor{
+    background: rgb(60,64,119);
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.table_con_row{
+    margin-top: 10px;
+}
+
+
+.inner_main_con2{
+    height: 88vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.inner_main_con2::-webkit-scrollbar {
+      width:1px; 
+    }
+    .inner_main_con2::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .inner_main_con2::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+.table{
+    color: rgba(255, 255, 255, 0.781) !important;
+}
+
+td{
+    font-size: 14px;
+}
+
+.table_city_con{
+    height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.table_city_con::-webkit-scrollbar {
+      width:1px; 
+    }
+    .table_city_con::-webkit-scrollbar * {
+      background:transparent; 
+    }
+    .table_city_con::-webkit-scrollbar-thumb {
+      background:rgba(0, 162, 255, 0.1) !important; 
+    }
+
+    .table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+   background-color: #8c90ccb7;
+}
+
+.vertical_line{
+    border-right:2px solid rgba(255, 255, 255, 0.548);
+}
+
+.table_tag_lbl{
+    color: #e8e9ff;
+    font-weight: 600;
+}
+
+.lbl_date{
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 14px;
+}

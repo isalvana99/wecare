@@ -61,7 +61,7 @@
     <div class="col-8">
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="list-personal" role="tabpanel" aria-labelledby="list-personal-list">
-            <label for="">Your Received History</label>
+            <label for="">Your Donation Received History</label>
                 <div class="personalcon">
                     <div class="formcon">
                         <div class="form-row">

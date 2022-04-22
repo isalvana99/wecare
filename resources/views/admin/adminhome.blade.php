@@ -309,6 +309,7 @@ document.getElementById("datetime").innerHTML =formatAMPM(new Date);
     var reclength = @json($data_received);
     var don = @json($total_donated);
     var rec = @json($total_received);
+    var year = @json($year);
     var amount1=parseFloat(don).toFixed(2);
     var don2= amount1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     var amount2=parseFloat(rec).toFixed(2);
@@ -319,7 +320,7 @@ document.getElementById("datetime").innerHTML =formatAMPM(new Date);
     data: {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
       datasets: [{
-          label: "Donated: PHP " + don2,
+          label: "Total Donations in Year " +year,
           data: donlength,
           backgroundColor: [
             '#6df0d13f',
@@ -333,17 +334,17 @@ document.getElementById("datetime").innerHTML =formatAMPM(new Date);
           
           borderWidth: 2
         },
-        {
-          label: "Received: PHP " + rec2,
-          data: reclength,
-          backgroundColor: [
-            '#e7e24e3f',
-          ],
-          borderColor: [
-            '#eabd3b',
-          ],
-          borderWidth: 2
-        },
+        // {
+        //   label: "Received: PHP " + rec2,
+        //   data: reclength,
+        //   backgroundColor: [
+        //     '#e7e24e3f',
+        //   ],
+        //   borderColor: [
+        //     '#eabd3b',
+        //   ],
+        //   borderWidth: 2
+        // },
       ]
     },
     options: {

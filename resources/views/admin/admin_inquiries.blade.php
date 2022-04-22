@@ -54,11 +54,9 @@
                     @if($selected_from_all != "")
                     @foreach($all as $p)
                       @if($selected_from_all == $p->id)
-                      <form style="width:675px;margin-top:-5px;" action="{{route('Users Inquiries')}}" method="GET">
-                        <input type="hidden" name="msgid" value="{{$p->inquiryId}}">
                         <input type="hidden" name="selected_tile" value="Users Inquiries">
                         <input type="hidden" name="selected_person_id" value="{{$p->id}}">
-                        <button type="submit" class="left_msg_white_con" style="padding-top:-5px;">
+                        <button class="left_msg_white_con" style="padding-top:-5px;">
                           
                             <div class="row msg_active_con" style=""> <!-- this is active chat design use msg_active_con to change design --start -->
                           
@@ -79,7 +77,6 @@
                             </div>
                         </div> <!-- active chat end -->
                         </button>
-                        </form>
                         @php $count = 2; @endphp
                         @php $firstID = $p->id; @endphp
                       @endif
@@ -91,6 +88,7 @@
                     @if(count($unique) > 0)
                       @foreach($unique as $p)
 
+                      @if($p->inquiryUserId != $firstID)
                         <form style="width:675px;margin-top:-5px;" action="{{route('Users Inquiries')}}" method="GET">
                         <input type="hidden" name="msgid" value="{{$p->inquiryId}}">
                         <input type="hidden" name="selected_tile" value="Users Inquiries">
@@ -140,6 +138,8 @@
                         </button>
                         </form>
                         @php $count = 2; @endphp
+
+                      @endif
                       @endforeach
 
 

@@ -30,13 +30,13 @@ class CreateUsersTable extends Migration
             $table->string('license')->nullable();
             $table->double('amountReceived');
             $table->double('amountGiven');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('profileImage');
-            $table->string('role');
             $table->string('accountVerified');
+            $table->string('accountType');
+            $table->string('email')->unique();
             $table->timestamp('emailVerified')->nullable();
-            $table->rememberToken();
+            $table->string('password');
+            $table->string('role');
+            $table->string('profileImage');
             $table->timestamp('accountCreatedAt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('accountUpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

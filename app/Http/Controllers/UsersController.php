@@ -198,6 +198,14 @@ class UsersController extends Controller
 
         $posts = Post::query()
                 ->join('users', 'users.id', '=', 'posts.postUserId')
+                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                ->where('posts.postUserId', $id)
+                ->orderBy('posts.postUpdatedAt', 'DESC')
+                ->get();
+
+        $posts2 = Post::query()
+                ->join('users', 'users.id', '=', 'posts.postUser2Id')
+                ->join('postimages', 'posts.postUser2Id', '=', 'postimages.postImageUserId')
                 ->where('posts.postUserId', $id)
                 ->orderBy('posts.postUpdatedAt', 'DESC')
                 ->get();
@@ -210,8 +218,44 @@ class UsersController extends Controller
 
         $vars = DB::select('SELECT * FROM inquiries JOIN users on users.id = inquiryUserId WHERE inquiryMessage != "" ORDER BY inquiryCreatedAt ASC');
         $notification = DB::select('SELECT * FROM notifs JOIN users ON users.id = notifs.notifUserId WHERE notifToUserId =' .auth()->user()->id.' ORDER BY notifCreatedAt DESC');
-        return view('users.timeline', compact('notification','posts', 'user', 'comment', 'likes2', 'shares', 'follows', 'badge', 'search', 'vars'));
+        
+        return view('users.timeline', compact('notification','posts', 'posts2', 'user', 'comment', 'likes2', 'shares', 'follows', 'badge', 'search', 'vars'));
     }
+
+    public function viewTimeline2(Request $request, $id){
+
+        $user = User::find($id);
+        $search = "";
+        $search = $request->input('search');
+
+        $posts = Post::query()
+                ->join('users', 'users.id', '=', 'posts.postUser2Id')
+                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                ->where('posts.postUserId', $id)
+                ->orderBy('posts.postUpdatedAt', 'DESC')
+                ->get();
+
+        $posts2 = Post::query()
+                ->join('users', 'users.id', '=', 'posts.postUser2Id')
+                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                ->where('posts.postUserId', $id)
+                ->where('posts.postUser2Id', auth()->user()->id)
+                ->orderBy('posts.postUpdatedAt', 'DESC')
+                ->get();
+        
+        $comment = DB::select('SELECT * FROM comments');
+        $likes2 = DB::select('SELECT * FROM likes');
+        $shares = DB::select('SELECT * FROM shares');
+        $follows = DB::select('SELECT * FROM follows JOIN users ON users.id = follows.followUserId ORDER BY follows.followCreatedAt DESC LIMIT 15');
+        $badge = DB::select('SELECT * FROM badges JOIN users ON users.id = badgeUserId WHERE badgeUserId = ' .auth()->user()->id);
+
+        $vars = DB::select('SELECT * FROM inquiries JOIN users on users.id = inquiryUserId WHERE inquiryMessage != "" ORDER BY inquiryCreatedAt ASC');
+        $notification = DB::select('SELECT * FROM notifs JOIN users ON users.id = notifs.notifUserId WHERE notifToUserId =' .auth()->user()->id.' ORDER BY notifCreatedAt DESC');
+        
+        return view('users.timeline_help', compact('notification','posts', 'posts2', 'user', 'comment', 'likes2', 'shares', 'follows', 'badge', 'search', 'vars'));
+    }
+
+    
 
     public function general_settings(){
         return view('users.my_settings');
@@ -250,6 +294,10 @@ class UsersController extends Controller
         
         $this -> validate($request,[
             'user_id' => 'image|required|max:1999',
+          ],
+          [
+              'user_id.image' => 'You have to attach an image file.',
+              'user_id.required' => 'An image attachment is required.',
           ]);
 
         //handles the file upload
@@ -289,5 +337,16 @@ class UsersController extends Controller
         return redirect()->back();
     }
     
+    public function demoonly(){
+      
+        return view('pages.homesampleonly');
+    }
+
+    public function demoonly2(){
+    
+
+        return view('pages.homesampleonly2');
+    
+    }
 }
 

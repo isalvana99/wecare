@@ -112,7 +112,7 @@ class InquiryController extends Controller
 
     public function show2(Request $request)
     {
-        $tiles = array('Dashboard', 'People', 'Organization', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
+        $tiles = array('Dashboard', 'Donors', 'Recepients', 'Posts', 'Users Inquiries', 'Users Leaderboards', 'Donation Monitoring', 'Requests', 'Reports', 'Logs', 'Settings');
         $selected_tile = $request->input('selected_tile');
 
         $selected_from_all = "";
