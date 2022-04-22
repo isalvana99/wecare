@@ -59,7 +59,7 @@
                             <!--Last name input-->
                             <div class="col-md-5 mb-3">
                                 <label for="lastname">Last name</label>
-                                <input type="text" name="lastname" class="form-control" id="validationCustom02" placeholder="Doe" value="{{$posts->lastName}}" required>
+                                <input type="text" name="lastname" class="form-control" id="validationCustom02" placeholder="Doe" value="{{$posts->lastName}}" >
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -192,6 +192,12 @@
                                     <input class="form-check-input" name="sex" type="radio" name="exampleRadios" id="exampleRadios2" value="Male" required {{ ($posts->sex=="Male")? "checked" : "" }}>
                                     <label class="form-check-label" for="exampleRadios2" style="margin-left:15px;">
                                             Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="sex" type="radio" name="exampleRadios" id="exampleRadios3" value="Other" required {{ ($posts->sex=="Other")? "checked" : "" }}>
+                                    <label class="form-check-label" for="exampleRadios3" style="margin-left:15px;">
+                                            Other
                                     </label>
                                 </div>
                                 <div class="valid-feedback">

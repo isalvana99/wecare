@@ -50,7 +50,7 @@
                         </div>
                         <!-- firstname row -->
                         <div class="col-sm-4">
-                            <label class="inputs_label">First name</label>
+                            <label class="inputs_label">First name<span style="color:red;">*</span></label>
                             <input type="text" name="firstname" class="form-control" id="validationCustom01" placeholder="John" value="{{ old('firstname') }}" required>
                             <div class="valid-feedback">
                                 Looks good!
@@ -60,7 +60,7 @@
 
                         <!-- lastname row -->
                         <div class="col-sm-4">
-                            <label class="inputs_label">Last name</label>
+                            <label class="inputs_label">Last name<span style="color:red;">*</span></label>
                             <input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control" id="validationCustom02" placeholder="Doe" required>
                             <div class="valid-feedback">
                                 Looks good!
@@ -85,7 +85,7 @@
 
                         <!-- birthdate col -->
                         <div class="col-sm-6">
-                            <label class="inputs_label">Birthday</label>
+                            <label class="inputs_label">Birthday<span style="color:red;">*</span></label>
                             <div class="row inputs_row">
                                 <!-- day row -->
                                 <div class="col-4">
@@ -185,7 +185,7 @@
                     <!-- gender row -->
                     <div class="row inputs_row">
                         <div class="col-6">
-                            <label class="inputs_label">Sex</label>
+                            <label class="inputs_label">Sex<span style="color:red;">*</span></label>
                             <div class="row">
                                 <div class="col-4">
                                     <div class="form-check form-check-inline">
@@ -213,7 +213,7 @@
                     <!-- Address row -->
                     <div class="row inputs_row">
                         <div class="col">
-                            <label class="inputs_label">Address</label>
+                            <label class="inputs_label">Full Address<span style="color:red;">*</span></label>
                             <div class="row">
 
                                <!--  Region col -->
@@ -344,7 +344,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <input type="text" name="sector" class="form-control" id="" placeholder="" value="" required>
-                                    <span class="inputs_label_small">House No./Street/Purok/span>
+                                    <span class="inputs_label_small">House No./Street/Purok/Sector</span>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -358,7 +358,7 @@
                     <!-- phone num row -->
                     <div class="row inputs_row">
                         <div class="col-sm-4">
-                            <label class="inputs_label">Registered GCash Number <small>(09XXXXXXXXX)</small> </label>
+                            <label class="inputs_label">Registered GCash Number<span style="color:red;">*</span> <small>(09XXXXXXXXX)</small> </label>
                             <div class="">
                                 <img src="../images/phflag.jpg" style="position:absolute; width:35px;margin:9px;" alt="">
                                 <input maxlength="11" minlength="11" type="tel" name="phone_number" class="form-control pn @error('phone_number') is-invalid @enderror" id="phone" placeholder="0912 345 6789" value="{{ old('phone_number') }}" style="padding-left:50px;" autocomplete="off" required>
@@ -376,8 +376,12 @@
                     </div>
                     <!-- phone num row end -->
 
-                     <!--org name input-->
+                        <!--org name input-->
                         <input type="hidden" name="org_name">
+                        <!--org name input-->
+
+                        <!--org name input-->
+                        <input type="hidden" name="accounttype" value="DONOR">
                         <!--org name input-->
 
                         <!--License input-->
@@ -393,7 +397,7 @@
                     <!-- email row -->
                     <div class="row inputs_row">
                         <div class="col-sm-6">
-                            <label class="inputs_label">Email</label>
+                            <label class="inputs_label">Email<span style="color:red;">*</span></label>
                             <label id="emailreport" style="font-size:10px; color:red;"></label>
                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="example@email.com" value="{{ old('email') }}" required>
                             <div class="valid-feedback">
@@ -412,7 +416,7 @@
 
                         <!-- password col -->
                         <div class="col-sm-6">
-                            <label class="inputs_label">Password</label>
+                            <label class="inputs_label">Password<span style="color:red;">*</span></label>
                             <input type="password" id="password" name="password" class="form-control password" placeholder="password" required>
                             <div class="valid-feedback">
                                 Looks good!
@@ -422,7 +426,7 @@
 
                         <!-- confirm pass col -->
                         <div class="col-sm-6">
-                            <label class="inputs_label">Confirm Password</label>
+                            <label class="inputs_label">Confirm Password<span style="color:red;">*</span></label>
                             <label id="passwordreport" style="font-size:10px; color:red;"></label>
                             <input type="password" id="confirm_password" name="password_confirmation" class="form-control password_confirmation" placeholder="confirm_password" required>
                              <span id="confirm_password_msg"></span>
@@ -439,8 +443,9 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required style="margin-left:-10px;">
                                 <label class="form-check-label" for="invalidCheck" style="margin-left:10px;">
-                                    Agree to terms and conditions
+                                    Agree to <span type="button" class="term_con_btn" data-toggle="modal" data-target=".bd-example-modal-lg" style="color:blue !important;">terms and conditions</span>
                                 </label>
+                                <br>
                                 <div class="invalid-feedback">
                                     *You may proceed if you agree to terms and conditions.
                                 </div>
@@ -471,6 +476,54 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Terms and Conditions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="paragraph">These are the Terms and Conditions which govern each use you make of the donation payment services provided through the Website.
+            These Terms and Conditions apply separately to each single donation that you make. By confirming on the Website that you wish to make a donation you agree to be bound by these Terms and Conditions for that donation.
+            </p>
+            
+            <label class="title_dark">1. The donation services</label>
+            <p class="paragraph">We will use your donation at our discretion but within our stated charitable objectives.</p>
+            <p class="paragraph">All payments through the Website are to be made via GCash.</p>
+            <p class="paragraph">Once you confirm to us through the Website that you wish to proceed with your donation, your transaction will be processed through our payment services provider. By confirming that you wish to proceed with your donation you authorize WeCare to request funds from your Gcash provider.</p>
+
+            <label class="title_dark">2. Information from you</label>
+            <p class="paragraph">Before we can process a donation, you must provide us with <span class="inline_dark">(i)</span> your name, address and email address; and <span class="inline_dark">(ii)</span> details of the GCash that you wish to use to fund the donation. We will use this information to process your donation. It is your responsibility to ensure you have provided us with the correct information.</p>
+            <p class="paragraph">When you submit your payment details, these details will be transferred to our payment provider, GCash, and your payment data will be collected and processed securely by them. You should make sure that you are aware of GCash’s terms and conditions, which are different from our own, to ensure that you are comfortable with how they will process your personal data before you make a donation.</p>
+            <p class="paragraph">We won’t share your personal details with any other third party other than is set out in our Privacy Policy. Our Privacy Policy forms part of these Donation Payment Terms and Conditions and by agreeing to these Terms and Conditions you are also agreeing to the way we use and protect your personal information in line with our Privacy Policy.</p>
+
+            <label class="title_dark">3. GCash Payment Processing</label>
+            <p class="paragraph">WeCare offers payments through GCash, a third-party payment processor. The GCash Terms of Service are available here: https://www.gcash.com/terms-and-conditions. The GCash Privacy Policy is available here: https://www.gcash.com/privacy-notice/20200727/. If you use the GCash payment service, you agree to the GCash Terms of Service and Privacy Policy for the country in which you are located. If you have questions regarding the GCash Terms of Service or Privacy Policy, please refer to the GCash website www.gcash.com or contact GCash at https://help.gcash.com/hc/en-us.</p>
+            
+            <label class="title_dark">4. Security</label>
+            <p class="paragraph">We are committed to ensuring donor personal data from unauthorized access, modification, disclosure, or destruction. Among other things, we attempt a range of security practices, including measures to assist secure web access to sensitive information and undertake efforts to address security vulnerabilities for different devices and databases.</p>
+
+            <label class="title_dark">5. Legal Requirements</label>
+            <p class="paragraph">In spite of the fact that such a circumstance may be unlikely, WeCare may be required to disclose user information to appropriate authorities in accordance with law, whether by subpoena or other authentic request, or in case, in our business judgment, such disclosure is sensibly essential to secure the rights, property, or individual safety of our Website, us, our affiliates, our officers, executives, employees, representatives, our licensors, other users, and/or the public.</p>
+
+            <label class="title_dark">6. Interactive Parts of WeCare Website</label>
+            <p class="paragraph">WeCare accepts no responsibility or liability in respect of the conduct of any user in connection with the use of posting page, or other message or communication facilities made available on its sites, or for any material submitted by users and carried on WeCare website including, for example, responsibility or liability for the accuracy or reliability of any information, data, opinions, advice or statements made in such material. Chats or comments, postings, and other communications by any users are not endorsed by the WeCare. WeCare reserves the right to remove, for any reason and without notice, any content received from users.</p>
+
+            <label class="title_dark">7. General</label>
+            <p class="paragraph">You have got certain rights with regard to the data we collect about you. Upon request, we'll tell you what information we hold about you and correct any incorrect data. We will moreover make reasonable endeavors to delete your data in case you ask us to do so, unless we are otherwise required to keep it. Thus, we reserve the right to amend these Donation Payment Terms and Conditions at any time.</p>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
 
     <!--jquery-->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>

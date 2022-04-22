@@ -72,6 +72,7 @@ class RegisterController extends Controller
             'profile_image' => 'image|nullable|max:1999',
             'verified' => ['string', 'max:255'],
             'role' => ['string', 'max:255'],
+            'accounttype' => ['string', 'max:255'],
         ]);
     }
 
@@ -103,6 +104,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'profileImage' => 'noimage.jpg',
             'accountVerified' => 'NOT VERIFIED',
+            'accountType' => $data['accounttype'],
             'role' => $data['role'],
         ]);
     }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Organization Record</title>
+    <title>Recepients Record</title>
   </head>
   <style>
     body{
@@ -64,32 +64,31 @@
           <div class="label">
             <h1>WeCare</h1>
             <span>A. C. Cortes Ave, Mandaue City, 6014, Cebu, Philippines</span>
-            <p id="pdfcat">ORGANIZATION RECORD</p>
+            <p id="pdfcat">RECEPIENTS RECORD</p>
           </div>
         </div>
 
         <div class="col" id="number">
           <!--  counting number of items in a loop -->
           @if(count($vars) > 0)
-              Total Organization Retrieved:
+              No. of Recepients:
               @foreach($vars as $count=>$var)
               @endforeach
               {{$count+=1}}
           @else
-            Total Organization Retrieved: 0
+            No. of Recepients: 0
           @endif
         </div>
           <table id="table">
             <thead>
               <tr>
               <th scope="col">Account ID</th>
-                      <th scope="col">Organization Name</th>
+                      <th scope="col">Recepients Name</th>
                       <th scope="col">License No.</th>
                       <th scope="col">Address</th>
                       <th scope="col">GCash Number</th>
                       <th scope="col">Received</th>
-                      <th scope="col">Donated</th>
-                      <th scope="col">Status</th>
+                      <th scope="col">Account Status</th>
               </tr>
             </thead>
             
@@ -102,8 +101,17 @@
                       <td>{{$var->license}}</td>
                       <td>{{$var->sector.", ".$var->barangay.", ".$var->city.", ".$var->province.", ".$var->region}}</td>
                       <td>{{$var->phoneNumber}}</td>
-                      <td>Php{{number_format((float)$var->amountReceived, 2, '.', '')}}</td>
-                      <td>Php{{number_format((float)$var->amountGiven, 2, '.', '')}}</td>
+                      <td>
+                        @php $total = 0; @endphp
+                        @if(count($received) > 0)
+                        @foreach ($received as $var3)
+                        @if($var3->postUserId == $var->id)
+                            @php $total += $var3->transactionAmount; @endphp
+                        @endif
+                        @endforeach
+                        @endif
+                        PHP {{number_format($total, 2)}}
+                      </td>
                       <td>{{$var->accountVerified}}</td>
                 
               </tr>

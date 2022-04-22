@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-8">{{$tile}}</div>
                                 @php $num = 0; @endphp
-                                @if($tile == 'People')
+                                @if($tile == 'Donors')
                                     @if(count($layoutpeople) > 0)
                                     @foreach($layoutpeople as $var)
                                         @if($var->accountVerified == "NOT VERIFIED")
@@ -70,7 +70,7 @@
                                     @endif
                                     @endif
                                 @endif
-                                @if($tile == 'Organization')
+                                @if($tile == 'Recepients')
                                 @if(count($layoutorg) > 0)
                                     @foreach($layoutorg as $var)
                                         @if($var->accountVerified == "NOT VERIFIED")
@@ -232,7 +232,6 @@
                                 <th scope="col">Posted By</th>
                                 <th scope="col">Target Amount</th>
                                 <th scope="col">Received Amount</th>
-                                <th scope="col">Status</th>
                                 <th scope="col" class="center">Action</th>
                             </tr>
                         </thead>
@@ -244,9 +243,9 @@
                                 <td>@php echo $cnt+=1; @endphp</td>
                                 <td>{{$var->postId}}</td>
                                 <td>{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</td>
-                                <td>Php{{number_format((float)$var->postTargetAmount, 2, '.', '')}}</td>
-                                <td>Php{{number_format((float)$var->postReceivedAmount, 2, '.', '')}}</td>
-                                <td>{{$var->postStatus}}</td>
+                                <td>PHP {{number_format($var->postTargetAmount, 2)}}</td>
+                                <td>PHP {{number_format($var->postReceivedAmount, 2)}}</td>
+                                
                                 <td class="center">
                                     <button class="btn_view" type="button" data-toggle="modal" data-target=".bd-example-modal-lg-{{$var->postId}}">View</button>
                                     <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->postId}}">Delete</button>
@@ -387,6 +386,12 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact-{{$var->postId}}" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Comment Information</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-distribution-{{$var->postId}}" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Distribution</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-files-{{$var->postId}}" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Attached Files</button>
+                </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home-{{$var->postId}}" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -416,12 +421,20 @@
                             </div>
                         </div>
                         <div class="row post_info_row">
+                            <div class="col-2 col_post_head">
+                                City:
+                            </div>
+                            <div class="col-10 col_post_info">
+                            {{$var->postCity}}
+                            </div>
+                        </div>
+                        <div class="row post_info_row">
                             <div class="col col_post_head">
                                 Post Images:
                             </div>
                         </div>
                         <div class="row col_post_info">
-                            <img src="/storage/cover_images/{{$var->postCoverImage}}" alt="" class="post_info_pics">
+                            <img src="/storage/cover_images/{{$var->postImageName}}" alt="" class="post_info_pics">
                         </div>
                         <div class="row post_info_row">
                             <div class="col-12 col_post_head">
@@ -505,7 +518,7 @@
                                 @php $ccnt = 0; @endphp
                                 @if(count($comments) > 0)
                                 @foreach($comments as $t)
-                                @if($c->commentPostId == $var->postId)
+                                @if($t->commentPostId == $var->postId)
                                     @php $ccnt += 1; @endphp
                                 @endif
                                 @endforeach
@@ -526,7 +539,7 @@
                         <tbody>
                             @php $ccnt2 = 0; @endphp
                             @if(count($comments) > 0)
-                            @foreach($comments as $t)
+                            @foreach($comments as $c)
                             @if($c->commentPostId == $var->postId)
                             <tr>
                                 <th scope="row">{{$ccnt2+=1}}</th>
@@ -550,6 +563,117 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="tab-pane fade" id="pills-distribution-{{$var->postId}}" role="tabpanel" aria-labelledby="pills-contact-tab">
+                    <div class="container">
+                        <div class="row row_total_info" >
+                            <div class="col-4">
+                                <span class="item_bold">Total Items:</span>
+                                @php $ccnt = 0; @endphp
+                                @if(count($transparency) > 0)
+                                @foreach($transparency as $i=>$tran)
+                                @if($tran->transparencyPostId == $var->postId)
+                                    @php $ccnt += 1; @endphp
+                                @endif
+                                @endforeach
+                                @endif
+                                <span class="item_info">{{$ccnt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                                    @php $total1 = 0; $total2 = 0; @endphp
+                                    @if(count($transparency) > 0)
+                                    @foreach($transparency as $i=>$tran)
+                                    @if($tran->transparencyPostId == $var->postId)
+                                        @php $total1 += $tran->transparencyAmount; @endphp
+                                        @php $total2 += $tran->transparencyAmount; @endphp
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    <div style="text-align:right;font-weight:bold;display:flex;float:right;">
+                                    (Grand Total) Donations: PHP {{number_format($var->postReceivedAmount,2)}} |  Distributions: PHP {{number_format($total1,2)}} | Remaining: @php $remains = $var->postReceivedAmount - $total1; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
+                                    </div><br>
+
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Person-in-Charge</th>
+                                <th scope="col">Barangay</th>
+                                <th scope="col">Name/Recepient</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                        @if(count($transparency) > 0)
+                                        @foreach($transparency as $i=>$tran)
+                                        @if($tran->transparencyPostId == $var->postId)
+                                        <tr>
+                                            <td>{{date('F j, Y',strtotime($tran->transparencyCreatedAt))}}</td>
+                                            <td>{{$tran->firstName." ".$tran->middleName." ".$tran->lastName." ".$tran->orgName}}</td>
+                                            <td>{{$tran->transparencyLocation}}</td>
+
+                                            @if(count($transparency2) > 0)
+                                            @foreach($transparency2 as $i=>$tran2)
+                                            @if($tran2->transparencyPostId == $var->postId && $tran->transparencyId == $tran2->transparencyId)
+                                            <td>{{$tran2->firstName." ".$tran2->middleName." ".$tran2->lastName." ".$tran2->orgName}}</td>
+                                            @endif
+                                            @endforeach
+                                            @endif
+
+                                            <td>PHP {{number_format($tran->transparencyAmount,2)}}</td>
+                                            
+                                        </tr>
+                                        @endif
+                                        @endforeach
+                                        <tr style="border-top:2px solid black;">
+                                        
+                                            <td colspan="4">Total</td>
+                                            <td>PHP {{number_format($total2,2)}}</td>
+                                        </tr>
+                                        @endif
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="pills-files-{{$var->postId}}" role="tabpanel" aria-labelledby="pills-contact-tab">
+                    <div class="container">
+                        <div class="row row_total_info" >
+                            <div class="col-4">
+                                <span class="item_bold">Total Items:</span>
+                                @php $ccnt = 0; @endphp
+                                @if(count($files) > 0)
+                                @foreach($files as $file)
+                                @if($file->filePostId == $var->postId)
+                                    @php $ccnt += 1; @endphp
+                                @endif
+                                @endforeach
+                                @endif
+                                <span class="item_info">{{$ccnt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <tr>
+                            <th colspan="2">Files Available:</th>
+                        </tr>
+                        @if(count($files) > 0)
+                        @foreach($files as $file)
+                        @if($file->filePostId == $var->postId)
+                        <tr>
+                            <td>{{date('Y-m-d | h:i A', strtotime($file->fileCreatedAt))}}</td>
+                            <td><form action="/download"><input type="hidden" name="filename" id="" value="{{$file->filePath}}"><button type="submit" style="background:none;border:none;">{{$file->fileName}}</button></form></td>
+                        </tr>
+                        @endif
+                        @endforeach
+                        @else
+                        <tr>
+                            <td colspan="3">No File</td>
+                        </tr>
+                        @endif
+                    </table>
+                </div>
+
             </div>
         </div>
 
@@ -559,11 +683,11 @@
             @elseif($var->postStatus == "BANNED")
                 <button type="submit" class="btn btn-primary" disabled><i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:14px"></i> This Post is Banned</button>
             @else
-            <form action="{{ route('admin_verify_post') }}" method="GET">
+            <!-- <form action="{{ route('admin_verify_post') }}" method="GET">
                 <input type="hidden" name="userid" value="{{$var->id}}">
                 <input type="hidden" name="postid" value="{{$var->postId}}">
                 <button type="submit" class="btn btn-primary">Verify this Post</button>
-            </form>
+            </form> -->
             @endif
             <button type="button" class="btn btn-secondary second_btn" data-dismiss="modal">Close</button>
         </div>
@@ -574,7 +698,7 @@
 @endforeach
 @endif
 
-  <!--jquery-->
+    <!--jquery-->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <!--/jquery-->
 
@@ -583,8 +707,8 @@
     <!--/script-->
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<!-- custom scrollbar plugin -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- custom scrollbar plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 <script>
 function formatAMPM(date) {
   var hours = date.getHours();

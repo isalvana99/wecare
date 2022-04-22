@@ -64,19 +64,19 @@
           <div class="label">
             <h1>WeCare</h1>
             <span>A. C. Cortes Ave, Mandaue City, 6014, Cebu, Philippines</span>
-            <p id="pdfcat">ALL USERS RECORD</p>
+            <p id="pdfcat">DONORS RECORD</p>
           </div>
         </div>
 
         <div class="col" id="number">
           <!--  counting number of items in a loop -->
           @if(count($vars) > 0)
-              Total Users Retrieved:
+              No. of Donors:
               @foreach($vars as $count=>$var)
               @endforeach
               {{$count+=1}}
           @else
-            Total Users Retrieved: 0
+            No. of Donors: 0
           @endif
         </div>
           <table id="table">
@@ -88,9 +88,7 @@
                 <th scope="col">Gender</th>
                 <th scope="col">Address</th>
                 <th scope="col">GCash Number</th>
-                <th scope="col">Received</th>
                 <th scope="col">Donated</th>
-                <th scope="col">Status</th>
               </tr>
             </thead>
             
@@ -104,9 +102,17 @@
                 <td>{{$var->sex}}</td>
                 <td>{{$var->sector.", ".$var->barangay.", ".$var->city.", ".$var->province.", ".$var->region}}</td>
                 <td>{{$var->phoneNumber}}</td>
-                <td>Php{{number_format((float)$var->amountReceived, 2, '.', '')}}</td>
-                <td>Php{{number_format((float)$var->amountGiven, 2, '.', '')}}</td>
-                <td>{{$var->accountVerified}}</td>
+                <td>
+                  @php $total = 0; @endphp
+                  @if(count($donated) > 0)
+                  @foreach ($donated as $var2)
+                  @if($var2->transactionUserId == $var->id)
+                      @php $total += $var2->transactionAmount; @endphp
+                  @endif
+                  @endforeach
+                  @endif
+                  PHP {{number_format($total, 2)}}
+                </td>
                 
               </tr>
               <!-- page number -->

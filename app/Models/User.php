@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'license',
         'email',
         'password',
+        'accountType',
         'profileImage',
         'accountVerified',
         'role',
@@ -49,7 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $hidden = [
         'password',
-        'rememberToken',
     ];
 
     /**

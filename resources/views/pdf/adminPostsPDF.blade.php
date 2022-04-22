@@ -71,12 +71,12 @@
         <div class="col" id="number">
           <!--  counting number of items in a loop -->
           @if(count($vars) > 0)
-              Total Posts Retrieved:
+              No. of Posts:
               @foreach($vars as $count=>$var)
               @endforeach
               {{$count+=1}}
           @else
-            Total Posts Retrieved: 0
+            No. of Posts: 0
           @endif
         </div>
           <table id="table">
@@ -90,7 +90,6 @@
                       <th scope="col">Target Amount</th>
                       <th scope="col">Received Amount</th>
                       <th scope="col">File Name</th>
-                      <th scope="col">Status</th>
               </tr>
             </thead>
             
@@ -115,12 +114,11 @@
                       <td>{{$com}}</td>
                       @endif
 
-                      <td>{{$var->postSector.", ".$var->postBarangay.", ".$var->postCity.", ".$var->postProvince.", ".$var->postRegion}}</td>
-                      <td>Php{{number_format((float)$var->postTargetAmount, 2, '.', '')}}</td>
-                      <td>Php{{number_format((float)$var->postReceivedAmount, 2, '.', '')}}</td>
+                      <td>{{$var->postCity}}</td>
+                      <td>PHP {{number_format($var->postTargetAmount, 2)}}</td>
+                      <td>PHP {{number_format($var->postReceivedAmount, 2)}}</td>
                       
-                      <td>{{$var->postCoverImage}}</td>
-                      <td>{{$var->postStatus}}</td>
+                      <td>{{$var->postImageName}}</td>
                 
               </tr>
               <!-- page number -->

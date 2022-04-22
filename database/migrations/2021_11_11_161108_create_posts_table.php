@@ -16,6 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->string('postId')->primary();
             $table->string('postUserId');
+            $table->string('postUser2Id');
             $table->mediumText('postCaption');
             $table->string('postStatus');
             $table->string('postSector');
@@ -27,7 +28,6 @@ class CreatePostsTable extends Migration
             $table->double('postTargetAmount');
             $table->double('postReceivedAmount');
             $table->string('postLikes');
-            $table->string('postCoverImage');
             $table->timestamp('postCreatedAt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('postUpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

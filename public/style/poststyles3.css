@@ -272,6 +272,27 @@ a:hover{
     border-radius: 1000px;
     object-fit: cover;
     margin-top: 5px;
+    border: 3px solid #56dd27;
+}
+
+.center_user_post_pic2{
+    width: 60px;
+    height: 60px;
+    border-radius: 1000px;
+    object-fit: cover;
+    margin-top: 5px;
+}
+
+.check_follow{
+    position: absolute;
+    color: #56dd27;
+    background-color: white;
+    border-radius: 100px;
+    margin-left: 40px;
+    margin-top: 45px;
+    font-size: 14px;
+    border: 2px solid #56dd27;
+    padding: 2px;
 }
 
 .post_user_name{
@@ -392,6 +413,13 @@ a:hover{
     text-align: center;
 }
 
+.col-w1{
+    width: 50%;
+}
+.col-w2{
+    width: 50%;
+}
+
 .react_btn_style{
     border: none;
     width: 100% !important;
@@ -402,7 +430,19 @@ a:hover{
     border:1px solid rgba(0, 0, 0, 0.151);
 }
 
-.react_btn_style:hover{
+.react_btn_style_form{
+    border: none;
+    width: 100% !important;
+    margin: auto;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.055);
+    border:1px solid rgba(0, 0, 0, 0.151);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.react_btn_style_form:hover,.react_btn_style:hover{
     background-color: rgba(0, 0, 0, 0.096);
     border:1px solid rgba(0, 0, 0, 0.151);
 }
@@ -412,9 +452,22 @@ a:hover{
     color: rgba(0, 0, 0, 0.39);
 }
 
+.react_btn_style_form i{
+    color: rgba(0, 0, 0, 0.39);
+    margin-top: 3px;
+    float: left !important;
+}
+
 .react_btn_style a{
     font-size: 13px;
     color: rgba(0, 0, 0, 0.39) !important;
+
+}
+
+.react_btn_style_form a{
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.39) !important;
+    float: left;
 }
 
 .react_button_row{
@@ -503,6 +556,8 @@ a:hover{
     .right_people_content::-webkit-scrollbar-thumb {
       background:rgba(0, 162, 255, 0.1) !important; 
     }
+
+
 
 .right_profile_suggest{
     margin-left: 0 !important;
@@ -691,6 +746,19 @@ select:focus{
     border: none !important;
 }
 
+.post_donate_button2{
+    width: 90%;
+    border: none;
+    background-color: #00d9ff;
+    padding: 5px;
+    font-weight: 500;
+    color: white;
+    border-radius: 4px;
+}
+
+.post_donate_button2:hover {
+    background-color: #20234e !important;
+}
 
 .btn-file {
     position: relative;
@@ -944,6 +1012,14 @@ margin: auto !important;
 @media only screen and (max-width: 470px) {
 .post_user_name, .post_address, .post_category, .post_time{
     padding-left: 30px !important;
+}
+
+.col-w1{
+    width: 30%;
+}
+.col-w2{
+    width: 70%;
+    padding-left: 20px;
 }
 }
 
