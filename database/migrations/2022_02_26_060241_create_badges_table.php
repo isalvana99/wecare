@@ -18,6 +18,7 @@ class CreateBadgesTable extends Migration
             $table->string('badgeUserId');
             $table->string('badgeType')->nullable();
             $table->string('badgeFilterLocation')->nullable();
+            $table->string('badgeShow')->nullable();
             $table->timestamp('badgeCreatedAt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('badgeUpdatedAt')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

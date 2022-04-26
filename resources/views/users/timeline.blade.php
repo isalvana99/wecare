@@ -23,29 +23,11 @@
   input[type=checkbox] {
   display: none;
 }
-
-.container2 img {
-  transition: transform 0.25s ease;
-  cursor: zoom-in;
-  width: 100px;
-  height: 70px;
-}
-
-input[type=checkbox]:checked ~ label > img {
-  transform: scale(4);
-  margin-top: -140px;
-  margin-left: 75%;
-  cursor: zoom-out;
-  position: relative;
-  width: 300px;
-  height: 200px;
-  z-index:99999;
-}
 </style>
-<div class="wide-con" style="border:1px solid white;">
-        <div class="row inner-row" >
+<div class="wide-con" style="border:1px solid white; ">
+    <div class="row inner-row">
 
-            <div class="pic-area">
+            <div class="pic-area" >
                 <div class="row home_btn">
                     <a href="/home"><i class="fas fa-home fa-md"></i></a>
                 </div>
@@ -54,7 +36,7 @@ input[type=checkbox]:checked ~ label > img {
                         <button class="btn tdots42" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2-{{$user->id}}">
                             <i class="fal fa-ellipsis-v fa-2x"></i>
                         </button>
-                        <!-- 3 dots Modal -->
+                        <!-- 3 dots Modal mobile -->
                         <div class="modal fade" id="exampleModalCenter2-{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
@@ -124,7 +106,7 @@ input[type=checkbox]:checked ~ label > img {
                         <button class="btn-icon-message-small tdots42" data-toggle="modal" data-target="#exampleModalCenterMessage2">
                             <i class="fas fa-user-headset fa-lg"></i>
                         </button>
-                        <!-- /3 dots Modal -->
+                        <!-- /3 dots Modal mobile-->
 
                         <div class="modal fade" id="exampleModalCenterMessage2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -236,12 +218,15 @@ input[type=checkbox]:checked ~ label > img {
                 </div>
                 <div class="col-12 follow-hold">
                     <div class="row">
+                        @if($user->accountType == "DONOR")
                         <div class="follow-col1">
                             <label for="" class="for-follow">Donated: PHP {{number_format($user->amountGiven, 2)}}</label>
                         </div>
+                        @else
                         <div class="follow-col2">
                             <label for="" class="for-follow">Received: PHP {{number_format($user->amountReceived, 2)}}</label>
                         </div>
+                        @endif
                     </div>                   
                 </div>
                 <div class="col-12">
@@ -249,6 +234,7 @@ input[type=checkbox]:checked ~ label > img {
                         <div type="button" class="col-12 badge-wrap" data-toggle="modal" data-target="#exampleModalCenter">
                             @if(count($badge) > 0)
                             @foreach($badge as $b)
+                                @if($user->id == $b->badgeUserId)
                                 @if($b->badgeType == "GOLD")
                                     <img src="../../images/caregold.png" style="width:35px;height:35px;" alt="">
                                     @if($b->badgeFilterLocation == "PROVINCE")
@@ -286,6 +272,7 @@ input[type=checkbox]:checked ~ label > img {
                                     <label for="" class="badge-date">{{date('F j, Y', strtotime($b->badgeUpdatedAt))}}</label>
                                     @endif
                                 @endif
+                                @endif
                             @endforeach
                             @endif
                         </div>
@@ -307,6 +294,16 @@ input[type=checkbox]:checked ~ label > img {
                                         <button type="submit" class="btn" style="width:100%;text-align:left;">Remove Badge</button>
                                     @endforeach
                                     @endif
+                                    </form>
+
+                                    <form action="/badge-certificate" method="GET">
+                                    @if(count($badge) > 0)
+                                    @foreach($badge as $b)
+                                        <input type="hidden" name="badgeid" value="{{$b->badgeId}}">
+                                        <button type="submit" class="btn" style="width:100%;text-align:left;">Get your Certificate</button>
+                                    @endforeach
+                                    @endif
+
                                     </form>
                                 </div>
                             </div>
@@ -437,7 +434,6 @@ input[type=checkbox]:checked ~ label > img {
                         <i class="fal fa-ellipsis-v fa-2x"></i>
                     </button>
                     <!-- Modal -->
-                    <!-- Modal -->
                     <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
@@ -446,7 +442,7 @@ input[type=checkbox]:checked ~ label > img {
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" style="height:auto;">
 
                                     @if(Auth::user()->id != $user->id && $user->accountVerified != "BANNED")
                                     <!-- user report -->
@@ -509,7 +505,7 @@ input[type=checkbox]:checked ~ label > img {
                                     @endif
                                     
 
-                                    @if(Auth::user()->id == $user->id && $user->accountVerified == "NOT VERIFIED")
+                                    @if(Auth::user()->id == $user->id && $user->accountVerified == "NOT VERIFIED" && $user->accountType == "RECEPIENT")
                                     <!-- request verification -->
                                     <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="verificationFunction()">Request Account Verification</button>
                                     <div class="row deleteDiv2" id="verificationDiv" style="display:none; ">
@@ -533,11 +529,11 @@ input[type=checkbox]:checked ~ label > img {
                                                 <div class="col-sm-12" style="">
                                                         <div class="" style="position:relative;">
                                                             <div class="form-group" style="">
-                                                                <label class="modal_row_title" style="">Do you wish to send verification request? You may, by sending us a proof of identification (Valid ID), then, wait within 30 working days to process your request.</label>
+                                                                <label class="modal_row_title" style="">Do you wish to send verification request? You may, by sending us a clear scan copy image file of your identification (Valid ID) / certificate that shows your registered certificate no. / accreditation no., then, wait within 30 working days to process your request.</label>
                                                                 <div class="input-group" style="">
                                                                     <span class="input-group-btn">
                                                                         <span class="btn btn-default btn-file" style="">
-                                                                            Add ID<input type="file" id="imgInp" name="user_id">
+                                                                            Add Image<input type="file" id="imgInp" name="user_id">
                                                                         </span>
                                                                     </span>
                                                                     <input  type="text" class="form-control" readonly>
@@ -546,7 +542,7 @@ input[type=checkbox]:checked ~ label > img {
                                                         </div>
                                                 </div>
                                                 <div class="col-sm-12" style="">
-                                                    <small style="padding-left:10px;">Please make sure that your ID is clear and readable.</small>
+                                                    <small style="padding-left:10px;">Please make sure that your image is clear and readable.</small>
                                                     <img id='img-upload'/>
                                                 </div>
                                                 
@@ -698,8 +694,8 @@ input[type=checkbox]:checked ~ label > img {
                 </div> 
             </div>
             <!-- /3 dots -->
-        </div>
     </div>
+</div>
 
     <div class="row allpost_con">
         <div class="row allpost_area" >
@@ -729,8 +725,27 @@ input[type=checkbox]:checked ~ label > img {
                         </div>
                     </div>
                     <!--  -->
+                    @if($user->id != Auth::user()->id)
+                    <!-- donor create post -->
+                    <!-- <button class="center_create_btn" data-toggle="modal" data-target=".bd-example-modaldonor-lg">
+                        Click here to ask help from {{$user->orgName}}..
+                    </button> -->
+                    <!-- donor create post end -->
+                    <!-- donor create post -->
+                    <!-- <a href="/users/profile2/{{$user->id}}"><button class="center_create_btn">
+                        View your posts from this page..
+                    </button></a> -->
+                    <!-- donor create post end -->
+                    @else
+                    <!-- donor create post -->
+                    <!-- <a href="/users/profile2/{{$user->id}}"><button class="center_create_btn">
+                        View posts from others..
+                    </button></a> -->
+                    <!-- donor create post end -->
+                    @endif
+                    <!--  -->
                     <div class="row left_row_header">
-                        Recent Follower <!-- lastest 3 followers only -->
+                        Recent Follower
                     </div>
                     <!--  -->
                     
@@ -753,10 +768,10 @@ input[type=checkbox]:checked ~ label > img {
                 </div>
             </div>
             <!-- center and post area -->
-            <div class="col">
-                <div class="container center_post_area">
+            <div class="col" style="width:1040px;">
+                <div class="container center_post_area" >
 
-                    @if($user->id == Auth::user()->id)
+                    @if($user->id == Auth::user()->id && Auth::user()->accountType == "RECEPIENT")
                     <!-- create post container start -->
                     <div class="row center_create_con" >
                     @include('inc.messages')
@@ -770,28 +785,34 @@ input[type=checkbox]:checked ~ label > img {
                         </div>
                     </div>   
                     <!-- create post end -->
-                    @else
-                    <div class="row" style="margin-top:10px;">
-                    @include('inc.messages')
+                    @elseif($user->id != Auth::user()->id)
+                    <div class="row " style="">
+                        @include('inc.messages')
                     </div>   
                     @endif
                     
+                    
+                    <!-- RECEPIENT VIEW POSTS -->
+                    <div id="recepientpost" style="margin-top:10px;">
                     @if(count($posts) > 0)
 <!--post -->        @foreach($posts as $post)
+
+                    @if($post->postUser2Id == NULL)
                     <!-- post start here -->
                     <div class="row center_post_main_con">
-            <div class="container">
-                <!-- first row(user profile area) -->
-                <div class="row post_profile_row">
-                    <div class="col-2" >
-                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic" alt="">
-                    </div>
-                    <div class="col-8">
+                        <div class="container">
+                        <!-- first row(user profile area) -->
+                        <div class="row post_profile_row">
+                            <div class="col-2" >
+                                <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic" alt="">
+                            </div>
+                            
+                            <div class="col-8">
 
-                        <div class="row">
-                            <div class="col">
-                            <a href="/users/profile/{{$post->id}}" class="post_user_name"  style="">{{$post->firstName." ".$post->middleName." ".$post->lastName." ".$post->orgName}}
-                            </a> 
+                                <div class="row">
+                                    <div class="col">
+                                    <a href="/users/profile/{{$post->id}}" class="post_user_name"  style="">{{$post->firstName." ".$post->middleName." ".$post->lastName." ".$post->orgName}}
+                                    </a> 
                                 <!-- <span class="timeline_post_follow">
                                 @php $count = 0; $id = 0; @endphp
                                 @if(count($follows) > 0)
@@ -832,10 +853,6 @@ input[type=checkbox]:checked ~ label > img {
                                 </span> -->
                             </div>
                         </div>
-
-
-
-                        
                         <div class="row">
                             <a href="" class="post_address">
                                 <i class="fal fa-map-marker-alt"></i>
@@ -844,8 +861,6 @@ input[type=checkbox]:checked ~ label > img {
                         </div>
                         <div class="row">
                             <a href="" class="post_category">
-                                <i class="fal fa-list-ul"></i>
-                                {{$post->postCategory}}
                             </a>
                         </div>
                         <div class="row">
@@ -935,7 +950,6 @@ input[type=checkbox]:checked ~ label > img {
                     <div class="col-2 col_center_3dots">
                         <button class="button_dots">
                             <i class="far fa-ellipsis-v" data-toggle="modal" data-target="#exampleModalCenter2-{{$post->postId}}"></i>
-                            
                         </button>
 
                         <!-- Modal -->
@@ -947,9 +961,9 @@ input[type=checkbox]:checked ~ label > img {
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body" style="height:auto;">
 
-                                        @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED")
+                                        @if(Auth::user()->id != $post->postUserId)
                                         <!-- post report -->
                                         <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('reportDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('reportDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('reportDiv{{$post->postId}}').style.display = 'none'">Report Post</button>
                                         <form action="{{route('report')}}" method="GET">
@@ -1010,7 +1024,7 @@ input[type=checkbox]:checked ~ label > img {
                                         <!-- /post report -->
                                         @endif
 
-                                        @if(Auth::user()->id == $post->postUserId && $post->postStatus == "PROCESS")
+                                        @if(Auth::user()->id == $post->postUserId)
                                         <!-- post edit -->
                                         <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('editDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('editDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('editDiv{{$post->postId}}').style.display = 'none'">Edit Post</button>
                                         <div class="row deleteDiv2" id="editDiv{{$post->postId}}" style="display:none; ">
@@ -1080,15 +1094,18 @@ input[type=checkbox]:checked ~ label > img {
                 <!-- end of first row -->
                 
                 <!-- second row (post caption) -->
-                <div class="row post_caption_con">
-                {{$post->postCaption}}
+                <div class="row post_caption_con" style="display:flex;">
+                   <h4 style="text-decoration:underline;">{{$post->postCategory}}</h4>
+                   <p style="">{{$post->postCaption}}</p>
                 </div>
                 <!-- second row end -->
+
+                
 
                 <!-- third row (post image here) -->
                 <div class="row post_image_con">
                     <a href="/home/{{$post->postId}}">
-                        <img style="width:100%" src="/storage/cover_images/{{$post->postCoverImage}}" alt="">
+                        <img style="width:100%" src="/storage/cover_images/{{$post->postImageName}}" alt="">
                     </a>
                 </div>
                 <!-- third row end -->
@@ -1096,22 +1113,42 @@ input[type=checkbox]:checked ~ label > img {
                 <!-- fourth row (donation area) -->
                 <div class="row post_donation_con">
                     <div class="col-4">
-                        @if($post->postReceivedAmount < $post->postTargetAmount && Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus == "VERIFIED")
+                    @if(Auth::user()->id == $post->postUserId || Auth::user()->accountType == "DONOR")
+
+                        @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
                         <div data-toggle="modal" data-target="#mpostModal2-{{$post->postId}}">
                             <input type="hidden" name="postid" value="{{$post->postId}}">
                             <button class="post_donate_button">Donate</button>
                         </div>
                         @elseif($post->postStatus == "BANNED")
                         <button class="post_donate_button_disabled" style="background-color:#90A4AE;cursor: no-drop;color:white;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Post Banned</button>
-                        @elseif($post->postReceivedAmount >= $post->postTargetAmount)
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"> Target Reached</button>
-                        @elseif($post->id == Auth::user()->id && $post->postStatus == "PROCESS")
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-hourglass-half" aria-hidden="true"></i> Under Review</button>
-                        @elseif($post->id == Auth::user()->id && $post->postStatus == "VERIFIED")
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-check" aria-hidden="true"></i> Verified</button>
-                        @elseif($post->id != Auth::user()->id)
-                        <button class="post_donate_button_disabled" style="cursor: no-drop;"><i class="fa fa-times-circle" aria-hidden="true"></i>Not Yet Available</button>
+                        @elseif(Auth::user()->id == $post->postUserId && $post->postStatus != "BANNED" && $post->postStatus != "STOPPED")
+                        <form action="{{route('stopdonation')}}" method="GET">
+                        <div>
+                            <input type="hidden" name="postid" value="{{$post->postId}}">
+                            <button class="post_donate_button" style="font-size:17px;">Stop Accepting Donation</button>
+                        </div>
+                        </form>
+                        @elseif(Auth::user()->id == $post->postUserId && $post->postStatus == "STOPPED")
+                        <form action="{{route('godonation')}}" method="GET">
+                            <div>
+                                <input type="hidden" name="postid" value="{{$post->postId}}">
+                                <button class="post_donate_button" style="background-color:#565bbb;">Undo Stop</button>
+                            </div>
+                        </form>
+                        @elseif(Auth::user()->id != $post->postUserId && $post->postStatus == "STOPPED")
+                        <div>
+                            <button class="post_donate_button_disabled">Donate Unavailable</button>
+                        </div>
+
                         @endif
+
+                    @elseif(Auth::user()->id != $post->postUserId && Auth::user()->accountType == "RECEPIENT")
+                    <a href="/home/{{$post->postId}}"><div>
+                        <button class="post_donate_button" style="background-color:#00b919;">View Post</button>
+                    </div></a>
+
+                    @endif
                         
                         <!--  <button class="post_donate_button_disabled">Donate</button> THIS IS DISABLED BUTTON -->
 
@@ -1308,6 +1345,8 @@ input[type=checkbox]:checked ~ label > img {
             </div>
         </div>
                     <!-- post end here -->
+                    @endif
+
                     @endforeach
                     @else
                     @endif
@@ -1316,6 +1355,10 @@ input[type=checkbox]:checked ~ label > img {
                 </div>
             </div>
             <!-- end of post area -->
+            </div>
+            <!-- //RECEPIENT POSTS END -->
+
+            
         </div>
     </div>
 
@@ -1330,10 +1373,16 @@ input[type=checkbox]:checked ~ label > img {
                 </button>
             </div>
 
-            {!! Form::open(['action' => 'App\Http\Controllers\PostsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['action' => 'App\Http\Controllers\PostsController@storeFromTimeline', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
                 <div class="modal-body">   
+                    <div class="col-sm-12" style="display:flex;">
+                            <div class="row modal_row_title" style="width:200px;position:relative;">Title of your Post: <small style="">(Ex: Fire in Mandaue City)</small></div>
+                            <div class="row modal_input_amount" style="width:100%;margin-left:20px;">
+                                <input type="text" name="category" id="" >
+                            </div>
+                    </div> <br>
                     <div class="row post_textarea_row">
-                        <textarea name="caption" id="" cols="30" rows="7" class="modal_post_textarea"placeholder="Enter post description..."></textarea>
+                        <textarea name="caption" id="" cols="30" rows="7" class="modal_post_textarea" placeholder="Write a description..."></textarea>
                     </div>
                     <div class="row">
                         <div class="container">
@@ -1351,31 +1400,18 @@ input[type=checkbox]:checked ~ label > img {
                                     <img id='img-upload'/>
                                 </div>
                             </div>
-                            
+                            <!-- target amount -->
+                            <div class="col-sm-6" style="margin-left:20px;">
+                                <div class="row modal_row_title">How much is your target amount for this post?</div>
+                                <div class="row modal_input_amount"><small>PHP</small><input name="amountTarget" type="text" placeholder="PHP"></div>
+                            </div> <br>
+                            <!-- //target amount -->
                         </div>
                     </div>
                     
                     <div class="row post_modal_row3">
-                    <div class="row modal_row_title_dark">Please fill out neccesary information for us to verify your post..</div> <br><br>
-                        <div class="col-sm-6">
-                            <div class="row modal_row_title">How much is your target amount?</div>
-                            <div class="row modal_input_amount"><input name="amountTarget" type="text"></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="row modal_row_title">Select category</div>
-                            <div class="row modal_input_amount">
-                                <select class="form-select" name="category" required>
-                                    <option value="Calamity" selected hidden>Calamity</option>
-                                    <option value="Calamity">Calamity</option>
-                                    <option value="Children">Children</option>
-                                    <option value="Animals">Animals</option>
-                                    <option value="Medical">Medical</option>
-                                    <option value="Youth">Youth</option>
-                                    <option value="Seniors">Seniors</option>
-                                    <option value="Memorial">Memorial</option>
-                                </select>
-                            </div>
-                        </div>
+                        <div class="row modal_row_title_dark">Please fill out neccesary information..</div> <br>
+                        
                     </div>
 
                     <div class="row post_modal_row4">
@@ -1512,6 +1548,199 @@ input[type=checkbox]:checked ~ label > img {
         </div>
     </div>
 </div>
+<!-- create post modal -->
+
+
+<!-- create post modal 2 -->
+<div class="modal fade bd-example-modaldonor-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Ask help: Create Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            {!! Form::open(['action' => 'App\Http\Controllers\PostsController@storeFromTimeline2', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+            <input type="hidden" name="owneruserid" id="" value="{{$user->id}}">
+                <div class="modal-body">   
+                    <div class="col-sm-12" style="display:flex;">
+                            <div class="row modal_row_title" style="width:200px;position:relative;">Title of your Post: <small style="">(Ex: Fire in Mandaue City)</small></div>
+                            <div class="row modal_input_amount" style="width:100%;margin-left:20px;">
+                                <input type="text" name="category" id="" >
+                            </div>
+                    </div> <br>
+                    <div class="row post_textarea_row">
+                        <textarea name="caption" id="" cols="30" rows="7" class="modal_post_textarea" placeholder="Write a description..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="container">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="modal_row_title">Upload Image</label>
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-default btn-file">
+                                                Add image<input type="file" id="imgInp" name="cover_image">
+                                            </span>
+                                        </span>
+                                        <input  type="text" class="form-control" readonly>
+                                    </div>
+                                    <img id='img-upload'/>
+                                </div>
+                            </div>
+                            <!-- target amount -->
+                            <div class="col-sm-6" style="margin-left:20px;">
+                                <div class="row modal_row_title">How much is your target amount for this post?</div>
+                                <div class="row modal_input_amount"><small>PHP</small><input name="amountTarget" type="text" placeholder="PHP"></div>
+                            </div> <br>
+                            <!-- //target amount -->
+                        </div>
+                    </div>
+                    
+                    <div class="row post_modal_row3">
+                        <div class="row modal_row_title_dark">Please fill out neccesary information..</div> <br>
+                        
+                    </div>
+
+                    <div class="row post_modal_row4">
+                        <div class="col-12">
+                            <br>
+                            <label for="" class="modal_row_title">Where was this happened?</label>
+                                    <!--Address input-->
+                                    <div class="container-drop">
+                                        <div class="row">
+
+                                            <div class="col-sm" style="margin-top:10px;">
+                                                <small>Select Region</small>
+                                                <select class="form-select modal_input_select" aria-label="Default select example" name="region"> 
+                                                    <option value="{{Auth::user()->region}}" selected hidden>{{Auth::user()->region}}</option>
+                                                    <option value="">Region 7</option>
+                                                </select>
+
+                                            </div>
+
+                                            <div class="col-sm" style="margin-top:10px;">
+                                                <small>Select Province</small>
+                                                <select class="form-select modal_input_select" aria-label="Default select example" name="province"> 
+                                                    <option value="{{Auth::user()->province}}" selected hidden>{{Auth::user()->province}}</option>
+                                                    <option value="">Cebu</option>
+                                                </select>
+
+                                            </div>
+
+                                            <div class="w-100" style="margin-top:10px;"> </div>
+
+                                            <div class="col-sm" style="margin-top:10px;">
+                                                <small>Select City</small>
+                                                <select class="form-select modal_input_select" aria-label="Default select example" onchange="myFunction()" id="selectedCity" name="city"> 
+                                                    <option value="{{Auth::user()->city}}" selected hidden>{{Auth::user()->city}}</option>
+                                                    <option value="Mandaue">Mandaue</option>
+                                                    <option value="Lapu-Lapu">Lapu-Lapu</option>
+                                                </select>
+
+                                            </div>
+
+                                            <div class="col-sm" style="margin-top:10px;">
+                                                <small>Select Barangay</small>
+                                                <select class="form-select modal_input_select" aria-label="Default select example" style="display:none;" id="city1" name="barangay1" onchange=getBarangay1()>
+                                                    <option value="{{Auth::user()->barangay}}" selected hidden>{{Auth::user()->barangay}}</option>
+                                                    <option value="Alang-alang">Alang-alang</option>
+                                                    <option value="Bakilid">Bakilid</option>
+                                                    <option value="Banilad">Banilad</option>
+                                                    <option value="Basak">Basak</option>
+                                                    <option value="Cabancalan">Cabancalan</option>
+                                                    <option value="Cambaro">Cambaro</option>
+                                                    <option value="Canduman">Canduman</option>
+                                                    <option value="Casili">Casili</option>
+                                                    <option value="Casuntingan">Casuntingan</option>
+                                                    <option value="Centro">Centro</option>
+                                                    <option value="Cubacub">Cubacub</option>
+                                                    <option value="Guizo">Guizo</option>
+                                                    <option value="Ibabao-Estancia">Ibabao-Estancia</option>
+                                                    <option value="Jagobiao">Jagobiao</option>
+                                                    <option value="Labogon">Labogon</option>
+                                                    <option value="Looc">Looc</option>
+                                                    <option value="Maguikay">Maguikay</option>
+                                                    <option value="Mantuyong">Mantuyong</option>
+                                                    <option value="Opao">Opao</option>
+                                                    <option value="Pakna-an">Pakna-an</option>
+                                                    <option value="Pagsabungan">Pagsabungan</option>
+                                                    <option value="Subangdaku">Subangdaku</option>
+                                                    <option value="Tabok">Tabok</option>
+                                                    <option value="Tawason">Tawason</option>
+                                                    <option value="Tingub">Tingub</option>
+                                                    <option value="Tipolo">Tipolo</option>
+                                                    <option value="Umapad">Umapad</option>
+                                                </select>
+
+                                                <select class="form-select modal_input_select" aria-label="Default select example" id="city2" style="display:none;" name="barangay1" onchange=getBarangay2()>
+                                                    <option value="{{Auth::user()->barangay}}" selected hidden>{{Auth::user()->barangay}}</option>
+                                                    <option value="Agus">Agus</option>
+                                                    <option value="Babag">Babag</option>
+                                                    <option value="Bankal">Bankal</option>
+                                                    <option value="Baring">Baring</option>
+                                                    <option value="Basak">Basak</option>
+                                                    <option value="Buaya">Buaya</option>
+                                                    <option value="Calawisan">Calawisan</option>
+                                                    <option value="Canjulao">Canjulao</option>
+                                                    <option value="Caw-oy">Caw-oy</option>
+                                                    <option value="Cawhagan">Cawhagan</option>
+                                                    <option value="Caubian">Caubian</option>
+                                                    <option value="Gun-ob">Gun-ob</option>
+                                                    <option value="Ibo">Ibo</option>
+                                                    <option value="Looc">Looc</option>
+                                                    <option value="Mactan">Mactan</option>
+                                                    <option value="Maribago">Maribago</option>
+                                                    <option value="Marigondon">Marigondon</option>
+                                                    <option value="Opon">Opon</option>
+                                                    <option value="Pajac">Pajac</option>
+                                                    <option value="Pajo">Pajo</option>
+                                                    <option value="Pangan-an">Pangan-an</option>
+                                                    <option value="Punta Engaño">Punta Engaño</option>
+                                                    <option value="Pusok">Pusok</option>
+                                                    <option value="Sabang">Sabang</option>
+                                                    <option value="Santa Rosa">Santa Rosa</option>
+                                                    <option value="Subabasbas">Subabasbas</option>
+                                                    <option value="Talima">Talima</option>
+                                                    <option value="Tingo">Tingo</option>
+                                                    <option value="Tungasan">Tungasan</option>
+                                                    <option value="San Vicente">San Vicente</option>
+                                                </select>
+
+                                                <select class="form-select modal_input_select" aria-label="Default select example" id="city0" style="display:block;" disabled>
+                                                    <option value="{{Auth::user()->barangay}}" selected hidden>{{Auth::user()->barangay}}</option>
+                                                </select>
+
+                                            </div>
+
+                                            <input type="hidden" id="citt" name="city" value="{{Auth::user()->city}}">
+                                            <input type="hidden" id="barr" name="barangay" value="{{Auth::user()->barangay}}">
+                                                
+                                            <div class="purokinput">
+                                                <small>Enter Street/Purok/Building No./House No.</small>
+                                                <input type="text" name="sector" class="form-control" value="{{Auth::user()->sector}}">                                                   
+                                            </div>
+
+                                        </div>
+
+                                    </div> <!--/Address inputs-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary primary_btn">Post</button>
+                    <button type="button" class="btn btn-secondary second_btn" data-dismiss="modal">Close</button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+<!-- create post modal 2 end -->
+
+
 
 <script>
 function reportFunction2() {

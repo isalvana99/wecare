@@ -6,11 +6,11 @@
     <div class="big_main_con">
         
         <!-- topbar here -->
-        <form action="{{ route('People') }}" method="GET">
+        <form action="{{ route('Donors') }}" method="GET">
         <div class="row top_search_area" >
             <div class="col-7" style="margin-top:10px !important; ">
                 <div class="input-group mb-3" style="">
-                    <input type="hidden" name="selected_tile" value="People">
+                    <input type="hidden" name="selected_tile" value="Donors">
                     <input class="form-control" type="search" placeholder="Search" name="search" onclick="submit_form()" aria-label="Search" value="{{ $search }}" aria-describedby="basic-addon2">
                     <div class="input-group-append" >
                         <button class="btn btn-outline-secondary" type="submit" style="height:40px;;margin-top:-1px;">Search</button>
@@ -30,7 +30,7 @@
             <div class="container tab_outer_con">
                 <div class="row">
                     <div class="col-12">
-                        <label for="" class="title_con">People Records</label>
+                        <label for="" class="title_con">Donors Records</label>
                     </div>
                 </div>
                 <div class="row">
@@ -66,9 +66,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Account ID</th>
                                 <th scope="col">Full Name</th>
-                                <th scope="col">Received</th>
                                 <th scope="col">Donated</th>
-                                <th scope="col">Verified</th>
                                 <th scope="col" class="center">Action</th>
                             </tr>
                         </thead>
@@ -80,9 +78,17 @@
                                 <td>@php echo $cnt+=1; @endphp</td>
                                 <td>{{$var->id}}</td>
                                 <td>{{$var->firstName." ".$var->middleName." ".$var->lastName}}</td>
-                                <td>Php{{number_format((float)$var->amountReceived, 2, '.', '')}}</td>
-                                <td>Php{{number_format((float)$var->amountGiven, 2, '.', '')}}</td>
-                                <td>{{$var->accountVerified}}</td>
+                                <td>
+                                    @php $total = 0; @endphp
+                                    @if(count($donated) > 0)
+                                    @foreach ($donated as $var2)
+                                    @if($var2->transactionUserId == $var->id)
+                                        @php $total += $var2->transactionAmount; @endphp
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    PHP {{number_format($total, 2)}}
+                                </td>
                                 <td class="center">
                                     <button class="btn_view" type="button" data-toggle="modal" data-target=".bd-example-modal-lg-{{$var->id}}">Review</button>
                                     <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->id}}">Delete</button>
@@ -158,7 +164,7 @@
                                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
                                         <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</button>
                                         <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donated History</button>
-                                        <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Received History</button>
+                                        <!-- <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Received History</button> -->
                                     </div>
                                 </div>
                             </div>
@@ -270,21 +276,29 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row modal_row_info">
+                                            <!-- <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Total Amount Received:
                                                 </div>
                                                 <div class="col-9 modal_info_names">
                                                 PHP {{number_format($var->amountReceived, 2)}}
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Total Amount Donated:
                                                 </div>
                                                 <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountGiven, 2)}}
+                                                @php $total = 0; @endphp
+                                                @if(count($donated) > 0)
+                                                @foreach ($donated as $var2)
+                                                @if($var2->transactionUserId == $var->id)
+                                                    @php $total += $var2->transactionAmount; @endphp
+                                                @endif
+                                                @endforeach
+                                                @endif
+                                                PHP {{number_format($total, 2)}}
                                                 </div>
                                             </div>
                                         </div>
@@ -344,7 +358,15 @@
                                                     
                                                 </div>
                                                 <div class="row modal_total_bottom">
-                                                    Total Amount: PHP {{number_format($var->amountGiven, 2)}}
+                                                    @php $total = 0; @endphp
+                                                    @if(count($donated) > 0)
+                                                    @foreach ($donated as $var2)
+                                                    @if($var2->transactionUserId == $var->id)
+                                                        @php $total += $var2->transactionAmount; @endphp
+                                                    @endif
+                                                    @endforeach
+                                                    @endif
+                                                    Total Amount: PHP {{number_format($total, 2)}}
                                                 </div>
                                             </div>
                                         </div>
@@ -352,7 +374,7 @@
                                     <!-- donated history end -->
                                     
                                     <!-- received tab -->
-                                    <div class="tab-pane fade" id="v-pills-messages-{{$var->id}}" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                    <!-- <div class="tab-pane fade" id="v-pills-messages-{{$var->id}}" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                                         <div class="container modal_info_con">
                                             <div class="row tab_row_header">
                                                 Received History
@@ -407,7 +429,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!-- received tab end -->
 
                                     
@@ -423,17 +445,17 @@
                     @if($var->role == "USER")
                     <form action="{{ route('make_admin') }}" method="GET">
                         <input type="hidden" name="usertoadminid" id="" value="{{$var->id}}">
-                        <button type="submit" class="btn" style="background-color:#ffae00; color:white;float:left;position:relative;margin-right:215px;"><i class="fa fa-user" aria-hidden="true"></i> Make as Admin</button>
+                        <button type="submit" class="btn" style="background-color:#ffae00; color:white;float:left;position:relative;margin-right:415px;"><i class="fa fa-user" aria-hidden="true"></i> Make as Admin</button>
                     </form>
                     @endif
 
                     @if($var->accountVerified == "VERIFIED")
                         <button type="submit" class="btn btn-primary" style="background-color:green; color:black;" disabled><i class="fa fa-check" aria-hidden="true"></i> Account Verified</button>
                     @else
-                    <form action="{{ route('admin_verify_user') }}" method="GET">
+                    <!-- <form action="{{ route('admin_verify_user') }}" method="GET">
                         <input type="hidden" name="userid" value="{{$var->id}}">
                         <button type="submit" class="btn btn-primary">Verify this Account</button>
-                    </form>
+                    </form> -->
                     @endif
                     <button type="button" class="btn btn-secondary second_btn" data-dismiss="modal">Close</button>
                     </div>

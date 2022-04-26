@@ -6,11 +6,11 @@
     <div class="big_main_con">
         
         <!-- topbar here -->
-        <form action="{{ route('Organization') }}" method="GET">
+        <form action="{{ route('Recepients') }}" method="GET">
         <div class="row top_search_area" >
             <div class="col-7" style="margin-top:10px !important; ">
                 <div class="input-group mb-3">
-                    <input type="hidden" name="selected_tile" value="Organization">
+                    <input type="hidden" name="selected_tile" value="Recepients">
                     <input class="form-control" type="search" placeholder="Search" name="search" onclick="submit_form()" aria-label="Search" value="{{ $search }}" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit" style="height:40px;margin-top:-1px;">Search</button>
@@ -29,7 +29,7 @@
             <div class="container tab_outer_con">
                 <div class="row">
                     <div class="col-12">
-                        <label for="" class="title_con">Organization Records</label>
+                        <label for="" class="title_con">Recepients Records</label>
                     </div>
                 </div>
                 <div class="row">
@@ -66,8 +66,7 @@
                                 <th scope="col">Account ID</th>
                                 <th scope="col">Full Name</th>
                                 <th scope="col">Received</th>
-                                <th scope="col">Donated</th>
-                                <th scope="col">Verified</th>
+                                <th scope="col">Account Status</th>
                                 <th scope="col" class="center">Action</th>
                             </tr>
                         </thead>
@@ -79,9 +78,26 @@
                                 <td>@php echo $cnt+=1; @endphp</td>
                                 <td>{{$var->id}}</td>
                                 <td>{{$var->orgName}}</td>
-                                <td>Php{{number_format((float)$var->amountReceived, 2, '.', '')}}</td>
-                                <td>Php{{number_format((float)$var->amountGiven, 2, '.', '')}}</td>
-                                <td>{{$var->accountVerified}}</td>
+                                <td>
+                                    @php $total = 0; @endphp
+                                    @if(count($received) > 0)
+                                    @foreach ($received as $var3)
+                                    @if($var3->postUserId == $var->id)
+                                        @php $total += $var3->transactionAmount; @endphp
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    PHP {{number_format($total, 2)}}
+                                </td>
+                                <td style="padding-left:50px;">
+                                    @if($var->accountVerified == "VERIFIED") 
+                                    <i class="fa fa-check" aria-hidden="true" style="color:#69e749;"></i>
+                                    @elseif($var->accountVerified == "NOT VERIFIED") 
+                                    <i class="fa fa-hourglass-half" aria-hidden="true"></i>
+                                    @else
+                                    {{$var->accountVerified}}
+                                    @endif
+                                </td>
                                 <td class="center">
                                     <button class="btn_view" type="button" data-toggle="modal" data-target=".bd-example-modal-lg-{{$var->id}}">Review</button>
                                     <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->id}}">Delete</button>
@@ -203,7 +219,7 @@
                                 <div class="row modal_left_second">
                                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
                                         <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</button>
-                                        <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donated History</button>
+                                        <!-- <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donated History</button> -->
                                         <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Received History</button>
                                     </div>
                                 </div>
@@ -219,7 +235,7 @@
 
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
-                                                    Organization Name:
+                                                    Recepients Name:
                                                 </div>
                                                 <div class="col-9 modal_info_names">
                                                     {{$var->orgName}}
@@ -294,24 +310,24 @@
                                                     Total Amount Received:
                                                 </div>
                                                 <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountReceived, 2)}}
+                                                    @php $total = 0; @endphp
+                                                    @if(count($received) > 0)
+                                                    @foreach ($received as $var3)
+                                                    @if($var3->postUserId == $var->id)
+                                                        @php $total += $var3->transactionAmount; @endphp
+                                                    @endif
+                                                    @endforeach
+                                                    @endif
+                                                    PHP {{number_format($total, 2)}}
                                                 </div>
                                             </div>
 
-                                            <div class="row modal_row_info">
-                                                <div class="col-3 modal_info_bold">
-                                                    Total Amount Donated:
-                                                </div>
-                                                <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountGiven, 2)}}
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <!-- presonal info end -->
 
                                     <!-- donated history tab -->
-                                    <div class="tab-pane fade" id="v-pills-profile-{{$var->id}}" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                    <!-- <div class="tab-pane fade" id="v-pills-profile-{{$var->id}}" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                                         <div class="container modal_info_con">
                                             <div class="row tab_row_header">
                                                 Donated History
@@ -367,7 +383,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!-- donated history end -->
                                     
                                     <!-- received tab -->
@@ -393,7 +409,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Date Donated</th>
-                                                                <th scope="col">Donator</th>
+                                                                <th scope="col">Donor</th>
                                                                 <th scope="col">GCash Number</th>
                                                                 <th scope="col">Date of Post</th>
                                                                 <th scope="col">Amount Received</th>
@@ -422,7 +438,15 @@
                                                     
                                                 </div>
                                                 <div class="row modal_total_bottom">
-                                                    Total Amount: PHP {{number_format($var->amountReceived, 2)}}
+                                                    @php $total = 0; @endphp
+                                                    @if(count($received) > 0)
+                                                    @foreach ($received as $var3)
+                                                    @if($var3->postUserId == $var->id)
+                                                        @php $total += $var3->transactionAmount; @endphp
+                                                    @endif
+                                                    @endforeach
+                                                    @endif
+                                                    Total Amount: PHP {{number_format($total, 2)}}
                                                 </div>
                                             </div>
                                         </div>

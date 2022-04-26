@@ -136,7 +136,7 @@
                             <div class="row">
                                 <div class="col-8">{{$tile}}</div>
                                 @php $num = 0; @endphp
-                                @if($tile == 'People')
+                                @if($tile == 'Donors')
                                     @if(count($layoutpeople) > 0)
                                     @foreach($layoutpeople as $var)
                                         @if($var->accountVerified == "NOT VERIFIED")
@@ -150,7 +150,7 @@
                                     @endif
                                     @endif
                                 @endif
-                                @if($tile == 'Organization')
+                                @if($tile == 'Recepients')
                                 @if(count($layoutorg) > 0)
                                     @foreach($layoutorg as $var)
                                         @if($var->accountVerified == "NOT VERIFIED")

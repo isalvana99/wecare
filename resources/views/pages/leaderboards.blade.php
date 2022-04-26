@@ -163,6 +163,7 @@
 
           @if(count($vars) > 0)
           @foreach($vars as $var)
+          @if($var->accountType != "RECEPIENT")
           <div class="row place-row"> <!-- repeat this row -->
             <div class="col-3 place-points-con" >
                 <img src="../images/wecarelogoblue.png" class="badge-con" alt="">
@@ -190,6 +191,7 @@
                 <label for="">Php {{number_format((float)$var->amountGiven, 2, '.', '')}}</label>
             </div>
           </div>
+          @endif
           @endforeach
           @else
           <div class="row place-row"> <!-- repeat this row -->

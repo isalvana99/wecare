@@ -35,15 +35,15 @@ class HomeController extends Controller
         return view('auth.adminlogin');
     }
 
-    public function demoonly(){
+    // public function demoonly(){
       
-        return view('pages.homesampleonly');
-    }
+    //     return view('pages.homesampleonly');
+    // }
 
-    public function demoonly2(){
+    // public function demoonly2(){
     
 
-        return view('pages.homesampleonly2');
+    //     return view('pages.homesampleonly2');
     
-    }
+    // }
 }

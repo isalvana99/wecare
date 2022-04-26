@@ -55,6 +55,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\FileUploadController;
 
 Route::get('/email/verify', function () {
     return view('verification.verify');
@@ -78,8 +79,8 @@ Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPass
 //USERS ROUTE
 
 Route::get('/register/organization', [HomeController::class, 'register_org'])->name('register_org');
-Route::get('/demo', [HomeController::class,'demoonly']);
-Route::get('/demo2', [HomeController::class,'demoonly2']);
+Route::get('/demo', [UsersController::class,'demoonly']);
+Route::get('/demo2', [UsersController::class,'demoonly2']);
 
 //To verify email
 Route::group(['middleware' => ['auth']], function() {
@@ -124,6 +125,9 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/try/settings', [PostsController::class,'settingsTopNav'])->middleware('role:USER');
             
             Route::post('/user/profile/post', [PostsController::class,'storeFromTimeline'])->middleware('role:USER');
+            Route::post('/users/profile2/post', [PostsController::class,'storeFromTimeline2'])->middleware('role:USER');
+            Route::get('/show-distribution/my', [PostsController::class,'showDistribution'])->middleware('role:USER');
+
 
             Route::resource('users', UsersController::class)->middleware('role:USER');
             Route::get('/users/user/home', [UsersController::class,'home'])->middleware('role:USER');
@@ -131,7 +135,12 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/users/{user}/change_password', [UsersController::class,'viewChangePassword'])->middleware('role:USER');
 
             //for profile timeline
-            Route::get('/users/profile/{user}', [UsersController::class,'viewTimeline'])->middleware('role:USER');;
+            Route::get('/users/profile/{user}', [UsersController::class,'viewTimeline'])->middleware('role:USER');
+
+            Route::get('/users/profile2/{user}', [UsersController::class,'viewTimeline2'])->middleware('role:USER');
+
+            Route::get('/users/profilerepost', [PostController::class,'repost'])->name('repost')->middleware('role:USER');
+            
 
             Route::get('/users/settings/{user}', [UsersController::class,'general_settings'])->middleware('role:USER');
             //Route::get('/changePassword', [UsersController::class, 'typepassword'])->name('changePasswordGet');
@@ -150,10 +159,28 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/follow', [FollowController::class, 'store'])->middleware('role:USER');
 
             Route::get('/notification', [PostsController::class, 'thisnotif'])->name('thisnotif')->middleware('role:USER');
+            Route::get('/stopdonation', [PostsController::class, 'stopDonation'])->name('stopdonation')->middleware('role:USER');
+            Route::get('/godonation', [PostsController::class, 'goDonation'])->name('godonation')->middleware('role:USER');
+            Route::get('/transparency', [PostsController::class, 'transparency'])->name('transparency')->middleware('role:USER');
+            Route::get('/transparency2', [PostsController::class, 'transparency2'])->name('transparency2')->middleware('role:USER');
+            Route::get('/transparencyedit', [PostsController::class, 'transparencyedit'])->name('transparencyedit')->middleware('role:USER');
+            Route::get('/transparencydelete', [PostsController::class, 'transparencydelete'])->name('transparencydelete')->middleware('role:USER');
 
-            
-            Route::get('/payment/', [TransactionController::class,'payment1']);
-            Route::get('/payment2/', [TransactionController::class,'payment2']);
+            Route::get('/upload-file', [FileUploadController::class, 'createForm'])->middleware('role:USER');
+            Route::post('/upload-file', [FileUploadController::class, 'fileUpload'])->name('fileUpload')->middleware('role:USER');
+            Route::get('/download-file', [FileUploadController::class, 'fileDownload'])->name('fileDownload')->middleware('role:USER');
+            Route::get('/delete-file', [FileUploadController::class, 'fileDelete'])->name('fileDelete')->middleware('role:USER');
+
+            //Route::post('/image-file', [UsersController::class, 'imageUpload'])->name('imageUpload')->middleware('role:USER');
+
+            Route::get('/payment/', [TransactionController::class,'payment1'])->middleware('role:USER');
+            Route::get('/payment2/', [TransactionController::class,'payment2'])->middleware('role:USER');
+            Route::get('/distpayment/', [TransactionController::class,'distpayment1'])->middleware('role:USER');
+            Route::get('/distpayment2/', [TransactionController::class,'distpayment2'])->middleware('role:USER');
+            Route::get('/distpayment2/store', [TransactionController::class,'distpaymentstore'])->middleware('role:USER');
+            Route::get('/transpayment/', [TransactionController::class,'transpayment1'])->middleware('role:USER');
+            Route::get('/transpayment2/', [TransactionController::class,'transpayment2'])->middleware('role:USER');
+            Route::get('/transpayment2/store', [TransactionController::class,'transpaymentstore'])->middleware('role:USER');
 
             Route::get('badge/save', [BadgeController::class,'store2'])->name('badge_save')->middleware('role:USER');
             Route::get('badge/remove', [BadgeController::class,'destroy2'])->name('badge_delete')->middleware('role:USER');
@@ -163,6 +190,17 @@ Route::group(['middleware' => ['auth']], function() {
             //message inquiry
             Route::get('inquiry_message', [InquiryController::class,'show1'])->middleware('role:USER');
             Route::get('inquiry_message/message', [InquiryController::class,'inquiryUser'])->name('inquiryToAdmin')->middleware('role:USER');
+
+            //pdf user
+            Route::get('/badge-certificate', [PDFController::class, 'badgeCertificate'])->middleware('role:USER');
+
+            //distribution report
+            Route::get('/sidepanel', [PostsController::class,'distributionSidePanel'])->name('distributionsidepanel')->middleware('role:USER');
+            Route::get('/distribution/', [PostsController::class,'distributionContent'])->name('distributioncontent')->middleware('role:USER');
+            Route::get('/sidepanel_assign', [PostsController::class,'distributionSidePanel2'])->name('distributionsidepanel2')->middleware('role:USER');
+            Route::get('/distribution/my', [PostsController::class,'distributionContent2'])->name('distributioncontent2')->middleware('role:USER');
+            Route::get('/distribution/loc', [PostsController::class, 'distributionlocation'])->name('distributionlocation')->middleware('role:USER');
+            Route::get('/distribution/delete', [PostsController::class, 'distributiondelete'])->name('distributiondelete')->middleware('role:USER');
     });
 });
 
@@ -173,8 +211,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['middleware' => ['verified']], function() {
 
         Route::get('/admin', [AdminController::class,'adminhome'])->name('Dashboard')->middleware('role:ADMIN');
-        Route::get('/admin/users', [AdminController::class,'adminUsersTable'])->name('People')->middleware('role:ADMIN');
-        Route::get('/admin/organization', [AdminController::class,'adminOrgsTable'])->name('Organization')->middleware('role:ADMIN');
+        Route::get('/admin/users', [AdminController::class,'adminUsersTable'])->name('Donors')->middleware('role:ADMIN');
+        Route::get('/admin/Recepients', [AdminController::class,'adminOrgsTable'])->name('Recepients')->middleware('role:ADMIN');
         Route::get('/admin/posts', [AdminController::class,'adminPostsTable'])->name('Posts')->middleware('role:ADMIN');
         Route::get('/admin/settings', [AdminController::class,'adminSettings'])->name('Settings 2')->middleware('role:ADMIN');
         Route::put('/admin/updateprofile/{admin?}', [AdminController::class,'updateProfile'])->name('updateProfile')->middleware('role:ADMIN');
@@ -210,5 +248,8 @@ Route::group(['middleware' => ['auth']], function() {
 
         //to delete
         Route::get('/delete', [AdminController::class, 'deleteSelected'])->name('admin_delete')->middleware('role:ADMIN');
+
+        //download file
+        Route::get('/download', [AdminController::class, 'getDownload'])->middleware('role:ADMIN');
     });
 });
