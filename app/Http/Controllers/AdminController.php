@@ -314,7 +314,7 @@ class AdminController extends Controller
         $transparency = Transparency::query()->join('users', 'users.id', '=', 'transparencies.transparencyUserId')->orderBy('transparencyLocation', 'ASC')->get();
         $transparency2 = Transparency::query()->join('users', 'users.id', '=', 'transparencies.transparencyHouseholdUserId')->orderBy('transparencyLocation', 'ASC')->get();
 
-        $files = File::query()->orderBy('fileCreatedAt', 'DESC')->get();
+        $files = File::query()->join('users', 'users.id', '=', 'files.fileUserId')->orderBy('fileCreatedAt', 'DESC')->get();
 
         $layoutpeople = DB::select('SELECT * FROM users WHERE orgName IS NULL AND role = "USER"');
         $layoutorg = DB::select('SELECT * FROM users WHERE orgName IS NOT NULL AND role = "USER"');

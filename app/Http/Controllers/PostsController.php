@@ -339,7 +339,7 @@ class PostsController extends Controller
       
       $transparency = Transparency::query()->join('users', 'users.id', '=', 'transparencies.transparencyHouseholdUserId')->orderBy('transparencyLocation', 'ASC')->where('transparencyPostId', '=', $id)->get();
 
-      $files = File::query()->orderBy('fileCreatedAt', 'DESC')->where('filePostId', '=', $id)->get();
+      $files = File::query()->join('users', 'users.id', '=', 'files.fileUserId')->orderBy('fileCreatedAt', 'DESC')->where('filePostId', '=', $id)->get();
       
       $notification = DB::select('SELECT * FROM notifs JOIN users ON users.id = notifs.notifUserId WHERE notifToUserId =' .auth()->user()->id.' ORDER BY notifCreatedAt DESC LIMIT 50');
 
@@ -494,6 +494,7 @@ class PostsController extends Controller
 
       $post = Post::find($id);
       $post -> postCaption = $request->input('caption');
+      $post -> postCategory = $request->input('title');
       // if($request->hasFile('cover_image')){
       //   $post->cover_image = $fileNameToStore;
       // }
@@ -710,8 +711,9 @@ class PostsController extends Controller
       //lapu-lapu
       $b2 = array('Agus', 'Babag', 'Bankal', 'Baring', 'Basak', 'Buaya', 'Calawisan', 'Canjulao', 'Caw-oy', 'Cawhagan', 'Caubian', 'Gun-ob', 'Ibo', 'Looc', 'Mactan', 'Maribago', 'Marigondon', 'Opon', 'Pajac', 'Pajo', 'Pangan-an', 'Punta Engaño', 'Pusok', 'Sabang', 'Santa Rosa', 'Subabasbas', 'Talima', 'Tingo', 'Tungasan', 'San Vicente');
 
+      $files = File::query()->join('users', 'users.id', '=', 'files.fileUserId')->orderBy('fileCreatedAt', 'DESC')->where('filePostId', '=', $postid)->get();
 
-    return view('distribution.content', compact('search', 'searchtitle', 'searchname', 'notification', 'vars', 'users', 'trans', 'selecteduser', 'transparency', 'b1', 'b2', 'l', 'post', 'postid', 'userid', 'distribution'));
+    return view('distribution.content', compact('files', 'search', 'searchtitle', 'searchname', 'notification', 'vars', 'users', 'trans', 'selecteduser', 'transparency', 'b1', 'b2', 'l', 'post', 'postid', 'userid', 'distribution'));
   }
 
   public function distributionSidePanel2(){
@@ -806,8 +808,9 @@ class PostsController extends Controller
       //lapu-lapu
       $b2 = array('Agus', 'Babag', 'Bankal', 'Baring', 'Basak', 'Buaya', 'Calawisan', 'Canjulao', 'Caw-oy', 'Cawhagan', 'Caubian', 'Gun-ob', 'Ibo', 'Looc', 'Mactan', 'Maribago', 'Marigondon', 'Opon', 'Pajac', 'Pajo', 'Pangan-an', 'Punta Engaño', 'Pusok', 'Sabang', 'Santa Rosa', 'Subabasbas', 'Talima', 'Tingo', 'Tungasan', 'San Vicente');
 
+      $files = File::query()->join('users', 'users.id', '=', 'files.fileUserId')->orderBy('fileCreatedAt', 'DESC')->where('filePostId', '=', $postid)->get();
 
-    return view('distribution.content_assign', compact('search', 'recepientid', 'allusers', 'searchtitle', 'searchname', 'notification', 'vars', 'users', 'trans', 'selecteduser', 'transparency', 'b1', 'b2', 'l', 'post', 'postid', 'userid', 'distribution'));
+    return view('distribution.content_assign', compact('files', 'search', 'recepientid', 'allusers', 'searchtitle', 'searchname', 'notification', 'vars', 'users', 'trans', 'selecteduser', 'transparency', 'b1', 'b2', 'l', 'post', 'postid', 'userid', 'distribution'));
   }
 
   public function distributiondelete(Request $request)
