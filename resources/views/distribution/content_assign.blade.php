@@ -45,6 +45,126 @@
     <div class="right-content" style="margin-left:30px;">
     @include('inc.messages')
 
+
+        <!-- view add files history -->
+        <div class="col-12" data-toggle="modal" data-target="#addfilepostModal2">
+            <div style="font-size:16px; text-decoration:underline; color:blue;text-align:left;">View Attached Files</div>
+        </div>
+        <!-- Modal OF view donation history BUTTON-->
+        <div class="modal fade" id="addfilepostModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width:805px;">
+                    <div class="modal-header">
+                        If necessary, you can upload your related files here:
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body" style="width:800px;">
+                        <div class="container">
+                            <form action="{{route('fileUpload')}}" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="postid" value="{{$post->postId}}">
+                                @csrf
+                                @if ($message = Session::get('success'))
+                                <div class="alert alert-success">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @endif
+                                @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
+                                <label for="formFileMultiple" class="form-label">Upload File Here</label>
+                                <input class="form-control" type="file" id="formFileMultiple" name="file"/>
+                                <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">
+                                    Upload Files
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    
+                        <table id="customers" style="width:800px;">
+                            <tr>
+                                <th>Date | Time</th>
+                                <th>Click the file to download</th>
+                                <th>Uploaded by: </th>
+                                <th></th>
+                            </tr>
+                            @if(count($files) > 0)
+                            @foreach($files as $file)
+                            <tr>
+                                <td style="width:200px;">{{date('F j, Y | h:i A', strtotime($file->fileCreatedAt))}}
+                                </td>
+                                <td>
+                                    <form action="{{route('fileDownload')}}" method="GET">
+                                        <input type="hidden" name="filename" id="" value="{{$file->filePath}}">
+                                        <button type="submit" style="background:none;border:none;width:300px;">{{$file->fileName}}</button>
+                                    </form>
+                                </td>
+                                <td style="width:200px;">
+                                    {{$file->firstName." ".$file->middleName." ".$file->lastName." ".$file->orgName}}
+                                </td>
+                                @if($file->fileUserId == Auth::user()->id)
+                                <td style="color:red !important;">
+                                    <form action="{{route('fileDelete')}}">
+                                        <input type="hidden" name="fileid" id="" value="{{$file->fileId}}">
+                                        <button type="submit" style="color:red !important;border:none;background:none;font-size:12px;width:50px;">
+                                        remove
+                                        </button>
+                                    </form>
+                                </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="3">No File</td>
+                            </tr>
+                            @endif
+                        </table>
+                    
+
+                    <div class="modal-footer">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
+        <!-- view add files history -->
+
+        <!-- computations -->
+        @php $total = 0; @endphp
+            @if(count($distribution) > 0)
+            @foreach($distribution as $i=>$tran)
+                @if($tran->distributionAssignedTo == Auth::user()->id)
+                @php $total += $tran->distributionAmount; @endphp
+                @endif
+            @endforeach
+            @endif
+
+            @php $transtotal = 0; @endphp
+            @if(count($transparency) > 0)
+            @foreach($transparency as $i=>$tran)
+                @if($tran->transparencyUserId == Auth::user()->id)
+                @php $transtotal += $tran->transparencyAmount; @endphp
+                @endif
+            @endforeach
+            @endif
+
+            <h5 style="text-align:left;font-weight:bold;">
+            Donations: PHP {{number_format($total,2)}} |  Distributions: PHP {{number_format($transtotal,2)}} | Remaining: PHP @php $remains = $total - $transtotal; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
+            </h5><br>
+        <!-- computations end -->
+
         <!-- add record row -->
         <form action="{{route('distributioncontent2')}}" style="">
             <div class="row">
@@ -126,6 +246,8 @@
             </form>
         </table>
 
+        
+
         <div class="row">
             <div class="col-6">
             @if($l != "")
@@ -202,11 +324,13 @@
                             <div class="form-group">
                             <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
                             PHP <input style="border-radius: 10px;padding:5px;" type="text" name="hamount">
+                            <input type="text" name="" id="" value="{{$transtotal}}">
                             </div>
                             <input type="hidden" name="userid" value="{{$recepientid}}">
                             <input type="hidden" name="postid" value="{{$postid}}">
                             <input type="hidden" name="donor" value="{{Auth::user()->id}}">
                             <input type="hidden" name="location" value="{{$l}}">
+                            <input type="hidden" name="donation" value="{{$transtotal}}">
                             <input type="hidden" name="previous_url" value="distribution/my?referenceno={{$postid}}&l={{$l}}">
                         </div>
 
@@ -245,26 +369,9 @@
                             <form action="{{route('transparencyedit')}}" method="GET">
                             <button class="btn-delete-yes" type="submit" style="float:left;display:none;">Update Table</button><br><br>
 
-                                    @php $total = 0; @endphp
-                                    @if(count($distribution) > 0)
-                                    @foreach($distribution as $i=>$tran)
-                                        @if($tran->distributionAssignedTo == Auth::user()->id)
-                                        @php $total += $tran->distributionAmount; @endphp
-                                        @endif
-                                    @endforeach
-                                    @endif
-
-                                    @php $transtotal = 0; @endphp
-                                    @if(count($transparency) > 0)
-                                    @foreach($transparency as $i=>$tran)
-                                        @if($tran->transparencyUserId == Auth::user()->id)
-                                        @php $transtotal += $tran->transparencyAmount; @endphp
-                                        @endif
-                                    @endforeach
-                                    @endif
-
+                                    
                                     <h5 style="text-align:left;font-weight:bold;">
-                                    (Grand Total) Donations: PHP {{number_format($total,2)}} |  Distributions: PHP {{number_format($transtotal,2)}} | Remaining: PHP @php $remains = $total - $transtotal; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
+                                    Donations: PHP {{number_format($total,2)}} |  Distributions: PHP {{number_format($transtotal,2)}} | Remaining: PHP @php $remains = $total - $transtotal; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
                                     </h5><br>
                             
                             <table id="myTable">
@@ -273,7 +380,7 @@
                                     <th style="background:white;border:none;">Date</th>
                                     <th style="background:white;border:none;">Name/Recepient</th>
                                     <th style="background:white;border:none;">Amount (PHP)</th>
-                                    <th style="background:white;border:none;">Remove</th>
+                                    <!-- <th style="background:white;border:none;">Remove</th> -->
                                 </tr>
                                 <div id="edit">
                                     
@@ -285,30 +392,35 @@
                                         <input type="hidden" name="menusettings[{{$i}}][transparencyid]" id="" value="{{$tran->transparencyId}}">
                                         <input type="hidden" name="menusettings[{{$i}}][postid]" id="" value="{{$post->postId}}">
 
-                                        <td style="background:white;border:none;"><h5>{{$tran->transparencyLocation}}</h5></td>
-                                        <td style="background:white;border:none;"><h6>{{date('F j, Y',strtotime($tran->transparencyCreatedAt))}}</h6></td>
+                                        <td style="background:white;border:none;width:200px !important;"><h5>{{$tran->transparencyLocation}}</h5></td>
+                                        <td style="background:white;border:none;width:200px !important;"><h6>{{date('F j, Y',strtotime($tran->transparencyCreatedAt))}}</h6></td>
                                         <div style="display:none;">
                                         <td style="display:none;background:white;border:none;width:20px !important;"><input type="text" name="menusettings[{{$i}}][household]" id="" value="{{$tran->firstName.' '.$tran->middleName.' '.$tran->lastName.' '.$tran->orgName}}" style="width:140px;"></td>
                                         <td style="display:none;background:white;border:none;"><input type="text" name="menusettings[{{$i}}][hamount]" id="" value="{{$tran->transparencyAmount}}" style="width:140px;"></td>
                                         </div>
-                                        <td style="background:white;border:none;width:20px !important;">{{$tran->firstName.' '.$tran->middleName.' '.$tran->lastName.' '.$tran->orgName}}</td>
-                                        <td style="background:white;border:none;">PHP {{number_format($tran->transparencyAmount,2)}}</td>
+                                        <td style="background:white;border:none;width:200px !important;">{{$tran->firstName.' '.$tran->middleName.' '.$tran->lastName.' '.$tran->orgName}}</td>
+                                        <td style="background:white;border:none;width:200px !important;">PHP {{number_format($tran->transparencyAmount,2)}}</td>
                                         </form>
 
 
 
-
-                                        <form action="{{route('transparencydelete')}}" method="GET">
+                                        <!-- distribution table delete -->
+                                        <!-- <form action="{{route('transparencydelete')}}" method="GET">
                                         <input type="hidden" name="transid"  value="{{$tran->transparencyId}}">
                                         <td style="background:white;"><button type="submit" style="border:none;background:none;font-size:12px;">
                                         <i class="fa fa-trash" aria-hidden="true" style="position:relative; left: 8px; top: -1px;color:red;"></i>
                                         </button></td>
-                                        </form>
+                                        </form> -->
 
                                     </tr>
                                     @endif
                                     @endforeach
                                     @endif
+                                    <tr style="border-top:1px solid black;background:white;font-weight:bold;">
+                                                
+                                        <td  colspan="3">Total</td>
+                                        <td>PHP {{number_format($transtotal,2)}}</td>
+                                    </tr>
                                     
                                 </div>
                             </table>

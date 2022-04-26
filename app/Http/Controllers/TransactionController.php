@@ -201,7 +201,7 @@ class TransactionController extends Controller
         $userid = $request->input('userid');
         $postid = $request->input('postid');
         $amount = $request->input('hamount');
-        //$donationamount = $request->input('donation');
+        $donationamount = $request->input('donation');
 
         $user = DB::table('users')
             ->where('users.id', '=', $userid)
@@ -211,17 +211,26 @@ class TransactionController extends Controller
             ->where('users.id', '=', auth()->user()->id)
             ->get();
 
-        // if($request->input('hamount') > $donationamount) {
+        $duser = DB::table('distributions')
+            ->where('distributionAssignedTo', '=', $userid)
+            ->where('distributionPostId', '=', $postid)
+            ->get();
 
-        //     return redirect()->back()->with('error', 'Sorry, you cannot proceed this action because of insufficient amount. Please double check remaining amount.');
+        if($amount > $donationamount) {
+
+            return redirect()->back()->with('error', 'Sorry, you cannot proceed this action because of insufficient amount. Please double check remaining amount.');
     
-        // }else{
+        }else if(count($duser) > 0){
 
-        //     return view('payment.distpayment', compact('user', 'amount', 'owner', 'previous_url', 'userid', 'postid'));
+            return redirect()->back()->with('error', 'Duplicate distribution, please try again.');
 
-        // }
+        }else{
 
-        return view('payment.distpayment', compact('user', 'amount', 'owner', 'previous_url', 'userid', 'postid'));
+            return view('payment.distpayment', compact('user', 'amount', 'owner', 'previous_url', 'userid', 'postid'));
+
+        }
+
+        //return view('payment.distpayment', compact('user', 'amount', 'owner', 'previous_url', 'userid', 'postid'));
         
     }
 
@@ -291,6 +300,7 @@ class TransactionController extends Controller
         $postid = $request->input('postid');
         $amount = $request->input('hamount');
         $location = $request->input('location');
+        $donationamount = $request->input('donation');
 
         $user = DB::table('users')
             ->where('users.id', '=', $userid)
@@ -300,7 +310,26 @@ class TransactionController extends Controller
             ->where('users.id', '=', auth()->user()->id)
             ->get();
 
-        return view('payment.transpayment', compact('user', 'amount', 'location', 'owner', 'previous_url', 'userid', 'postid'));
+        $duser = DB::table('transparencies')
+            ->where('transparencyHouseholdUserId', '=', $userid)
+            ->where('transparencyPostId', '=', $postid)
+            ->get();
+
+        if($amount > $donationamount) {
+
+            return redirect()->back()->with('error', 'Sorry, you cannot proceed this action because of insufficient amount. Please double check remaining amount.');
+    
+        }else if(count($duser) > 0){
+
+            return redirect()->back()->with('error', 'Duplicate distribution, please try again.');
+
+        }else{
+
+            return view('payment.transpayment', compact('user', 'amount', 'location', 'owner', 'previous_url', 'userid', 'postid'));
+
+        }
+
+        //return view('payment.transpayment', compact('user', 'amount', 'location', 'owner', 'previous_url', 'userid', 'postid'));
         
     }
 
