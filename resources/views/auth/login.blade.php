@@ -66,7 +66,7 @@
                         </div>
                         <div class="form-group form-con2">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword1" placeholder="Enter Password" name="password" value="{{ old('password') }}" required autocomplete="password">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword1" placeholder="Enter Password" name="password" value="{{ old('password') }}" onclick="document.getElementById('button').removeAttribute('disabled')" required autocomplete="password">
                             @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <!-- you can change the message for error -->

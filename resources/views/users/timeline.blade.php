@@ -1032,7 +1032,9 @@
                                             {!! Form::open(['action' => ['App\Http\Controllers\PostsController@update', $post->postId], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 
                                                 <div class="form-group" style="margin-top:20px;">
-                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your caption:</label>
+                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your title:</label>
+                                                <input class="form-control" type="text" name="title" value="{{$post->postCategory}}">
+                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;margin-top:5px;">You may edit your caption:</label>
                                                 {{Form::textarea('caption', $post->postCaption, ['class' => 'form-control'])}}
                                                 </div>
                                                 <div class="" style="position:absolute;width:50%;margin-left:290px;">

@@ -216,7 +216,34 @@
                 <!-- first row(user profile area) -->
                 <div class="row post_profile_row">
                     <div class="col-2" >
+                        @php $count = 0; $id = 0; @endphp
+                        @if(count($follows) > 0)
+                        @foreach($follows as $follow)
+                            @if($follow->followedUserId == $post->id)
+                                @if($follow->followUserId == Auth::user()->id)
+
+                                    @php $count = 1; $id = $follow->followId; @endphp
+
+                                @endif
+                                
+                            @endif
+                        @endforeach
+                        @endif
+
+                        @if($post->id != Auth::user()->id)
+                        @if($count == 1)
+
+                        <i class="far fa-check check_follow"></i>
                         <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic" alt="">
+
+                        @else
+                        
+                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic2" alt="">
+
+                        @endif
+                        @else
+                        <img src="/storage/profile_images/{{$post->profileImage}}" class="center_user_post_pic2" alt="">
+                        @endif
                     </div>
                     <div class="col-9">
                         <div class="row">
@@ -228,7 +255,7 @@
                             
                             </div>
 
-                            <div style="width: auto;">
+                            <div style="width: auto;display:none;">
                             @php $count = 0; $id = 0; @endphp
                                 @if(count($follows) > 0)
                                 @foreach($follows as $follow)
@@ -393,6 +420,43 @@
                                     <div class="modal-body" style="height:auto;">
 
                                         @if(Auth::user()->id != $post->postUserId && $post->postStatus != "BANNED")
+
+                                        <!-- follow/following button -->
+                                        @php $count = 0; $id = 0; @endphp
+                                        @if(count($follows) > 0)
+                                        @foreach($follows as $follow)
+                                            @if($follow->followedUserId == $post->id)
+                                                @if($follow->followUserId == Auth::user()->id)
+
+                                                    @php $count = 1; $id = $follow->followId; @endphp
+
+                                                @endif
+                                                
+                                            @endif
+                                        @endforeach
+                                        @endif
+
+                                        @if($post->id != Auth::user()->id)
+                                        @if($count == 1)
+                                        {!!Form::open(['action' => ['App\Http\Controllers\FollowController@destroy', $id], 'method' => 'POST'])!!}
+                                        <input type="hidden" name="followpostid" value="{{$post->id}}">
+
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="submit">Unfollow this User</button>
+                                        {{Form::hidden('_method', 'DELETE')}}
+                                        {!!Form::close()!!}
+
+                                        @else
+
+                                        {!! Form::open(['action' => 'App\Http\Controllers\FollowController@store2', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                                        <input type="hidden" name="followpostid" value="{{$post->id}}">
+                                        
+                                        <button class="btn btn2" style="width:100%;text-align:left;" type="submit">Follow this User</button>
+                                        {!! Form::close() !!}
+                                        @endif
+                                        @endif
+                                        <!-- follow/following button end -->
+
+
                                         <!-- post report -->
                                         <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="document.getElementById('reportDiv{{$post->postId}}').style.display == 'none' ? document.getElementById('reportDiv{{$post->postId}}').style.display = 'inline' : document.getElementById('reportDiv{{$post->postId}}').style.display = 'none'">Report Post</button>
                                         <form action="{{route('report')}}" method="GET">
@@ -461,7 +525,9 @@
                                             {!! Form::open(['action' => ['App\Http\Controllers\PostsController@update', $post->postId], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 
                                                 <div class="form-group" style="margin-top:20px;">
-                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your caption:</label>
+                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your title:</label>
+                                                <input class="form-control" type="text" name="title" value="{{$post->postCategory}}">
+                                                <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;margin-top:5px;">You may edit your caption:</label>
                                                 {{Form::textarea('caption', $post->postCaption, ['class' => 'form-control'])}}
                                                 </div>
                                                 <div class="" style="position:absolute;width:50%;margin-left:290px;">
@@ -734,9 +800,16 @@
                             @endif
                         @endforeach
                         <form action="/home/{{$post->postId}}">
-                        <button class="react_btn_style" style="height:31px;">
-                            <i class="fas fa-comment-alt"></i>
-                            <a href="">{{number_format($com)}}</a>
+                        <button class="react_btn_style_form" >
+                            <div class="row">
+                                <div class="col-w1">
+                                    <i class="fas fa-comment-alt"></i>
+                                </div>
+
+                                <div class="col-w2">
+                                    <a href="">{{number_format($com)}}</a>
+                                </div>
+                            </div>
                         </button>
                         </form>
                         @endif
