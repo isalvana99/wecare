@@ -91,7 +91,7 @@
                                 </td>
                                 <td class="center">
                                     <button class="btn_view" type="button" data-toggle="modal" data-target=".bd-example-modal-lg-{{$var->id}}">Review</button>
-                                    <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->id}}">Delete</button>
+                                    <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->id}}" style="display:none;">Delete</button>
                                 </td>
                                 </td>
                                 
@@ -163,7 +163,7 @@
                                 <div class="row modal_left_second">
                                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
                                         <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</button>
-                                        <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donated History</button>
+                                        <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donation History</button>
                                         <!-- <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages-{{$var->id}}" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Received History</button> -->
                                     </div>
                                 </div>

@@ -50,21 +50,128 @@
             @php $remains += $dist->distributionAmount @endphp
         @endforeach
         @endif
-        <h5 style="width: auto;">Total donation received in this section: PHP {{number_format($post->postReceivedAmount,2)}} | Remaining for distribution: @if(($post->postReceivedAmount - $remains) < 0) <label style="color:red;"> PHP {{number_format($post->postReceivedAmount - $remains,2)}}</label> @else PHP {{number_format($post->postReceivedAmount - $remains,2)}} @endif</h5>
+        <!-- <h5 style="width: auto;">Total donation received in this section: PHP {{number_format($post->postReceivedAmount,2)}} | Remaining for distribution: @if(($post->postReceivedAmount - $remains) < 0) <label style="color:red;"> PHP {{number_format($post->postReceivedAmount - $remains,2)}}</label> @else PHP {{number_format($post->postReceivedAmount - $remains,2)}} @endif</h5> -->
+
+        <!-- view add files history -->
+        <div class="col-12" data-toggle="modal" data-target="#addfilepostModal2">
+            <div style="font-size:16px; text-decoration:underline; color:blue;text-align:left;">View Attached Files</div>
+        </div>
+        <!-- Modal OF view donation history BUTTON-->
+        <div class="modal fade" id="addfilepostModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width:805px;">
+                    <div class="modal-header">
+                        If necessary, you can upload your related files here:
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body" style="width:800px;">
+                        <div class="container">
+                            <form action="{{route('fileUpload')}}" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="postid" value="{{$post->postId}}">
+                                @csrf
+                                @if ($message = Session::get('success'))
+                                <div class="alert alert-success">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @endif
+                                @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
+                                <label for="formFileMultiple" class="form-label">Upload File Here</label>
+                                <input class="form-control" type="file" id="formFileMultiple" name="file"/>
+                                <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">
+                                    Upload Files
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    
+                        <table id="customers" style="width:800px;">
+                            <tr>
+                                <th>Date | Time</th>
+                                <th>Click the file to download</th>
+                                <th>Uploaded by: </th>
+                                <th></th>
+                            </tr>
+                            @if(count($files) > 0)
+                            @foreach($files as $file)
+                            <tr>
+                                <td style="width:200px;">{{date('F j, Y | h:i A', strtotime($file->fileCreatedAt))}}
+                                </td>
+                                <td>
+                                    <form action="{{route('fileDownload')}}" method="GET">
+                                        <input type="hidden" name="filename" id="" value="{{$file->filePath}}">
+                                        <button type="submit" style="background:none;border:none;width:300px;">{{$file->fileName}}</button>
+                                    </form>
+                                </td>
+                                <td style="width:200px;">
+                                    {{$file->firstName." ".$file->middleName." ".$file->lastName." ".$file->orgName}}
+                                </td>
+                                @if($file->fileUserId == Auth::user()->id)
+                                <td style="color:red !important;">
+                                    <form action="{{route('fileDelete')}}">
+                                        <input type="hidden" name="fileid" id="" value="{{$file->fileId}}">
+                                        <button type="submit" style="color:red !important;border:none;background:none;font-size:12px;width:50px;">
+                                        remove
+                                        </button>
+                                    </form>
+                                </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="3">No File</td>
+                            </tr>
+                            @endif
+                        </table>
+                    
+
+                    <div class="modal-footer">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
+        <!-- view add files history -->
 
         @php $total1 = 0; $total2 = 0; @endphp
         @if(count($transparency) > 0)
         @foreach($transparency as $i=>$tran)
         @if($tran->transparencyPostId == $post->postId)
-            @php $total1 += ($tran->transparencyHousehold * $tran->transparencyAmount); @endphp
+            @php $total1 += $tran->transparencyAmount; @endphp
             @php $total2 += $tran->transparencyAmount; @endphp
         @endif
         @endforeach
         @endif
-        <div style="text-align:left;font-weight:bold;display:flex;float:left;background:yellow;">
-        (Grand Total for Distribution) Donations: PHP {{number_format($post->postReceivedAmount,2)}} |  Distributions: PHP {{number_format($total1,2)}} | Remaining: @php $remains = $post->postReceivedAmount - $total1; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
-        </div><br>
-
+        <div style="text-align:left;font-weight:bold;background:yellow;">
+        <hr>DISTRIBUTIONS <br><hr>
+        <div class="row">
+            <div class="col-6" style="border-right: 2px solid gray;">
+                Total Donations Collected: <u>PHP {{number_format($post->postReceivedAmount,2)}}</u><br> 
+                Total Distributed to Assignments: <u>PHP {{number_format($remains,2)}}</u><br>
+                Remaining for Distribution: @if(($post->postReceivedAmount - $remains) < 0) 
+                    <label style="color:red;"> <u>PHP {{number_format($post->postReceivedAmount - $remains,2)}}</u></label> @else <u>PHP {{number_format($post->postReceivedAmount - $remains,2)}}</u> @endif<br>
+            </div>
+            <div class="col-6">
+                Distributions to Recepients: <u>PHP {{number_format($total1,2)}}</u><br>
+                Remaining for Distributions: PHP @php $remains = $post->postReceivedAmount - $total1; @endphp @if($remains < 0) 
+                    <div style="color:red;">&nbsp;<u>{{number_format($remains,2)}}</u></div> @else <u>{{number_format($remains,2)}}</u> @endif</div><br>
+            </div>
+            <hr>
+        </div>
         
 
         <div class="row" style="padding: 10px;">
@@ -106,7 +213,7 @@
                                         </div>
                                         <input type="hidden" name="userid" value="{{$userid}}">
                                         <input type="hidden" name="postid" value="{{$postid}}">
-                                        <input type="hidden" name="donation" id="" value="{{$post->postReceivedAmount - $remains}}">
+                                        <input type="hidden" name="donation" id="" value="{{$remains}}">
                                         <input type="hidden" name="donor" value="{{Auth::user()->id}}">
                                         <input type="hidden" name="previous_url" value="/distribution?referenceno={{$postid}}&userid={{$userid}}">
                                     </div>
@@ -277,7 +384,7 @@
                                             @endforeach
                                             @endif
                                             <h5 style="text-align:left;font-weight:bold;">
-                                            (Grand Total) Donations: PHP {{number_format($total,2)}} |  Distributions: PHP {{number_format($transtotal,2)}} | Remaining: PHP @php $remains = $total - $transtotal; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
+                                            Donations: PHP {{number_format($total,2)}} |  Distributions: PHP {{number_format($transtotal,2)}} | Remaining: PHP @php $remains = $total - $transtotal; @endphp @if($remains < 0) <div style="color:red;">&nbsp;{{number_format($remains,2)}}</div> @else {{number_format($remains,2)}} @endif
                                             </h5><br>
 
                                             
@@ -329,14 +436,15 @@
                             <!-- end modal -->
                             <!-- view transparency history -->
                         </td>
-                        <td>
+                        <!-- delete from table -->
+                        <!-- <td>
                             <form action="{{route('distributiondelete')}}" >
                             <input type="hidden" name="distid" id="" value="{{$dist->distributionId}}">
                             <button type="submit" style="background:none; border:none; position:relative;">
                                 <i class="fa fa-trash" style="position:absolute; left: -20px; top: -12px;color:red;"></i>
                             </button>
                             </form>
-                        </td>
+                        </td> -->
                     </tr>
                     @endforeach
                 </table>

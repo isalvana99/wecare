@@ -656,6 +656,7 @@
                     <table class="table table-striped table-hover">
                         <tr>
                             <th colspan="2">Files Available:</th>
+                            <th>Uploaded by:</th>
                         </tr>
                         @if(count($files) > 0)
                         @foreach($files as $file)
@@ -663,6 +664,7 @@
                         <tr>
                             <td>{{date('Y-m-d | h:i A', strtotime($file->fileCreatedAt))}}</td>
                             <td><form action="/download"><input type="hidden" name="filename" id="" value="{{$file->filePath}}"><button type="submit" style="background:none;border:none;">{{$file->fileName}}</button></form></td>
+                            <td>{{$file->firstName." ".$file->middleName." ".$file->lastName." ".$file->orgName}}</td>
                         </tr>
                         @endif
                         @endforeach

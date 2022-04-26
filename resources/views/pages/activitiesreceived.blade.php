@@ -68,8 +68,8 @@
                             <table id="customers">
                                 <tr>
                                     <th>Date Donated</th>
-                                    <th>Donator</th>
-                                    <th>GCash Number</th>
+                                    <th>Donor</th>
+                                    <!-- <th>GCash Number</th> -->
                                     <th>Date of Post</th>
                                     <th>Amount Received</th>
                                 </tr>
@@ -77,16 +77,16 @@
                                 @foreach ($tran as $var)
                                 <tr>
                                     
-                                    <td>{{date('F j, Y', strtotime($var->transactionCreatedAt))}}</td>
+                                    <td>{{date('F j, Y | h:i A', strtotime($var->transactionCreatedAt))}}</td>
                                     <td>{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</td>
-                                    <td>{{$var->phoneNumber}}</td>
+                                    <!-- <td>{{$var->phoneNumber}}</td> -->
                                     <td>{{date('F j, Y', strtotime($var->postCreatedAt))}}</td>
-                                    <td>Php {{number_format((float)$var->transactionAmount, 2, '.', '')}}</td>
+                                    <td>Php {{number_format($var->transactionAmount, 2)}}</td>
                                 </tr>
                                 @endforeach
                                 <tr style="border-top:2px solid grey;">
-                                    <td colspan="4" style="text-align:center">Total</td>
-                                    <td>Php {{number_format((float)Auth::user()->amountReceived, 2, '.', '')}}</td>
+                                    <td colspan="3" style="text-align:center">Total</td>
+                                    <td>Php {{number_format(Auth::user()->amountReceived, 2)}}</td>
                                 </tr>
                                 @else
                                 <tr>

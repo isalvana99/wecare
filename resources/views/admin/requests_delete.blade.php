@@ -110,8 +110,11 @@
                                 <div class="row modal_left_second">
                                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
                                         <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</button>
+                                        @if($var->accountType == "DONOR")
                                         <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donated History</button>
+                                        @elseif($var->accountType == "RECEPIENT")
                                         <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Received History</button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +126,7 @@
                                             <div class="row tab_row_header">
                                                 Personal Information
                                             </div>
-
+                                            @if($var->accountType == "DONOR")
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Firstname:
@@ -150,7 +153,7 @@
                                                     {{$var->lastName}}
                                                 </div>
                                             </div>
-
+                                            
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
                                                     Birthday:
@@ -168,6 +171,19 @@
                                                 {{$var->sex}}
                                                 </div>
                                             </div>
+
+                                            @elseif($var->accountType == "RECEPIENT")
+
+                                            <div class="row modal_row_info">
+                                                <div class="col-3 modal_info_bold">
+                                                    Organization Name:
+                                                </div>
+                                                <div class="col-9 modal_info_names">
+                                                {{$var->orgName}}
+                                                </div>
+                                            </div>
+
+                                            @endif
 
                                             <div class="row modal_row_info">
                                                 <div class="col-3 modal_info_bold">
@@ -223,23 +239,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row modal_row_info">
-                                                <div class="col-3 modal_info_bold">
-                                                    Total Amount Received:
-                                                </div>
-                                                <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountReceived, 2)}}
-                                                </div>
-                                            </div>
-
-                                            <div class="row modal_row_info">
-                                                <div class="col-3 modal_info_bold">
-                                                    Total Amount Donated:
-                                                </div>
-                                                <div class="col-9 modal_info_names">
-                                                PHP {{number_format($var->amountGiven, 2)}}
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <!-- presonal info end -->
