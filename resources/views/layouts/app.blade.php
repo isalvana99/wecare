@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" type="image/x-icon" href="images/wecarelogo.png"/>
-    <title>WeCare</title>
+    <title>WeCare</title> 
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
