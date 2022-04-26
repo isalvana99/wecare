@@ -100,7 +100,7 @@
                                 </td>
                                 <td class="center">
                                     <button class="btn_view" type="button" data-toggle="modal" data-target=".bd-example-modal-lg-{{$var->id}}">Review</button>
-                                    <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->id}}">Delete</button>
+                                    <button class="btn_delete" data-toggle="modal" data-target=".bd-example-modal-sm-{{$var->id}}" style="display:none;">Delete</button>
                                 </td>
                                 </td>
                                 

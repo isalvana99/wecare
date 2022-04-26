@@ -202,13 +202,12 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content" style="width:705px;">
                                 <div class="modal-header">
-                                    Files:
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
 
-                                <div class="modal-body" style="width:700px;">
+                                <div class="modal-body" style="width:700px;display:none;">
                                     <div class="container">
                                     @if($post->postUserId == Auth::user()->id)
                                         <form action="{{route('fileUpload')}}" method="post" enctype="multipart/form-data">
@@ -244,9 +243,7 @@
                                         <tr>
                                             <th>Date | Time</th>
                                             <th>Click the file to download</th>
-                                            @if($post->postUserId == Auth::user()->id)
-                                            <th>Remove</th>
-                                            @endif
+                                            <th>Uploaded by:</th>
                                         </tr>
                                         @if(count($files) > 0)
                                         @foreach($files as $file)
@@ -259,16 +256,9 @@
                                                     <button type="submit" style="background:none;border:none;width:300px;">{{$file->fileName}}</button>
                                                 </form>
                                             </td>
-                                            @if($post->postUserId == Auth::user()->id)
-                                            <td style="color:red !important;">
-                                                <form action="{{route('fileDelete')}}">
-                                                    <input type="hidden" name="fileid" id="" value="{{$file->fileId}}">
-                                                    <button type="submit" style="color:red !important;border:none;background:none;font-size:12px;width:50px;">
-                                                    <i class="fa fa-trash" aria-hidden="true" style=""></i>
-                                                    </button>
-                                                </form>
+                                            <td style="width:200px;">
+                                                {{$file->firstName." ".$file->middleName." ".$file->lastName." ".$file->orgName}}
                                             </td>
-                                            @endif
                                         </tr>
                                         @endforeach
                                         @else
@@ -540,7 +530,9 @@
                                                         {!! Form::open(['action' => ['App\Http\Controllers\PostsController@update', $post->postId], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
             
                                                             <div class="form-group" style="margin-top:20px;">
-                                                            <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your caption:</label>
+                                                            <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;">You may edit your title:</label>
+                                                            <input class="form-control" type="text" name="title" value="{{$post->postCategory}}">
+                                                            <label for="edit_post" style="background:#dbdcdd;padding:10px 10px 10px 20px;border-radius:5px;width:100%;margin-top:5px;">You may edit your caption:</label>
                                                             {{Form::textarea('caption', $post->postCaption, ['class' => 'form-control'])}}
                                                             </div>
                                                             <div class="" style="position:absolute;width:50%;margin-left:290px;">
