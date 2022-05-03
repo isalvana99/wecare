@@ -142,7 +142,7 @@
         <!-- view add files history -->
 
         <!-- computations -->
-        @php $total = 0; @endphp
+            @php $total = 0; @endphp
             @if(count($distribution) > 0)
             @foreach($distribution as $i=>$tran)
                 @if($tran->distributionAssignedTo == Auth::user()->id)
@@ -308,6 +308,8 @@
                 <input type="hidden" name="postid" value="{{$postid}}">
                 <button class="post_donate_button" style="width:200px;">Assign Amount</button>
             </div>
+
+
             <!-- Modal OF DONATE BUTTON-->
             <div class="modal fade" id="mpostModal2-{{$a->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:300px;">
                 <div class="modal-dialog" role="document">
@@ -324,13 +326,13 @@
                             <div class="form-group">
                             <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
                             PHP <input style="border-radius: 10px;padding:5px;" type="text" name="hamount">
-                            <input type="text" name="" id="" value="{{$transtotal}}">
+                            <input type="hidden" name="" id="" value="{{$remains}}">
                             </div>
                             <input type="hidden" name="userid" value="{{$recepientid}}">
                             <input type="hidden" name="postid" value="{{$postid}}">
                             <input type="hidden" name="donor" value="{{Auth::user()->id}}">
                             <input type="hidden" name="location" value="{{$l}}">
-                            <input type="hidden" name="donation" value="{{$transtotal}}">
+                            <input type="hidden" name="donation" value="{{$remains}}">
                             <input type="hidden" name="previous_url" value="distribution/my?referenceno={{$postid}}&l={{$l}}">
                         </div>
 
