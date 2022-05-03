@@ -13,6 +13,7 @@ use App\Models\Review;
 use App\Models\Notif;
 use App\Models\Transparency;
 use App\Models\File;
+use App\Models\Deletedusers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -1281,7 +1282,7 @@ class AdminController extends Controller
 
             $vars = Report::query()
                 ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
-                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                ->join('postimages', 'reports.reportPostId', '=', 'postimages.postImagePostId')
                 ->join('users', 'users.id', '=', 'posts.postUserId')
                 ->where('reportPostId', '!=', NULL)
                 ->orderBy('reportUpdatedAt','DESC')
@@ -1290,7 +1291,7 @@ class AdminController extends Controller
 
             $varse = Report::query()
                     ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
-                    ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                    ->join('postimages', 'reports.reportPostId', '=', 'postimages.postImagePostId')
                     ->join('users', 'users.id', '=', 'posts.postUserId')
                     ->where('reportPostId', '!=', NULL)
                     ->orderBy('reportUpdatedAt','DESC')
@@ -1301,7 +1302,7 @@ class AdminController extends Controller
 
             $vars = Report::query()
                 ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
-                ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                ->join('postimages', 'reports.reportPostId', '=', 'postimages.postImagePostId')
                 ->join('users', 'users.id', '=', 'posts.postUserId')
                 ->where('reportPostId', '!=', NULL)
                 ->orderBy('reportUpdatedAt','DESC')
@@ -1355,7 +1356,7 @@ class AdminController extends Controller
             if(count($person2) > 0){
                 $varse = Report::query()
                     ->join('posts', 'posts.postId', '=', 'reports.reportPostId')
-                    ->join('postimages', 'posts.postId', '=', 'postimages.postImagePostId')
+                    ->join('postimages', 'reports.reportPostId', '=', 'postimages.postImagePostId')
                     ->join('users', 'users.id', '=', 'posts.postUserId')
                     ->where('reportPostId', '!=', NULL)
                     ->orderBy('reportUpdatedAt','DESC')
@@ -1632,6 +1633,36 @@ class AdminController extends Controller
         $reportid = $request->input('reportid');
 
         if($deleteUser != ""){
+
+            $u = User::query()->where('id', '=', $deleteUser)->first();
+
+            $d = new Deletedusers;
+            $d -> deleteduserFirstName = $u->firstName;
+            $d -> deleteduserLastName = $u->lastName;
+            $d -> deleteduserMiddleName = $u->middleName;
+            $d -> deleteduserOrgName = $u->orgName;
+            $d -> deleteduserBirthday = $u->birthday;
+            $d -> deleteduserSex = $u->sex;
+            $d -> deleteduserSector = $u->sector;
+            $d -> deleteduserBarangay = $u->barangay;
+            $d -> deleteduserCity = $u->city;
+            $d -> deleteduserProvince = $u->province;
+            $d -> deleteduserRegion = $u->region;
+            $d -> deleteduserPhoneNumber = $u->phoneNumber;
+            $d -> deleteduserLicense = $u->license;
+            $d -> deleteduserAmountReceived = $u->amountReceived;
+            $d -> deleteduserAmountGiven = $u->amountGiven;
+            $d -> deleteduserAccountVerified = $u->accountVerified;
+            $d -> deleteduserAccountType = $u->accountType;
+            $d -> deleteduserEmail = $u->email;
+            $d -> deleteduserEmailVerified = $u->emailVerified;
+            $d -> deleteduserPassword = $u->password;
+            $d -> deleteduserRole = $u->role;
+            $d -> deleteduserProfileImage = $u->profileImage;
+            $d -> deleteduserAccountCreatedAt = $u->accountCreatedAt;
+            $d -> deleteduserAccountUpdatedAt = $u->accountUpdatedAt;
+            $d->save();
+
             
             DB::table('users')->where(['id'=> $deleteUser])->delete();
 
@@ -1647,7 +1678,6 @@ class AdminController extends Controller
             DB::table('recactivities')->where(['recactivityUserId'=> $deleteUser])->delete();
             DB::table('reports')->where(['reportedBy'=> $deleteUser])->delete();
             DB::table('reports')->where(['reportUserId'=> $deleteUser])->delete();
-            DB::table('transactions')->where(['transactionUserId'=> $deleteUser])->delete();
 
             $post = new AdminLog;
             $post ->  adminloggedBy = auth()->user()->id;
@@ -1655,6 +1685,8 @@ class AdminController extends Controller
             $post -> adminlogDescription = "DELETED";
             $post -> adminlogCategory = "Manage Reports";
             $post->save();
+
+            
         }
 
         if($deletePost != ""){

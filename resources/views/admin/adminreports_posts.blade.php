@@ -149,13 +149,19 @@
                             <div class="row row_post_report_id">
                                 {{$var->reportDescription}}
                             </div>
+                            <div class="row row_post_report_type">
+                                Post Caption:
+                            </div>
+                            <div class="row row_post_report_id">
+                                {{$var->postCaption}}
+                            </div>
                             <div class="row row_report_post">
                                 <div class="col-12 col_post_head">
                                     Reported Images:
                                 </div>
                             </div>
                             <div class="row col_report_info">
-                                <img src="/storage/cover_images/{{$var->postCoverImage}}" alt="" class="report_post_pics">
+                                <img src="/storage/cover_images/{{$var->postImageName}}" alt="" class="report_post_pics">
                             </div>
                             <div class="row row_report_post">
                                 <div class="col-3 col_post_head">
@@ -198,20 +204,7 @@
                                     PHP {{number_format((float) $var->postTargetAmount, 2)}} / PHP {{number_format((float) $var->postReceivedAmount, 2)}}
                                 </div>
                             </div>
-                            <div class="row row_report_post">
-                                <div class="col-3 col_report_head">
-                                    Email Verified:
-                                </div>
-                                @if($var->postStatus != NULL)
-                                <div class="col-9 col_report_info">
-                                    YES
-                                </div>
-                                @else
-                                <div class="col-9 col_report_info">
-                                    NO
-                                </div>
-                                @endif
-                            </div>
+                            
                             <div class="row row_report_post">
                                 <div class="col-3 col_report_head">
                                     Post Created Date:
@@ -339,20 +332,7 @@
                                 PHP {{number_format((float) $var->postTargetAmount, 2)}} / PHP {{number_format((float) $var->postReceivedAmount, 2)}}
                             </div>
                         </div>
-                        <div class="row row_report_post">
-                            <div class="col-3 col_report_head">
-                                Post Verified:
-                            </div>
-                            @if($var->postStatus == "VERIFIED")
-                            <div class="col-9 col_report_info">
-                                YES
-                            </div>
-                            @else
-                            <div class="col-9 col_report_info">
-                                NO
-                            </div>
-                            @endif
-                        </div>
+                        
                         <div class="row row_report_post">
                             <div class="col-3 col_report_head">
                                 Post Created Date:
@@ -403,7 +383,7 @@
                 </div>
 
                 <div class="modal-body">
-                    Are you sure you want to delete this user? Please note that you cannot undo this after.
+                    Are you sure you want to delete this user? Please note that you cannot undo this aftera.
                 </div>
 
                 <div class="modal-footer">
