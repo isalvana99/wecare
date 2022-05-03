@@ -326,7 +326,7 @@
                             <div class="form-group">
                             <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
                             PHP <input style="border-radius: 10px;padding:5px;" type="text" name="hamount">
-                            <input type="text" name="" id="" value="{{$remains}}">
+                            <input type="hidden" name="" id="" value="{{$remains}}">
                             </div>
                             <input type="hidden" name="userid" value="{{$recepientid}}">
                             <input type="hidden" name="postid" value="{{$postid}}">
