@@ -679,6 +679,8 @@ class AdminController extends Controller
         $date01 = date('F, Y', strtotime($monthchoice));
         $date02 = $yearchoice;
         
+        //city
+        $c = array('Mandaue', 'Lapu-Lapu');
         //mandaue
         $b1 = array('Alang-alang', 'Bakilid', 'Banilad', 'Basak', 'Cabancalan', 'Cambaro', 'Canduman', 'Casili', 'Casuntingan', 'Centro', 'Cubacub', 'Guizo', 'Ibabao-Estancia', 'Jagobiao', 'Labogon', 'Looc', 'Maguikay', 'Mantuyong', 'Opao', 'Pakna-an', 'Pagsabungan', 'Subangdaku', 'Tabok', 'Tawason', 'Tingub', 'Tipolo', 'Umapad');
         //lapu-lapu
@@ -697,16 +699,28 @@ class AdminController extends Controller
            ->get();
         $currarray1[] = [];
         if(count($currdata1) > 0) {
-            foreach($currdata1 as $key => $value)
-            {
-                $currarray1[$key] = $value->number;
-                $key++;
+            foreach($c as $key => $b){
+                foreach($currdata1 as $value)
+                {
+                    if($value->val == $b){
+                        $currarray1[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $currarray1[$key] = 0;
+                    }
+                }
             }
         }else{
-            foreach($currdata1 as $key => $value)
-            {
-              $currarray1[$key] = 0;
-              $key++;
+            foreach($c as $key => $b){
+                foreach($currdata1 as $value)
+                {
+                    if($value->val == $b){
+                        $currarray1[$key] = 0;
+                        $key++;
+                    }else{
+                        $currarray1[$key] = 0;
+                    }
+                }
             }
         }
 
@@ -827,14 +841,30 @@ class AdminController extends Controller
            ->get();
         $warray1[] = [];
         if(count($wdata1) > 0) {
-            foreach($wdata1 as $key => $value)
-            {
-                $warray1[$key] = $value->number;
+            foreach($c as $key => $b){
+                foreach($wdata1 as $value)
+                {
+                    if($value->val == $b){
+                        $warray1[$key] = $value->number;
+                    }else{
+                        $warray1[$key] = 0;
+                    }
+                    
+                }
+                
             }
         }else{
-            foreach($wdata1 as $key => $value)
-            {
-                $warray1[$key] = 0;
+            foreach($c as $key => $b){
+                foreach($wdata1 as $value)
+                {
+                    if($value->val == $b){
+                        $warray1[$key] = 0;
+                    }else{
+                        $warray1[$key] = 0;
+                    }
+                    
+                }
+                
             }
         }
 
@@ -926,14 +956,32 @@ class AdminController extends Controller
            ->get();
         $marray1[] = [];
         if(count($mdata1) > 0) {
-            foreach($mdata1 as $key => $value)
-            {
-                $marray1[$key] = $value->number;
+            foreach($c as $key => $b){
+                foreach($mdata1 as $value)
+                {
+                    if($value->val == $b){
+                        $marray1[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $marray1[$key] = 0;
+                    }
+                    
+                }
+                
             }
         }else{
-            foreach($mdata1 as $key => $value)
-            {
-              $marray1[$key] = 0;
+            foreach($c as $key => $b){
+                foreach($mdata1 as $value)
+                {
+                    if($value->val == $b){
+                        $marray1[$key] = 0;
+                        $key++;
+                    }else{
+                        $marray1[$key] = 0;
+                    }
+                    
+                }
+                
             }
         }
         
@@ -1025,14 +1073,32 @@ class AdminController extends Controller
            ->get();
         $yarray1[] = [];
         if(count($ydata1) > 0) {
-            foreach($ydata1 as $key => $value)
-            {
-                $yarray1[$key] = $value->number;
+            foreach($c as $key => $b){
+                foreach($ydata1 as $value)
+                {
+                    if($value->val == $b){
+                        $yarray1[$key] = $value->number;
+                        $key++;
+                    }else{
+                        $yarray1[$key] = 0;
+                    }
+                    
+                }
+                
             }
         }else{
-            foreach($ydata1 as $key => $value)
-            {
-              $yarray1[$key] = 0;
+            foreach($c as $key => $b){
+                foreach($ydata1 as $value)
+                {
+                    if($value->val == $b){
+                        $yarray1[$key] = 0;
+                        $key++;
+                    }else{
+                        $yarray1[$key] = 0;
+                    }
+                    
+                }
+                
             }
         }
         

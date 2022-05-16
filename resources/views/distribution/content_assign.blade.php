@@ -325,7 +325,7 @@
                             <form action="/transpayment/" method="GET">
                             <div class="form-group">
                             <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
-                            PHP <input style="border-radius: 10px;padding:5px;" type="text" name="hamount">
+                            PHP <input style="border-radius: 10px;padding:5px;" type="number" name="hamount" id="donationamount">
                             <input type="hidden" name="" id="" value="{{$remains}}">
                             </div>
                             <input type="hidden" name="userid" value="{{$recepientid}}">
@@ -485,6 +485,18 @@
             span       = 1;
         }
     });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#donationamount').on('keypress', function (event) {
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+        }
+        });
     });
 </script>
 @endsection

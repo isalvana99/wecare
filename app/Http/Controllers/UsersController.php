@@ -211,6 +211,7 @@ class UsersController extends Controller
                 ->get();
         
         $comment = DB::select('SELECT * FROM comments');
+        $requests = DB::select('SELECT * FROM reviews WHERE reviewUserId =' .$id);
         $likes2 = DB::select('SELECT * FROM likes');
         $shares = DB::select('SELECT * FROM shares');
         $follows = DB::select('SELECT * FROM follows JOIN users ON users.id = follows.followUserId ORDER BY follows.followCreatedAt DESC LIMIT 15');
@@ -219,7 +220,7 @@ class UsersController extends Controller
         $vars = DB::select('SELECT * FROM inquiries JOIN users on users.id = inquiryUserId WHERE inquiryMessage != "" ORDER BY inquiryCreatedAt ASC');
         $notification = DB::select('SELECT * FROM notifs JOIN users ON users.id = notifs.notifUserId WHERE notifToUserId =' .auth()->user()->id.' ORDER BY notifCreatedAt DESC');
         
-        return view('users.timeline', compact('notification','posts', 'posts2', 'user', 'comment', 'likes2', 'shares', 'follows', 'badge', 'search', 'vars'));
+        return view('users.timeline', compact('notification','posts', 'posts2', 'user', 'comment', 'likes2', 'shares', 'follows', 'badge', 'search', 'vars', 'requests'));
     }
 
     public function viewTimeline2(Request $request, $id){
@@ -333,6 +334,13 @@ class UsersController extends Controller
         $user -> reviewType = "DELETION";
         $user -> reviewStatus = "PROCESS";
         $user -> save();
+
+        return redirect()->back();
+    }
+
+    public function cancel_deletion(){
+
+        DB::table('reviews')->where(['reviewUserId'=> auth()->user()->id])->delete();
 
         return redirect()->back();
     }

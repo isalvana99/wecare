@@ -40,7 +40,6 @@
     
     <div class="out-con">
         <div class="col-12 row-title">
-            <label for="" class="filter-title">Filter by Preference</label>
         </div>
         <form action="{{ route('filterlocation') }}" method="GET">
         <div class="row">
@@ -60,14 +59,14 @@
                             <option value="Memorial">Memorial</option>
                         </select>
                     </div>
-                    <div class="col-4" >
+                    <div class="col-4" style="display:none;">
                         <small>Region</small>
                         <select class="form-select" name="region"> 
                             <option value="{{$region == '' ? 'Region 7' : $region}}" selected hidden>{{$region == '' ? 'Region 7' : $region}}</option>
                             <option value="Region 7">Region 7</option>
                         </select>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4" style="display:none;">
                         <small>Province</small>
                         <select class="form-select" name="province"> 
                             <option value="{{$province == '' ? 'Cebu' : $province}}" selected hidden>{{$province == '' ? 'Cebu' : $province}}</option>
@@ -78,7 +77,7 @@
 
                 <div class="row">
                     <div class="col-4" >
-                        <small>City</small>
+                        <small>Choose City</small>
                         <select class="form-select" aria-label="Default select example" onchange="myFunction()" id="selectedCity" name="city"> 
                             <option value="{{$city == '' ? '' : $city}}" selected hidden>{{$city == '' ? 'All' : $city}}</option>
                             <option value="">All</option>
@@ -87,7 +86,7 @@
                         </select>
                     </div>
                     <div class="col-4" >
-                        <small>Barangay</small>
+                        <small>Choose Barangay</small>
                         <!-- barangays of Mandaue -->
                         <select class="form-select" aria-label="Default select example" style="display:none;" id="city1" onchange=getBarangay1()>
                             <option value="{{$city == ''? '' : $barangay}}" selected hidden>{{$city = ''? 'All' : $barangay}}</option>
@@ -183,7 +182,7 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-7">
-            
+                    @include('inc.messages')
                     <!-- post start here -->
                     @php $idcount = 0; @endphp
                     @if(count($posts) > 0)
@@ -642,7 +641,7 @@
                                                     <form action="/payment/" method="GET">
                                                     <div class="form-group">
                                                     <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
-                                                    PHP <input style="border-radius: 10px;padding:5px;" type="text" name="amountDonated">
+                                                    PHP <input style="border-radius: 10px;padding:5px;" type="number" name="hamount" onkeypress="return isNumber(event)">
                                                     </div>
                                                     <input type="hidden" name="postid" value="{{$post->postId}}">
                                                     <input type="hidden" name="postuserid" value="{{$post->postUserId}}">
@@ -942,6 +941,17 @@
 
     
 
+</script>
+
+<script>
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
 </script>
     
 </body>

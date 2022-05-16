@@ -242,6 +242,12 @@
                             <div class="row row_com_report_id">
                                 {{$var->reportDescription}}
                             </div>
+                            <div class="row row_com_report_type">
+                                Date Reported:
+                            </div>
+                            <div class="row row_com_report_id">
+                                {{date('F j, Y h:i A', strtotime($var->reportCreatedAt))}}
+                            </div>
                             <div class="row row_report_comment">
                                 <div class="col col_report_head">
                                     Reported Comment:

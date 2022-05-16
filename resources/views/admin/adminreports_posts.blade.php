@@ -150,6 +150,12 @@
                                 {{$var->reportDescription}}
                             </div>
                             <div class="row row_post_report_type">
+                                Date Reported:
+                            </div>
+                            <div class="row row_post_report_id">
+                                {{date('F j, Y h:i A', strtotime($var->reportCreatedAt))}}
+                            </div>
+                            <div class="row row_post_report_type">
                                 Post Caption:
                             </div>
                             <div class="row row_post_report_id">
@@ -383,7 +389,7 @@
                 </div>
 
                 <div class="modal-body">
-                    Are you sure you want to delete this user? Please note that you cannot undo this aftera.
+                    Are you sure you want to delete this post? Please note that you cannot undo this aftera.
                 </div>
 
                 <div class="modal-footer">

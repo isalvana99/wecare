@@ -663,7 +663,7 @@
                                         <form action="/payment/" method="GET">
                                         <div class="form-group">
                                         <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
-                                        PHP <input style="border-radius: 10px;padding:5px;" type="text" name="amountDonated">
+                                        PHP <input style="border-radius: 10px;padding:5px;" type="number" name="hamount" onkeypress="return isNumber(event)">
                                         </div>
                                         <input type="hidden" name="postid" value="{{$post->postId}}">
                                         <input type="hidden" name="postuserid" value="{{$post->postUserId}}">

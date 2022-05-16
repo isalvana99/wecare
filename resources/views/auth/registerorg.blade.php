@@ -86,11 +86,11 @@
                     <!-- Address row -->
                     <div class="row inputs_row">
                         <div class="col">
-                            <label class="inputs_label">Full Address<span style="color:red;">*</span></label>
+                            <label class="inputs_label">Address<span style="color:red;">*</span></label>
                             <div class="row">
 
                                <!--  Region col -->
-                                <div class="col-sm-3 col_mar_bot">
+                                <div class="col-sm-3 col_mar_bot" style="display:none;">
                                     <select class="form-control" name="region" required> 
                                         <option value="Region 7" selected>Region 7</option>
                                     </select>
@@ -102,7 +102,7 @@
                                 <!-- region col end -->
 
                                 <!--  province col -->
-                                <div class="col-sm-2 col_mar_bot">
+                                <div class="col-sm-2 col_mar_bot" style="display:none;">
                                     <select class="form-control" name="province" required>
                                         <option value="Cebu" selected>Cebu</option>
                                     </select>
@@ -120,7 +120,7 @@
                                         <option value="Mandaue">Mandaue</option>
                                         <option value="Lapu-Lapu">Lapu-Lapu</option>
                                     </select>
-                                    <span class="inputs_label_small">City</span>
+                                    <span class="inputs_label_small">Your City</span>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -202,20 +202,18 @@
                                         <option>Select City first</option>
                                     </select>
                                 
-                                    <span class="inputs_label_small">Barangay</span>
+                                    <span class="inputs_label_small">Your Barangay</span>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                 </div>
                                 <!-- barangay col end -->
-                            </div>
 
                             <input type="hidden" id="citt" name="city">
                             <input type="hidden" id="barr" name="barangay">
 
                             <!-- house street row -->
-                            <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-5">
                                     <input type="text" autocomplete="off" name="sector" class="form-control" id="" placeholder="" value="" required>
                                     <span class="inputs_label_small">House No./Street/Purok/Sector</span>
                                     <div class="valid-feedback">
