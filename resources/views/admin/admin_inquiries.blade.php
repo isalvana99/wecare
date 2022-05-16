@@ -315,7 +315,7 @@
                                     <div class="row">
                                         <div class="col info-msg-user">
                                             <small class="user-msg-name">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</small>
-                                            <small class="user-msg-time">{{date('h:m A', strtotime($var->inquiryCreatedAt))}}</small>
+                                            <small class="user-msg-time">({{date('F j, Y h:i A', strtotime($var->inquiryCreatedAt))}})</small>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -331,8 +331,8 @@
                                 <div class="col-7" style="padding-right: 27px;">
                                   <div class="row admin_msg_info">
                                       <div class="col info-msg-user">
-                                          <small class="user-msg-name">{{$var->id." ".$var->firstName}}</small>
-                                          <small class="user-msg-time">{{date('h:m A', strtotime($var->inquiryCreatedAt))}}</small>
+                                          <small class="user-msg-name">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</small>
+                                          <small class="user-msg-time">({{date('F j, Y h:i A', strtotime($var->inquiryCreatedAt))}})</small>
                                       </div>
                                   </div>
                                   <div class="w-100"></div>
@@ -360,7 +360,7 @@
                                     <div class="row">
                                         <div class="col info-msg-user">
                                             <small class="user-msg-name">{{$var->firstName." ".$var->middleName." ".$var->lastName." ".$var->orgName}}</small>
-                                            <small class="user-msg-time">{{date('h:m A', strtotime($var->inquiryCreatedAt))}}</small>
+                                            <small class="user-msg-time">{{date('F j, Y h:i A', strtotime($var->inquiryCreatedAt))}}</small>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -377,7 +377,7 @@
                                   <div class="row admin_msg_info">
                                       <div class="col info-msg-user">
                                           <small class="user-msg-name">{{$var->firstName}}</small>
-                                          <small class="user-msg-time">{{date('h:m A', strtotime($var->inquiryCreatedAt))}}</small>
+                                          <small class="user-msg-time">{{date('F j, Y h:i A', strtotime($var->inquiryCreatedAt))}}</small>
                                       </div>
                                   </div>
                                   <div class="w-100"></div>

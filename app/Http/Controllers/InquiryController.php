@@ -104,6 +104,23 @@ class InquiryController extends Controller
             $post -> inquiryMessage = $request->input('inquirymessage');
             $post -> inquiryStatus = "UNREAD";
             $post->save();
+
+
+        }
+
+        $vars = Inquiry::query()
+                ->join('users', 'users.id', '=', 'inquiries.inquiryUserId')
+                ->orderBy('inquiries.inquiryCreatedAt', 'DESC')
+                ->get();
+
+        foreach($vars as $v){
+            if($v->inquiryStatus == "UNREAD" && $v->inquirySentToId == auth()->user()->id){
+
+                $updatemsg = Inquiry::find($v->inquiryId);
+                $updatemsg ->  inquiryStatus = "READ";
+                $updatemsg->save();
+            }
+            
         }
         
         return redirect()->back();
@@ -260,6 +277,7 @@ class InquiryController extends Controller
             $post = new Inquiry;
             $post -> inquiryUserId = auth()->user()->id;
             $post -> inquirySentToId = $sentTo;
+            $post -> inquiryStatus = "UNREAD";
             $post -> inquiryMessage = $request->input('inquirymessage');
             $post->save();
 
@@ -271,5 +289,25 @@ class InquiryController extends Controller
         
         return redirect()->back();
         //return view('messages.user_inquiries', compact('vars'));
+    }
+
+    public function markRead(Request $request){
+
+        $vars = Inquiry::query()
+                ->join('users', 'users.id', '=', 'inquiries.inquiryUserId')
+                ->orderBy('inquiries.inquiryCreatedAt', 'DESC')
+                ->get();
+
+        foreach($vars as $v){
+            if($v->inquiryStatus == "UNREAD" && $v->inquirySentToId == auth()->user()->id){
+
+                $updatemsg = Inquiry::find($v->inquiryId);
+                $updatemsg ->  inquiryStatus = "READ";
+                $updatemsg->save();
+            }
+            
+        }
+        
+        return redirect()->back();
     }
 }

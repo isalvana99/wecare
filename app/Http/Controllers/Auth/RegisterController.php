@@ -57,7 +57,7 @@ class RegisterController extends Controller
             'day' => ['string', 'max:255', 'nullable'],
             'month' => ['string', 'max:255', 'nullable'],
             'year' => ['string', 'max:255', 'nullable'],
-            'age' => ['string', 'max:255', 'nullable'],
+            'age' => ['integer','min:18', 'nullable'],
             'sex' => ['string', 'max:255', 'nullable'],
             'sector' => ['nullable', 'string', 'max:255'],
             'barangay' => ['required', 'string', 'max:255'],

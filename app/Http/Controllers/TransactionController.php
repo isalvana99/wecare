@@ -170,7 +170,7 @@ class TransactionController extends Controller
     {
         $previous_url = $request->input('previous_url');
         $id = $request->input('postid');
-        $amount = $request->input('amountDonated');
+        $amount = $request->input('hamount');
         $user = DB::table('posts')
             ->join('users', 'users.id', '=', 'posts.postUserId')
             ->where('posts.postId', '=', $id)
@@ -178,7 +178,14 @@ class TransactionController extends Controller
         $owner = DB::table('users')
             ->where('users.id', '=', auth()->user()->id)
             ->get();
-        return view('payment.payment', compact('user', 'amount', 'owner', 'previous_url'));
+
+        if($amount > 0){
+            return view('payment.payment', compact('user', 'amount', 'owner', 'previous_url'));
+            
+        }else{
+            return redirect()->back()->with('error', 'Please put a non-zero value.');
+        }
+        
     }
 
     public function payment2(Request $request)

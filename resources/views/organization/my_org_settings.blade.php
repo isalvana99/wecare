@@ -35,6 +35,222 @@
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="list-personal" role="tabpanel" aria-labelledby="list-personal-list">
         <label for="">Personal Info</label>
+        @if($posts->accountVerified == "VERIFIED")
+        <div class="personalcon">
+            <div class="formcon">
+                {!! Form::open(['action' => ['App\Http\Controllers\UsersController@update', $posts->id], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                <!--form-row-->
+                @include('inc.messages')
+                <label for="" style="color:red;">*Your account is verified. You cannot make changes to your information.</label>
+                <div class="form-row">
+                    <!--org name input-->
+                    <div class="col-md-6 mb-3">
+                        <input type="hidden" value="" name="id"/>
+                        <label for="org_name">Organization Name</label>
+                        <input type="text" name="org_name" class="form-control" id="validationCustom01" placeholder="" value="{{$posts->orgName}}" disabled>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div> <!--org name input-->
+                    </div>
+                    
+                    <!--License input-->
+                    <div class="col-md-6 mb-3" >
+                        <label for="license label">Organization License</label>
+                        <input type="text" name="license" class="form-control mi2" id="validationCustom01" placeholder="" value="{{$posts->license}}" disabled>
+                        
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div> <!--/License input-->
+
+                    <!--Address input-->
+                    <div class="col-md-12 mb-3">
+                            <label for="">Address</label>
+                            <div class="row">
+                                <div class="col-sm-3" style="display:none;">
+                                    <select class="form-control" name="region" required> 
+                                        <option value="{{$posts->region}}">{{$posts->region}}</option>
+                                        <option value="Region 7" selected hidden>Region 7</option>
+                                    </select>
+                                    <small>Region</small>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="display:none;">
+                                    <select class="form-control" name="province" required>
+                                        <option value="{{$posts->province}}" selected hidden>{{$posts->province}}</option>
+                                        <option value="Cebu" selected>Cebu</option>
+                                    </select>
+                                    <small>Province</small>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="form-control" aria-label="Default select example" onchange="myFunction()" id="selectedCity" name="" disabled> 
+                                        <option value="{{$posts->city}}" selected hidden>{{$posts->city}}</option>
+                                        <option value="Mandaue">Mandaue</option>
+                                        <option value="Lapu-Lapu">Lapu-Lapu</option>
+                                    </select>
+                                    <small>Your City</small>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                
+
+                                <select class="form-control" aria-label="Default select example" style="display:none;" id="city1" name="" onchange=getBarangay1() disabled>
+                                    <option value="{{$posts->barangay}}" selected hidden>{{$posts->barangay}}</option>
+                                    <option value="Alang-alang">Alang-alang</option>
+                                    <option value="Bakilid">Bakilid</option>
+                                    <option value="Banilad">Banilad</option>
+                                    <option value="Basak">Basak</option>
+                                    <option value="Cabancalan">Cabancalan</option>
+                                    <option value="Cambaro">Cambaro</option>
+                                    <option value="Canduman">Canduman</option>
+                                    <option value="Casili">Casili</option>
+                                    <option value="Casuntingan">Casuntingan</option>
+                                    <option value="Centro">Centro</option>
+                                    <option value="Cubacub">Cubacub</option>
+                                    <option value="Guizo">Guizo</option>
+                                    <option value="Ibabao-Estancia">Ibabao-Estancia</option>
+                                    <option value="Jagobiao">Jagobiao</option>
+                                    <option value="Labogon">Labogon</option>
+                                    <option value="Looc">Looc</option>
+                                    <option value="Maguikay">Maguikay</option>
+                                    <option value="Mantuyong">Mantuyong</option>
+                                    <option value="Opao">Opao</option>
+                                    <option value="Pakna-an">Pakna-an</option>
+                                    <option value="Pagsabungan">Pagsabungan</option>
+                                    <option value="Subangdaku">Subangdaku</option>
+                                    <option value="Tabok">Tabok</option>
+                                    <option value="Tawason">Tawason</option>
+                                    <option value="Tingub">Tingub</option>
+                                    <option value="Tipolo">Tipolo</option>
+                                    <option value="Umapad">Umapad</option>
+                                </select>
+                                <!-- /barangays of Mandaue -->
+                                <!-- barangays of Lapu-lapu -->
+                                <select class="form-control" aria-label="Default select example" id="city2" style="display:none;" name="" onchange=getBarangay2() disabled>
+                                    <option value="{{$posts->barangay}}" selected hidden>{{$posts->barangay}}</option>
+                                    <option value="Agus">Agus</option>
+                                    <option value="Babag">Babag</option>
+                                    <option value="Bankal">Bankal</option>
+                                    <option value="Baring">Baring</option>
+                                    <option value="Basak">Basak</option>
+                                    <option value="Buaya">Buaya</option>
+                                    <option value="Calawisan">Calawisan</option>
+                                    <option value="Canjulao">Canjulao</option>
+                                    <option value="Caw-oy">Caw-oy</option>
+                                    <option value="Cawhagan">Cawhagan</option>
+                                    <option value="Caubian">Caubian</option>
+                                    <option value="Gun-ob">Gun-ob</option>
+                                    <option value="Ibo">Ibo</option>
+                                    <option value="Looc">Looc</option>
+                                    <option value="Mactan">Mactan</option>
+                                    <option value="Maribago">Maribago</option>
+                                    <option value="Marigondon">Marigondon</option>
+                                    <option value="Opon">Opon</option>
+                                    <option value="Pajac">Pajac</option>
+                                    <option value="Pajo">Pajo</option>
+                                    <option value="Pangan-an">Pangan-an</option>
+                                    <option value="Punta Engaño">Punta Engaño</option>
+                                    <option value="Pusok">Pusok</option>
+                                    <option value="Sabang">Sabang</option>
+                                    <option value="Santa Rosa">Santa Rosa</option>
+                                    <option value="Subabasbas">Subabasbas</option>
+                                    <option value="Talima">Talima</option>
+                                    <option value="Tingo">Tingo</option>
+                                    <option value="Tungasan">Tungasan</option>
+                                    <option value="San Vicente">San Vicente</option>
+                                </select>
+                                <!-- /barangays of Lapu-lapu -->
+                                
+                                <select class="form-select modal_input_select" aria-label="Default select example" id="city0" style="display:block;" disabled>
+                                    <option value="{{Auth::user()->barangay}}" selected hidden>{{$posts->barangay}}</option>
+                                </select>
+
+                                <small>Your Barangay</small>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                
+                                </div>
+
+                                <input type="hidden" id="citt" name="city" value="{{$posts->city}}">
+                                <input type="hidden" id="barr" name="barangay" value="{{$posts->barangay}}">
+
+                                <div class="col-sm-5">
+                                    <input type="text" name="sector" class="form-control" id="" placeholder="" value="{{$posts->sector}}" disabled>
+                                    <small>House No./Street/Purok</small>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            </div>        
+                       </div> <!--/Address inputs-->
+
+                    <!-- phone num row -->
+                    <div class="col-md-4 mb-4" style="margin-top:15px;">
+                        <label class="inputs_label">Registered GCash Number</label>
+                        <div class="">
+                            <img src="../../images/phflag.jpg" style="position:absolute; width:35px;margin:9px;" alt="">
+                            <input maxlength="11" minlength="11" type="tel" name="phone_number" class="form-control pn @error('phone_number') is-invalid @enderror" id="phone" placeholder="0912 345 6789" value="{{$posts->phoneNumber}}" style="padding-left:50px;" autocomplete="off" disabled>
+                        </div>
+
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        @error('phone_number')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>wrong</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <!-- phone num row end -->
+
+                    <!-- profile photo -->
+                    <div class="col-md-12 mb-2" style="display:flex;">
+                        <div class="col-sm-1" style="margin-right:15px;">
+                            <img  class="profilepic2" src="/storage/profile_images/{{Auth::user()->profileImage}}" alt="">
+                        </div>
+                        <div class="col-sm-5" style="">
+                                <div class="" style="position:relative;">
+                                    <div class="form-group" style="">
+                                        <label class="modal_row_title" style="">Change Your Profile Photo</label>
+                                        <div class="input-group" style="">
+                                            <span class="input-group-btn">
+                                                <span class="btn btn-default btn-file" style="">
+                                                    Add image<input type="file" id="imgInp" name="profile_image" disabled>
+                                                </span>
+                                            </span>
+                                            <input  type="text" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        
+                        <div class="col-sm-2" style="">
+                            <small style="padding-left:10px;">Preview</small>
+                            <img id='img-upload'/>
+                        </div>
+                    </div>
+                    <!-- /profile photo -->
+
+                    <div class="w-100"></div>
+                    <div class="" style="margin-top:20px;">
+                        <div class="">
+                            {{Form::hidden('_method', 'PUT')}}
+                            {{Form::submit('Save Changes', ['class' => 'btn-violet', 'disabled'])}}
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+        @else
         <div class="personalcon">
             <div class="formcon">
                 {!! Form::open(['action' => ['App\Http\Controllers\UsersController@update', $posts->id], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
@@ -65,7 +281,7 @@
                     <div class="col-md-12 mb-3">
                             <label for="">Address</label>
                             <div class="row">
-                            <div class="col-sm-3">
+                                <div class="col-sm-3" style="display:none;">
                                     <select class="form-control" name="region" required> 
                                         <option value="{{$posts->region}}">{{$posts->region}}</option>
                                         <option value="Region 7" selected hidden>Region 7</option>
@@ -75,7 +291,7 @@
                                         Looks good!
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-3" style="display:none;">
                                     <select class="form-control" name="province" required>
                                         <option value="{{$posts->province}}" selected hidden>{{$posts->province}}</option>
                                         <option value="Cebu" selected>Cebu</option>
@@ -91,7 +307,7 @@
                                         <option value="Mandaue">Mandaue</option>
                                         <option value="Lapu-Lapu">Lapu-Lapu</option>
                                     </select>
-                                    <small>City</small>
+                                    <small>Your City</small>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -170,7 +386,7 @@
                                     <option value="{{Auth::user()->barangay}}" selected hidden>{{$posts->barangay}}</option>
                                 </select>
 
-                                <small>Barangay</small>
+                                <small>Your Barangay</small>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -248,6 +464,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     

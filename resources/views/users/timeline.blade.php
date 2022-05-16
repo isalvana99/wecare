@@ -108,11 +108,12 @@
                         </button>
                         <!-- /3 dots Modal mobile-->
 
+                        <!-- messages in mobile view -->
                         <div class="modal fade" id="exampleModalCenterMessage2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Messages</h5>
+                                    <h5 class="modal-title">Customer Support</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -125,7 +126,7 @@
                                         @if($var->inquirySentToId == Auth::user()->id)
                                             <div class="row admin-message" >
                                                 <div class="col-2">
-                                                    <img src="/storage/profile_images/{{$var->profileImage}}.jpg" class="img-msg-user" alt="">
+                                                    <img src="/storage/profile_images/admin.jpg" class="img-msg-user" alt="">
                                                 </div>
                                                 <div class="col-10 admin-msg-con1">
                                                     <div class="col info-msg-user">
@@ -152,7 +153,7 @@
                                                         <label >{{$var->inquiryMessage}}</label>             
                                                 </div>
                                                 <div class="col-2">
-                                                    <img src="../storage/profile_images/{{$user->profileImage}}.jpg" class="img-msg-user" alt="">
+                                                    <img src="/storage/profile_images/{{Auth::user()->profileImage}}" class="img-msg-user" alt="">
                                                 </div>
                                             </div>
                                             @endif
@@ -181,7 +182,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        </div><!-- messages in mobile view  end-->
 
                     </div>
                     </div>
@@ -505,7 +506,7 @@
                                     @endif
                                     
 
-                                    @if(Auth::user()->id == $user->id && $user->accountVerified == "NOT VERIFIED" && $user->accountType == "RECEPIENT")
+                                    @if(Auth::user()->id == $user->id && $user->accountVerified != "VERIFIED" && $user->accountType == "RECEPIENT")
                                     <!-- request verification -->
                                     <button class="btn btn2" style="width:100%;text-align:left;" type="button" onclick="verificationFunction()">Request Account Verification</button>
                                     <div class="row deleteDiv2" id="verificationDiv" style="display:none; ">
@@ -523,13 +524,13 @@
 
                                                 How can we determine if an account is verified?<br><br>
 
-                                                It is when you see a check icon<i class="fa fa-check-circle verified-icon" aria-hidden="true" style=""></i> &nbsp; near the name of the account in their profile page. <br><br>
+                                                It is when you see a check icon<i class="fa fa-check-circle verified-icon" aria-hidden="true" style=""></i> &nbsp; near the name of the account in their profile page. Please note that you cannot update your information after verification.<br><br>
                                                 </label>
 
                                                 <div class="col-sm-12" style="">
                                                         <div class="" style="position:relative;">
                                                             <div class="form-group" style="">
-                                                                <label class="modal_row_title" style="">Do you wish to send verification request? You may, by sending us a clear scan copy image file of your identification (Valid ID) / certificate that shows your registered certificate no. / accreditation no., then, wait within 30 working days to process your request.</label>
+                                                                <label class="modal_row_title" style="">Do you wish to send verification request? You may, by sending us a clear scan copy image file of your identification (Valid ID) / certificate that shows your registered certificate no. / accreditation no., then, wait at most 30 working days to process your request.</label>
                                                                 <div class="input-group" style="">
                                                                     <span class="input-group-btn">
                                                                         <span class="btn btn-default btn-file" style="">
@@ -572,7 +573,7 @@
                                             <div class="col" style="background:#dbdcdd;padding:20px;border-radius:10px;">
                                             <p>
                                                 Request Account Deletion: <br><br>
-                                                Upon proceeding, please wait within 30 working days to process your request. You cannot undo this action once the admins accepted your request. <br><br><br>
+                                                Upon proceeding, please wait at most 30 working days to process your request. You cannot undo this action once the admins accepted your request. <br><br><br>
 
                                                 Thank you.
                                             </p>
@@ -580,6 +581,15 @@
                                         </div>
 
                                         <div class="row" style="display:flex;">
+                                            @if(count($requests) > 0)
+                                            <form action="{{route('cancel_deletion')}}" method="GET">
+                                            <div class="" style="position:relative;width:50%;margin-left:50px;">
+                                                <div class="">
+                                                    <button type="submit" class="btn-delete-yes">Cancel Request</button>
+                                                </div>
+                                            </div>  
+                                            </form>
+                                            @else
                                             <form action="{{route('request_deletion')}}" method="GET">
                                             <div class="" style="position:relative;width:50%;margin-left:50px;">
                                                 <div class="">
@@ -587,6 +597,7 @@
                                                 </div>
                                             </div>  
                                             </form>
+                                            @endif
 
                                             <div class="" style="position:absolute;width:50%;margin-left:250px;">
                                                 <div class="">
@@ -608,6 +619,13 @@
                     @if($user->id == Auth::user()->id)
                     <div class="row icon-message-con">
                         <button class="btn-icon-message-big tdots42" data-toggle="modal" data-target="#exampleModalCenterMessage">
+                            @if(count($vars) > 0)
+                            @foreach($vars as $var)
+                            @if($var->inquirySentToId == Auth::user()->id && $var->inquiryStatus == "UNREAD")
+                            <div class="circle_alert" style="position:absolute;margin-left:20px;margin-top:-5px;"></div>
+                            @endif
+                            @endforeach
+                            @endif
                             <i class="fas fa-user-headset fa-lg"></i>
                         </button>
                         <!-- Modal -->
@@ -616,6 +634,16 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Customer Support</h5>
+                                    @if(count($vars) > 0)
+                                    @foreach($vars as $var)
+                                    @if($var->inquirySentToId == Auth::user()->id && $var->inquiryStatus == "UNREAD")
+                                    <form action="{{route('markRead')}}" method="GET">
+                                        <button type="submit" style="background:none;color:blue;border:none;padding-left:30px;">Mark as read</button>
+                                    </form>
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -678,11 +706,12 @@
                                                 <i class="fas fa-paper-plane" style="position:relative;color:white;">
                                                 Send</i>
                                             </button>
+                                            
                                         </div>
                                     
                                     </div>
                                     </form>
-
+                                    
                                 </div>
                             </div>
                         </div>
@@ -1169,7 +1198,7 @@
                                         <form action="/payment/" method="GET">
                                         <div class="form-group">
                                         <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
-                                        PHP <input style="border-radius: 10px;padding:5px;" type="text" name="amountDonated">
+                                        PHP <input style="border-radius: 10px;padding:5px;" type="number" name="hamount" onkeypress="return isNumber(event)">
                                         </div>
                                         <input type="hidden" name="postid" value="{{$post->postId}}">
                                         <input type="hidden" name="postuserid" value="{{$post->postUserId}}">

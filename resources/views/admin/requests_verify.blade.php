@@ -132,7 +132,7 @@ input[type=checkbox]:checked ~ label > img {
                                 <div class="row modal_left_second">
                                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
                                         <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Personal Information</button>
-                                        <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Donation History</button>
+                                        <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" style="display:none;">Donation History</button>
                                         <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages-{{$var->reviewUserId}}" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Received History</button>
 
                                         <div class="nav-link">
@@ -266,7 +266,14 @@ input[type=checkbox]:checked ~ label > img {
                                                 </div>
                                             </div>
 
-                                            
+                                            <div class="row modal_row_info">
+                                                <div class="col-3 modal_info_bold">
+                                                    Region:
+                                                </div>
+                                                <div class="col-9 modal_info_names">
+                                                    {{$var->region}}
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>

@@ -148,7 +148,7 @@ Route::group(['middleware' => ['auth']], function() {
 
             Route::post('/request-verification', [UsersController::class, 'request_verification'])->name('request_verification')->middleware('role:USER');
             Route::get('/request-deletion', [UsersController::class, 'request_deletion'])->name('request_deletion')->middleware('role:USER');
-
+            Route::get('/cancel-deletion', [UsersController::class, 'cancel_deletion'])->name('cancel_deletion')->middleware('role:USER');
 
             Route::resource('transaction', TransactionController::class)->middleware('role:USER');
             Route::resource('comment', CommentController::class)->middleware('role:USER');
@@ -190,6 +190,7 @@ Route::group(['middleware' => ['auth']], function() {
             //message inquiry
             Route::get('inquiry_message', [InquiryController::class,'show1'])->middleware('role:USER');
             Route::get('inquiry_message/message', [InquiryController::class,'inquiryUser'])->name('inquiryToAdmin')->middleware('role:USER');
+            Route::get('inquiry_message/markread', [InquiryController::class,'markRead'])->name('markRead')->middleware('role:USER');
 
             //pdf user
             Route::get('/badge-certificate', [PDFController::class, 'badgeCertificate'])->middleware('role:USER');

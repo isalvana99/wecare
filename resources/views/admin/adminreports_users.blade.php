@@ -152,6 +152,12 @@
                                     <div class="row row_report_id">
                                         {{$var->reportDescription}}
                                     </div>
+                                    <div class="row row_report_type">
+                                        Date Reported:
+                                    </div>
+                                    <div class="row row_report_id">
+                                        {{date('F j, Y h:i A', strtotime($var->reportCreatedAt))}}
+                                    </div>
                                     <div class="row row_report_details">
                                         <div class="col-3 col_report_head">
                                             Date:
@@ -273,10 +279,10 @@
                         @if($var->accountVerified == "BANNED")
                             <button type="submit" class="btn btn-primary" style="background-color:red !important; color:white;" disabled>Account Banned</button>
                         @else
-                        <form action="{{ route('admin_ban') }}" method="GET">
+                        <form action="{{route('admin_delete')}}" method="GET">
                             <input type="hidden" name="reportid" value="{{$var->reportId}}">
                             <input type="hidden" name="deleteUser" value="{{$var->id}}">
-                            <button type="submit" class="btn btn-primary">Ban this Account</button>
+                            <button type="submit" class="btn btn-primary">Ban/Delete this Account</button>
                         </form>
                         @endif
                         <button type="button" class="btn btn-secondary second_btn" data-dismiss="modal">Close</button>
@@ -462,7 +468,7 @@
                         @if($var->accountVerified == "BANNED")
                             <button type="submit" class="btn btn-primary" style="background-color:red !important; color:white;" disabled>Account Banned</button>
                         @else
-                        <form action="{{ route('admin_ban') }}" method="GET">
+                        <form action="{{route('admin_delete')}}" method="GET">
                             <input type="hidden" name="reportid" value="{{$var->reportId}}">
                             <input type="hidden" name="deleteUser" value="{{$var->id}}">
                             <button type="submit" class="btn btn-primary">Ban this Account</button>

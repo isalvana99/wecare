@@ -160,15 +160,19 @@
         <hr>DISTRIBUTIONS <br><hr>
         <div class="row">
             <div class="col-6" style="border-right: 2px solid gray;">
-                Total Donations Collected: <u>PHP {{number_format($post->postReceivedAmount,2)}}</u><br> 
-                Total Distributed to Assignments: <u>PHP {{number_format($remains,2)}}</u><br>
-                Remaining for Distribution: @if(($post->postReceivedAmount - $remains) < 0) 
+                Total Donations Collected: <u>PHP {{number_format($post->postReceivedAmount,2)}}</u><br><br><br>
+                Remaining for Distributors: @if(($post->postReceivedAmount - $remains) < 0) 
                     <label style="color:red;"> <u>PHP {{number_format($post->postReceivedAmount - $remains,2)}}</u></label> @else <u>PHP {{number_format($post->postReceivedAmount - $remains,2)}}</u> @endif<br>
             </div>
             <div class="col-6">
-                Distributions to Recepients: <u>PHP {{number_format($total1,2)}}</u><br>
-                Remaining for Distributions: PHP @php $remains = $post->postReceivedAmount - $total1; @endphp @if($remains < 0) 
-                    <div style="color:red;">&nbsp;<u>{{number_format($remains,2)}}</u></div> @else <u>{{number_format($remains,2)}}</u> @endif</div><br>
+                To Distributors: <u>PHP {{number_format($remains,2)}}</u><br>
+                To Recepients: <u>PHP {{number_format($total1,2)}}</u><br><br>
+                Remaining: PHP @php $dremains = $remains - $total1; @endphp 
+                    @if($dremains < 0) 
+                    <div style="color:red;">&nbsp;<u>{{number_format($dremains,2)}}</u></div> 
+                    @else 
+                    <u>{{number_format($dremains,2)}}</u> 
+                    @endif</div><br>
             </div>
             <hr>
         </div>
@@ -209,11 +213,11 @@
                                         <form action="/distpayment/" method="GET">
                                         <div class="form-group">
                                         <label for="amount" style="font-weight:bold;font-size:18px;">Enter Amount:</label><br>
-                                        PHP <input style="border-radius: 10px;padding:5px;" type="text" name="hamount">
+                                        PHP <input style="border-radius: 10px;padding:5px;" type="number" name="hamount" id="donationamount">
                                         </div>
                                         <input type="hidden" name="userid" value="{{$userid}}">
                                         <input type="hidden" name="postid" value="{{$postid}}">
-                                        <input type="hidden" name="donation" id="" value="{{$remains}}">
+                                        <input type="hidden" name="donation" id="" value="{{$post->postReceivedAmount - $remains}}">
                                         <input type="hidden" name="donor" value="{{Auth::user()->id}}">
                                         <input type="hidden" name="previous_url" value="/distribution?referenceno={{$postid}}&userid={{$userid}}">
                                     </div>
@@ -488,6 +492,18 @@
             span       = 1;
         }
     });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#donationamount').on('keypress', function (event) {
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+        }
+        });
     });
 </script>
 @endsection

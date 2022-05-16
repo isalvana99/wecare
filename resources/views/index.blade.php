@@ -18,7 +18,7 @@
             </div>
 
             <div class="btn_grp">
-                <a href="{{ route('register') }}"><button style="width:250px;">Register as an Individual</button></a>
+                <a href="{{ route('register') }}"><button style="width:250px;">Register as a Personal Account</button></a>
                 <div class="w-100"></div>
                 <label for="" class="">or</label>
                 <div class="w-100"></div>

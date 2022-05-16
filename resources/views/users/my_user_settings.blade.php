@@ -201,7 +201,7 @@
                     <div class="col-md-12 mb-3">
                             <label for="">Address</label>
                             <div class="row">
-                            <div class="col-sm-3">
+                                <div class="col-sm-3" style="display:none;">
                                     <select class="form-control" name="region" required> 
                                         <option value="{{$posts->region}}">{{$posts->region}}</option>
                                         <option value="Region 7" selected hidden>Region 7</option>
@@ -211,7 +211,7 @@
                                         Looks good!
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-3" style="display:none;">
                                     <select class="form-control" name="province" required>
                                         <option value="{{$posts->province}}" selected hidden>{{$posts->province}}</option>
                                         <option value="Cebu" selected>Cebu</option>
@@ -227,7 +227,7 @@
                                         <option value="Mandaue">Mandaue</option>
                                         <option value="Lapu-Lapu">Lapu-Lapu</option>
                                     </select>
-                                    <small>City</small>
+                                    <small>Your City</small>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -306,7 +306,7 @@
                                     <option value="{{Auth::user()->barangay}}" selected hidden>{{$posts->barangay}}</option>
                                 </select>
 
-                                <small>Barangay</small>
+                                <small>Your Barangay</small>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
